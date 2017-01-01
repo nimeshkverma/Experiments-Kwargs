@@ -1,0 +1,11 @@
+venv
+fvenv
+.env
+*.pyc
+.gitignore
+config.py
+settings.py
+*.log
+.cache
+*.swp
+*.swo
