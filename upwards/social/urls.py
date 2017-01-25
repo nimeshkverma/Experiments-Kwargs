@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^login/$', views.LoginList.as_view()),
     url(r'^login/(?P<pk>[0-9]+)/$', views.LoginDetail.as_view()),
     url(r'^social_login/$', views.SocialLogin.as_view()),
+    url(r'^social_logout/$', views.SocialLogout.as_view()),
 ]
