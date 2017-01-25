@@ -3,14 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
-MALE = 'M'
-FEMALE = 'F'
-OTHER = 'O'
-GENDER_CHOICES = (
-    (MALE, 'Male'),
-    (FEMALE, 'Female'),
-    (OTHER, 'Other'),
-)
+from common.models import LifeTimeTrackingModel
 
 FACEBOOK = 'facebook'
 GOOGLE = 'google'
@@ -29,24 +22,8 @@ SOURCE_CHOICES = (
 )
 
 
-class LifeTimeTrackingModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        abstract = True
-
-
-class Customer(LifeTimeTrackingModel):
-    customer_id = models.AutoField(primary_key=True)
-    gender = models.CharField(
-        max_length=1, default=MALE, choices=GENDER_CHOICES)
-
-
 class Login(LifeTimeTrackingModel):
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
     email_id = models.EmailField()
     platform = models.CharField(
         max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)

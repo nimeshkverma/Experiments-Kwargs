@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'social.apps.SocialConfig',
+    'customer.apps.CustomerConfig',
+    'common.apps.CommonConfig',
 ]
 
 MIDDLEWARE = [
@@ -108,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 

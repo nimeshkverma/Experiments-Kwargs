@@ -1,27 +1,9 @@
 from functools import wraps
 from rest_framework import status
-from social.serializers import AuthenticationSerializer
+from serializers import AuthenticationSerializer
 
 
 def session_authorize(f):
-    def unauthorized_customer_error():
-        body = {
-            "s": 0,
-            "m": "Token invalid!",
-            "d": {},
-        }
-        from app.app_config import log_error
-        log_error(request, 401, {'stack_trace': body['m'], 'response': body})
-        response = Response(
-            json.dumps(body), status=401, content_type='application/json')
-        return response
-
-    def check_token(token, customerId=None):
-        if token != None:
-            return True
-        else:
-            return False
-
     def abstract_customerId(request):
         if request.method == 'GET':
             customerId = request.args.get('customer_id')

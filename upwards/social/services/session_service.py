@@ -2,7 +2,8 @@ import json
 
 from django.utils.crypto import get_random_string
 
-from social.models import Login, Customer
+from social.models import Login
+from customer.models import Customer
 from social_service import SocialProfile
 
 
@@ -26,33 +27,6 @@ def session_success_data(login_object):
 
 
 def email_related_sessions(email_id):
-    sessions = Login.email_related_logins(email_id)
-    if not sessions:
-        return {}
-    else:
-        platform_sessions = {
-            'facebook': None,
-            'google': None
-        }
-        for session in sessions:
-            platform_sessions[session.platform] = session
-        return platform_sessions
-
-
-# def type_of_customer(email_sessions, platform):
-#     if email_sessions:
-#         if email_sessions.get(platform):
-#             if email_sessions[platform].session_token:
-#                 return "returning_live_session_customer"
-#             else:
-#                 if email_sessions[get_opposite_platform(platform)]:
-#         else:
-
-#     else:
-#         return "first_time_customer"
-
-
-def email_related_sessionss(email_id):
     sessions = Login.email_related_logins(email_id)
     platform_sessions_data = {
         'facebook': {
@@ -90,7 +64,7 @@ def create_new_session(session_input, social_profile):
         'email_id': social_profile.email_id,
         'session_token': generate_session_token(new_customer.customer_id)
     }
-    new_session = Login.objects.create(**login_object_dict)
+    new_session = Login.objects.create(**session_object_dict)
     return session_success_data(new_session)
 
 
@@ -112,12 +86,13 @@ def create_session_from_obj(session_obj, session_input, social_profile, new_sess
     return session_success_data(session_obj)
 
 
-def get_or_create_sessionss(session_input):
+def get_or_create_sessions(session_input):
     platform = session_input['platform']
     platform_token = session_input['platform_token']
     source = session_input['source']
     social_profile = SocialProfile(platform, platform_token)
-    email_sessions = email_related_sessionss(social_profile.email_id)
+    print social_profile.email_id
+    email_sessions = email_related_sessions(social_profile.email_id)
     opposite_platform = get_opposite_platform(platform)
 
     if not (email_sessions['facebook']['customer_record'] or email_sessions['google']['customer_record']):
@@ -133,7 +108,8 @@ def get_or_create_sessionss(session_input):
                 # updated time and return old session_token and customer_id
                 session_data = {
                     "platform_token": platform_token,
-                    "social_data": json.dumps(social_profile.data)
+                    "social_data": json.dumps(social_profile.data),
+                    "deleted_at": None,
                 }
                 return update_session(email_sessions[platform]["object"].id, session_data)
 
@@ -146,8 +122,9 @@ def get_or_create_sessionss(session_input):
                     session_data = {
                         "platform_token": platform_token,
                         "social_data": json.dumps(social_profile.data),
-                        "session_token": email_sessions[opposite_platform].session_token,
-                        "is_active": True
+                        "session_token": email_sessions[opposite_platform]["object"].session_token,
+                        "is_active": True,
+                        "deleted_at": None,
                     }
                     return update_session(email_sessions[platform]["object"].id, session_data)
                 else:
@@ -159,7 +136,8 @@ def get_or_create_sessionss(session_input):
                             "platform_token": platform_token,
                             "social_data": json.dumps(social_profile.data),
                             "session_token": generate_session_token(email_sessions[platform]["object"].customer_id),
-                            "is_active": True
+                            "is_active": True,
+                            "deleted_at": None,
                         }
                         return update_session(email_sessions[platform]["object"].id, session_data)
                     else:
@@ -170,7 +148,9 @@ def get_or_create_sessionss(session_input):
                             "platform_token": platform_token,
                             "social_data": json.dumps(social_profile.data),
                             "session_token": generate_session_token(email_sessions[platform]["object"].customer_id),
-                            "is_active": True
+                            "is_active": True,
+                            "deleted_at": None,
+
                         }
                         return update_session(email_sessions[platform]["object"].id, session_data)
         else:
@@ -180,6 +160,7 @@ def get_or_create_sessionss(session_input):
                     # ACTION: Copy the Session with the other platform
                     # session_token and cust_id and return the session token
                     # and cust_id
+                    print 100
                     return create_session_from_obj(email_sessions[opposite_platform]["object"], session_input, social_profile)
                 else:
                     # CASE: DB has record of this Customer, this platform session record is not there  and his other platform session Inactive
@@ -189,66 +170,3 @@ def get_or_create_sessionss(session_input):
             else:
                 pass
                 # Not Possible
-
-
-# def get_or_create_session(session_input):
-#     platform = session_input['platform']
-#     platform_token = session_input['platform_token']
-#     source = session_input['source']
-#     social_profile = SocialProfile(platform, platform_token)
-#     email_sessions = email_related_sessions(social_profile.email_id)
-#     if email_sessions:
-#         session = email_sessions.get(
-#             platform)
-#         if session:
-#             if not session.session_token:
-#                 opposite_platform_session = email_sessions.get(
-#                     get_opposite_platform(platform))
-#                 if opposite_platform_session:
-#                     if opposite_platform.session_token:
-#                         session_token = generate_session_token(
-#                             opposite_platform.customer_id)
-#                         session.session_token = session_token
-#                         session.is_active = True
-#                         session.deleted_at = None
-#                         session.save()
-#                 else:
-
-#                 session_token = generate_session_token(
-#                     session.customer_id)
-#                 session.session_token = session_token
-#                 session.is_active = True
-#                 session.deleted_at = None
-#                 session.save()
-#             return session_success_data(session)
-#         else:
-#             print 101001
-#             new_session = email_sessions.get(
-#                 get_opposite_platform(platform))
-#             new_session.id = None
-#             new_session.platform = platform
-#             new_session.platform_token = platform_token
-#             print new_session.session_token
-#             print new_session.is_active
-#             if not new_session.session_token:
-#                 session_token = generate_session_token(
-#                     new_session.customer_id)
-#                 new_session.session_token = session_token
-#                 new_session.is_active = True
-#                 new_session.deleted_at = None
-#             new_session.save()
-#             return session_success_data(new_session)
-#     else:
-#         new_customer = Customer.objects.create()
-#         login_object_dict = {
-#             'platform_token': session_input['platform_token'],
-#             'source': session_input['source'],
-#             'platform': session_input['platform'],
-#             'customer': new_customer,
-#             'social_data': json.dumps(social_profile.data),
-#             'email_id': social_profile.email_id,
-#             'session_token': generate_session_token(new_customer.customer_id)
-#         }
-#         new_session = Login.objects.create(**login_object_dict)
-#         print new_session.is_active
-#         return session_success_data(new_session)

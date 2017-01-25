@@ -1,5 +1,5 @@
 import requests
-from social.exceptions import ErrorMessage
+from common.exceptions import ErrorMessage
 
 FACEBOOK_BASE_URL = 'https://graph.facebook.com/me'
 GOOGLE_BASE_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
