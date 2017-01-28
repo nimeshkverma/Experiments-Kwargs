@@ -7,4 +7,4 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Customer
-        fields = '__all__'
+        exclude = ('created_at', 'updated_at', 'is_active',)

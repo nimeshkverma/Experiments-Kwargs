@@ -1,30 +1,32 @@
-from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from common.decorators import session_authorize, meta_data_response
 
 from . import serializers
-
-from common.decorators import session_authorize
-from common.response import MetaDataResponse
 
 
 class SocialLogin(APIView):
 
+    @meta_data_response
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
             social_login_data = serializer.save()
-            return MetaDataResponse(social_login_data, status=status.HTTP_200_OK)
-        return MetaDataResponse({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(social_login_data, status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SocialLogout(APIView):
 
-    @session_authorize
+    @meta_data_response
+    @session_authorize()
     def post(self, request, auth_data):
         if auth_data.get("authorized"):
             serializer = serializers.LogoutSerializer(data=auth_data)
             if serializer.is_valid():
                 serializer.errors
                 serializer.save()
-                return MetaDataResponse({}, status.HTTP_204_NO_CONTENT)
-        return MetaDataResponse({}, status.HTTP_401_UNAUTHORIZED)
+                return Response({}, status.HTTP_204_NO_CONTENT)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
