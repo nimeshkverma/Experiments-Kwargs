@@ -19,4 +19,25 @@ class Customer(ActiveModel):
         db_table = "customer"
 
     def __unicode__(self):
-        return "%s" % (str(self.id))
+        return "%s" % (str(self.customer_id))
+
+
+class BankDetails(ActiveModel):
+    customer_id = models.OneToOneField(
+        Customer, on_delete=models.CASCADE, primary_key=True, db_column='customer_id')
+    bank_name = models.CharField(max_length=50, blank=False, null=False)
+    account_number = models.CharField(max_length=20, blank=False, null=False)
+    account_holder_name = models.CharField(
+        max_length=50, blank=False, null=False)
+    ifsc = models.CharField(max_length=20, blank=False, null=False)
+    upi_mobile_number = models.CharField(max_length=12, validators=[
+        mobile_number_regex], blank=True, default="")
+    is_upi_mobile_number_verified = models.BooleanField(default=False)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "customer_bank_details"
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer_id), str(self.account_holder_name), str(self.bank_name))
