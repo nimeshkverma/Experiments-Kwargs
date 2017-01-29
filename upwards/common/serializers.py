@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from social.models import Login
+from . import models
 
 
 class AuthenticationSerializer(serializers.Serializer):
@@ -15,3 +16,17 @@ class AuthenticationSerializer(serializers.Serializer):
         else:
             login_object.save()
             return True
+
+
+class CollegeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.College
+        fields = ('id', 'name', 'is_active')
+
+
+class CompanySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Company
+        fields = ('id', 'name', 'is_active')

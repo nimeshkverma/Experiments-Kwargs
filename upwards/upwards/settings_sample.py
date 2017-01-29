@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'social.apps.SocialConfig',
     'customer.apps.CustomerConfig',
+    'eligibility.apps.EligibilityConfig',
     'common.apps.CommonConfig',
 ]
 
@@ -123,3 +124,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+BASE_URL = 'http://40237ad1.ngrok.io/'

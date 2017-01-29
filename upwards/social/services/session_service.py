@@ -91,7 +91,6 @@ def get_or_create_sessions(session_input):
     platform_token = session_input['platform_token']
     source = session_input['source']
     social_profile = SocialProfile(platform, platform_token)
-    print social_profile.email_id
     email_sessions = email_related_sessions(social_profile.email_id)
     opposite_platform = get_opposite_platform(platform)
 
@@ -160,7 +159,6 @@ def get_or_create_sessions(session_input):
                     # ACTION: Copy the Session with the other platform
                     # session_token and cust_id and return the session token
                     # and cust_id
-                    print 100
                     return create_session_from_obj(email_sessions[opposite_platform]["object"], session_input, social_profile)
                 else:
                     # CASE: DB has record of this Customer, this platform session record is not there  and his other platform session Inactive
