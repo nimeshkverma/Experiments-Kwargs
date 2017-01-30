@@ -42,7 +42,7 @@ class Aadhaar(ActiveModel):
     state = models.CharField(max_length=25, blank=False, null=False)
     pincode = models.CharField(max_length=6, validators=[
         pincode_regex], blank=False, null=False)
-    pic_link = models.FileField()
+    pic_link = models.URLField()
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 

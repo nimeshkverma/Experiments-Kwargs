@@ -7,6 +7,16 @@ from common.models import (ActiveModel,
                            YEAR_CHOICES)
 
 
+GRADUATE = 'Graduate'
+POST_GRADUATE = 'Post Graduate or Higher'
+OTHERS = 'Others'
+QUALIFICATION_CHOICES = (
+    (GRADUATE, 'graduate'),
+    (POST_GRADUATE, 'post_graduate'),
+    (OTHERS, 'others'),
+)
+
+
 class Finance(ActiveModel):
     customer = models.ForeignKey(
         'customer.Customer', on_delete=models.CASCADE)
@@ -49,14 +59,15 @@ class Education(ActiveModel):
     college = models.ForeignKey(
         'common.College', on_delete=models.CASCADE)
     qualification = models.CharField(max_length=25, blank=False, null=False)
-    completion_year = models.IntegerField(choices=YEAR_CHOICES)
+    completion_year = models.IntegerField(
+        choices=QUALIFICATION_CHOICES, blank=False, null=False)
     qualification_type = models.CharField(
-        max_length=5, blank=False, null=False, default="highest")
+        max_length=25, blank=False, null=False, default="highest")
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
     class Meta(object):
-        db_table = "customer_profession"
+        db_table = "customer_education"
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.college), str(self.qualification))

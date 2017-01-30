@@ -5,9 +5,7 @@ from django.db import models
 from common.models import (	ActiveModel,
                             ActiveObjectManager,
                             pan_regex,
-                            alphabet_regex,
-                            alphabet_regex_allow_empty,
-                            alphabet_whitespace_regex,)
+                            alphabet_regex_allow_empty,)
 
 
 class Pan(ActiveModel):
@@ -18,11 +16,11 @@ class Pan(ActiveModel):
     title = models.CharField(max_length=10, validators=[
         alphabet_regex_allow_empty], default="")
     first_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex], blank=False, null=False)
+        alphabet_regex_allow_empty], blank=False, null=False, default="")
     middle_name = models.CharField(max_length=25, validators=[
         alphabet_regex_allow_empty], default="")
     last_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex], blank=False, null=False)
+        alphabet_regex_allow_empty], blank=False, null=False, default="")
     father_first_name = models.CharField(max_length=25, validators=[
         alphabet_regex_allow_empty], default="")
     father_middle_name = models.CharField(max_length=25, validators=[
