@@ -39,6 +39,9 @@ class Profession(ActiveModel):
         'common.Company', on_delete=models.CASCADE)
     email = models.EmailField(blank=False, null=False)
     is_email_verified = models.BooleanField(default=False)
+    phone_no = models.CharField(
+        max_length=25, blank=True, null=True, default="")
+    is_phone_no_verified = models.BooleanField(default=False)
     salary = models.IntegerField(blank=False, null=False)
     join_date = models.DateField(blank=False, null=False)
     total_experience = models.DecimalField(
