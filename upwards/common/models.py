@@ -24,9 +24,10 @@ for r in range(1950, (datetime.now().year + 1)):
     YEAR_CHOICES.append((r, r))
 
 
-MALE = 'M'
-FEMALE = 'F'
-OTHER = 'O'
+MALE = 'Male'
+FEMALE = 'Female'
+OTHER = 'Other'
+
 GENDER_CHOICES = (
     (MALE, 'Male'),
     (FEMALE, 'Female'),

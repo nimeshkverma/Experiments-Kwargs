@@ -17,32 +17,34 @@ from common.models import (	ActiveModel,
 class Aadhaar(ActiveModel):
     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
     aadhaar = models.CharField(max_length=12, validators=[
-        aadhaar_regex], blank=False, null=False)
+        aadhaar_regex], blank=True, null=False)
     is_verified = models.BooleanField(default=False)
     first_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex], blank=False, null=False)
+        alphabet_whitespace_regex], blank=True, null=False)
     last_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex], blank=False, null=False)
+        alphabet_whitespace_regex], blank=True, null=False)
     father_first_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], default="")
+        alphabet_regex_allow_empty], blank=True, default="")
     father_last_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], default="")
+        alphabet_regex_allow_empty], blank=True, default="")
     mother_first_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], default="")
+        alphabet_regex_allow_empty], blank=True, default="")
     mother_last_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], default="")
-    dob = models.DateField()
+        alphabet_regex_allow_empty], blank=True, default="")
+    dob = models.DateField(blank=True, null=False)
     gender = models.CharField(
-        max_length=1, default=MALE, choices=GENDER_CHOICES)
+        max_length=1, default=MALE, choices=GENDER_CHOICES, blank=True, null=False)
     mobile_no = models.CharField(max_length=12, validators=[
-                                 mobile_number_regex], blank=False, null=False)
-    address_line1 = models.CharField(max_length=256, default="")
-    address_line2 = models.CharField(max_length=256, default="")
-    city = models.CharField(max_length=25, blank=False, null=False)
-    state = models.CharField(max_length=25, blank=False, null=False)
+                                 mobile_number_regex], blank=True, null=False)
+    address_line1 = models.CharField(
+        max_length=256, default="", blank=True, null=False)
+    address_line2 = models.CharField(
+        max_length=256, default="", blank=True, null=False)
+    city = models.CharField(max_length=25, blank=True, null=False)
+    state = models.CharField(max_length=25, blank=True, null=False)
     pincode = models.CharField(max_length=6, validators=[
-        pincode_regex], blank=False, null=False)
-    pic_link = models.URLField()
+        pincode_regex], blank=True, null=False)
+    pic_link = models.URLField(blank=True, null=False)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
