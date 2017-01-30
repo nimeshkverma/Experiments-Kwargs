@@ -44,7 +44,7 @@ class FinanceDetail(APIView):
             finance_object_updated = serializers.FinanceSerializer().update(finance_object,
                                                                             request.data)
             return Response(serializers.FinanceSerializer(finance_object_updated).data, status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
     @meta_data_response
     @session_authorize()

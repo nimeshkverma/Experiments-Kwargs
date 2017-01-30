@@ -54,47 +54,47 @@ class Login(LifeTimeTrackingModel):
         return "%s__%s__%s" % (str(self.customer), str(self.email_id), str(self.platform))
 
 
-# class Profile(LifeTimeTrackingModel):
-#     customer = models.ForeignKey('Login', on_delete=models.CASCADE)
-#     email_id = models.EmailField(blank=False, null=False)
-#     platform_id = models.CharField(max_length=256, blank=False, null=False)
-#     platform = models.CharField(
-#         max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
-#     first_name = models.CharField(max_length=25, validators=[
-#         alphabet_whitespace_regex_allow_empty], default="")
-#     last_name = models.CharField(max_length=25, validators=[
-#         alphabet_whitespace_regex_allow_empty], default="")
-#     gender = models.CharField(
-#         max_length=1, default=MALE, choices=GENDER_CHOICES)
-#     profile_link = models.URLField()
-#     profile_pic_link = models.URLField()
+class Profile(LifeTimeTrackingModel):
+    login = models.ForeignKey('Login', on_delete=models.CASCADE)
+    email_id = models.EmailField(blank=False, null=False)
+    platform_id = models.CharField(max_length=256, blank=False, null=False)
+    platform = models.CharField(
+        max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
+    first_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    last_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    gender = models.CharField(
+        max_length=1, default=MALE, choices=GENDER_CHOICES)
+    profile_link = models.URLField()
+    profile_pic_link = models.URLField()
 
-#     def __unicode__(self):
-# return "%s__%s__%s" % (str(self.customer), str(self.email_id),
-# str(self.platform))
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.Login), str(self.email_id),
+                               str(self.platform))
 
 
-# class LinkedinProfile(LifeTimeTrackingModel):
-#     customer = models.ForeignKey('Login', on_delete=models.CASCADE)
-#     email_id = models.EmailField(blank=False, null=False)
-#     linkedin_id = models.CharField(max_length=256, blank=False, null=False)
-#     first_name = models.CharField(max_length=25, validators=[
-#         alphabet_whitespace_regex_allow_empty], default="")
-#     last_name = models.CharField(max_length=25, validators=[
-#         alphabet_whitespace_regex_allow_empty], default="")
-#     gender = models.CharField(
-#         max_length=1, default=MALE, choices=GENDER_CHOICES)
-#     profile_link = models.URLField()
-#     profile_pic_link = models.URLField()
-#     industry = models.CharField(max_length=100, default="")
-#     location = models.CharField(max_length=100, default="")
-#     last_employer = models.CharField(max_length=100, default="")
-#     join_date_last_employer = models.DateField(blank=False, null=False)
-#     connections = models.   IntegerField(default=500)
+class LinkedinProfile(LifeTimeTrackingModel):
+    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
+    email_id = models.EmailField(blank=False, null=False)
+    linkedin_id = models.CharField(max_length=256, blank=False, null=False)
+    first_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    last_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    gender = models.CharField(
+        max_length=1, default=MALE, choices=GENDER_CHOICES)
+    profile_link = models.URLField()
+    profile_pic_link = models.URLField()
+    industry = models.CharField(max_length=100, default="")
+    location = models.CharField(max_length=100, default="")
+    last_employer = models.CharField(max_length=100, default="")
+    join_date_last_employer = models.DateField(blank=False, null=False)
+    connections = models.   IntegerField(default=500)
 
-#     class Meta(object):
-#         db_table = "customer_linkedin_profile"
+    class Meta(object):
+        db_table = "customer_linkedin_profile"
 
-#     def __unicode__(self):
-# return "%s__%s__%s" % (str(self.customer), str(self.email_id),
-# str(self.platform))
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer), str(self.email_id),
+                               str(self.platform))
