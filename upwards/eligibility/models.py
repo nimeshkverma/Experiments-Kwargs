@@ -63,7 +63,7 @@ class Education(ActiveModel):
         'common.College', on_delete=models.CASCADE)
     qualification = models.CharField(max_length=25, blank=False, null=False)
     completion_year = models.IntegerField(
-        choices=QUALIFICATION_CHOICES, blank=False, null=False)
+        choices=YEAR_CHOICES, blank=False, null=False)
     qualification_type = models.CharField(
         max_length=25, blank=False, null=False, default="highest")
     objects = models.Manager()

@@ -103,3 +103,52 @@ class ProfessionDetail(APIView):
             profession_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class EducationCreate(APIView):
+
+    @meta_data_response
+    @session_authorize('customer_id')
+    def post(self, request, auth_data):
+        if auth_data.get('authorized'):
+            serializer = serializers.EducationSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            print serializer.errors
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class EducationDetail(APIView):
+
+    @meta_data_response
+    @session_authorize()
+    def get(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            education_object = get_object_or_404(
+                models.Education, customer_id=auth_data['customer_id'])
+            serializer = serializers.EducationSerializer(education_object)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+    @meta_data_response
+    @session_authorize()
+    def put(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            education_object = get_object_or_404(
+                models.Education, customer_id=auth_data['customer_id'])
+            education_object_updated = serializers.EducationSerializer().update(education_object,
+                                                                                request.data)
+            return Response(serializers.EducationSerializer(education_object_updated).data, status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+
+    @meta_data_response
+    @session_authorize()
+    def delete(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            education_object = get_object_or_404(
+                models.Education, customer_id=auth_data['customer_id'])
+            education_object.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
