@@ -6,6 +6,12 @@ urlpatterns = [
     url(r'^finance/$', views.FinanceCreate.as_view(), name='FinanceCreate'),
     url(r'^(?P<pk>[0-9]+)/finance/$',
         views.FinanceDetail.as_view(), name='FinanceDetail'),
+    url(r'^profession/$', views.ProfessionCreate.as_view(), name='ProfessionCreate'),
+    url(r'^(?P<pk>[0-9]+)/profession/$',
+        views.ProfessionDetail.as_view(), name='ProfessionDetail'),
+    url(r'^education/$', views.EducationCreate.as_view(), name='EducationCreate'),
+    url(r'^(?P<pk>[0-9]+)/education/$',
+        views.EducationDetail.as_view(), name='EducationDetail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

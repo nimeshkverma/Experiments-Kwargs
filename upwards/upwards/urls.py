@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^customer/', include('social.urls')),
     url(r'^customer/', include('eligibility.urls')),
     url(r'^customer/', include('customer.urls')),
+    url(r'^customer/', include('pan.urls')),
     url(r'^common/', include('common.urls')),
 
 ]

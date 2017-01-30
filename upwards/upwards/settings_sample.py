@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'common.apps.CommonConfig',
     'social.apps.SocialConfig',
     'customer.apps.CustomerConfig',
     'eligibility.apps.EligibilityConfig',
-    'common.apps.CommonConfig',
+    'pan.apps.PanConfig',
+    'aadhaar.apps.AadhaarConfig',
 ]
 
 MIDDLEWARE = [
