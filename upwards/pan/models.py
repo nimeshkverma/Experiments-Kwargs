@@ -35,6 +35,7 @@ class Pan(ActiveModel):
 
     class Meta(object):
         db_table = "customer_pan"
+        unique_together = ("customer", "id")
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.pan), str(self.first_name))

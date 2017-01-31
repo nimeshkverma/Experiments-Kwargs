@@ -74,3 +74,67 @@ class CompanyDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class SalaryPaymentModeList(mixins.ListModelMixin,
+                            mixins.CreateModelMixin,
+                            generics.GenericAPIView):
+    queryset = models.SalaryPaymentMode.active_objects.all()
+    serializer_class = serializers.SalaryPaymentModeSerializer
+
+    @meta_data_response
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @meta_data_response
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class SalaryPaymentModeDetail(mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin,
+                              mixins.DestroyModelMixin,
+                              generics.GenericAPIView):
+    queryset = models.SalaryPaymentMode.objects.all()
+    serializer_class = serializers.SalaryPaymentModeSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class OrganisationTypeList(mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           generics.GenericAPIView):
+    queryset = models.OrganisationType.active_objects.all()
+    serializer_class = serializers.OrganisationTypeSerializer
+
+    @meta_data_response
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @meta_data_response
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class OrganisationTypeDetail(mixins.RetrieveModelMixin,
+                             mixins.UpdateModelMixin,
+                             mixins.DestroyModelMixin,
+                             generics.GenericAPIView):
+    queryset = models.OrganisationType.objects.all()
+    serializer_class = serializers.OrganisationTypeSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

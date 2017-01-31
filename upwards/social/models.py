@@ -77,7 +77,13 @@ class Profile(LifeTimeTrackingModel):
 class LinkedinProfile(LifeTimeTrackingModel):
     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
     email_id = models.EmailField(blank=False, null=False)
+    social_data = models.TextField(editable=False, blank=True, null=False)
+    linkedin_token = models.TextField(editable=False, blank=True, null=False)
+    session_token = models.CharField(
+        editable=False, blank=True, null=True, max_length=64)
     linkedin_id = models.CharField(max_length=256, blank=False, null=False)
+    source = models.CharField(
+        max_length=20, default=ANDROID, choices=SOURCE_CHOICES)
     first_name = models.CharField(max_length=25, validators=[
         alphabet_whitespace_regex_allow_empty], default="")
     last_name = models.CharField(max_length=25, validators=[
@@ -90,7 +96,7 @@ class LinkedinProfile(LifeTimeTrackingModel):
     location = models.CharField(max_length=100, default="")
     last_employer = models.CharField(max_length=100, default="")
     join_date_last_employer = models.DateField(blank=False, null=False)
-    connections = models.   IntegerField(default=500)
+    connections = models.IntegerField(default=500)
 
     class Meta(object):
         db_table = "customer_linkedin_profile"

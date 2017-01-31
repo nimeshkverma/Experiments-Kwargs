@@ -23,7 +23,7 @@ class Customer(ActiveModel):
 
 
 class BankDetails(ActiveModel):
-    customer = models.ForeignKey(
+    customer = models.OneToOneField(
         'customer.Customer', on_delete=models.CASCADE)
     bank_name = models.CharField(max_length=50, blank=False, null=False)
     account_number = models.CharField(max_length=20, blank=False, null=False)

@@ -61,7 +61,8 @@ class ActiveObjectManager(models.Manager):
 
 
 class College(ActiveModel):
-    name = models.CharField(blank=False, null=False, max_length=256)
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
@@ -73,12 +74,39 @@ class College(ActiveModel):
 
 
 class Company(ActiveModel):
-    name = models.CharField(blank=False, null=False, max_length=256)
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
     class Meta(object):
         db_table = "company"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.id), str(self.name))
+
+
+class SalaryPaymentMode(ActiveModel):
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "salary_payment_mode"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.id), str(self.name))
+
+
+class OrganisationType(ActiveModel):
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "organisation_type"
 
     def __unicode__(self):
         return "%s__%s" % (str(self.id), str(self.name))

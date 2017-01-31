@@ -14,11 +14,13 @@ class FinanceSerializer(serializers.ModelSerializer):
 class ProfessionSerializer(serializers.ModelSerializer):
     customer_id = serializers.IntegerField()
     company_id = serializers.IntegerField()
+    organisation_type_id = serializers.IntegerField()
+    salary_payment_mode_id = serializers.IntegerField()
 
     class Meta:
         model = models.Profession
-        exclude = ('customer', 'company', 'created_at',
-                   'updated_at', 'is_active', 'id')
+        exclude = ('customer', 'company', 'organisation_type',
+                   'salary_payment_mode', 'created_at', 'updated_at', 'is_active', 'id')
 
 
 class EducationSerializer(serializers.ModelSerializer):

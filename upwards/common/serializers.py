@@ -30,3 +30,17 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
         fields = ('id', 'name', 'is_active')
+
+
+class SalaryPaymentModeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.SalaryPaymentMode
+        fields = ('id', 'name', 'is_active')
+
+
+class OrganisationTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.OrganisationType
+        fields = ('id', 'name', 'is_active')
