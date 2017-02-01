@@ -4,19 +4,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from . import models, serializers
-
-from common.decorators import session_authorize, meta_data_response
-from common.response import MetaDataResponse
+from common.decorators import session_authorize, meta_data_response, catch_exception
 
 
 class FinanceCreate(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
         if auth_data.get('authorized'):
             serializer = serializers.FinanceSerializer(data=request.data)
             if serializer.is_valid():
+                serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -25,7 +25,8 @@ class FinanceCreate(APIView):
 
 class FinanceDetail(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -35,18 +36,21 @@ class FinanceDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
             finance_object = get_object_or_404(
                 models.Finance, customer_id=auth_data['customer_id'])
-            finance_object_updated = serializers.FinanceSerializer().update(finance_object,
-                                                                            request.data)
+            serializers.FinanceSerializer().validate_foreign_keys(request.data)
+            finance_object_updated = serializers.FinanceSerializer().update(
+                finance_object, request.data)
             return Response(serializers.FinanceSerializer(finance_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -59,12 +63,14 @@ class FinanceDetail(APIView):
 
 class ProfessionCreate(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
         if auth_data.get('authorized'):
             serializer = serializers.ProfessionSerializer(data=request.data)
             if serializer.is_valid():
+                serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -73,7 +79,8 @@ class ProfessionCreate(APIView):
 
 class ProfessionDetail(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -83,18 +90,21 @@ class ProfessionDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
             profession_object = get_object_or_404(
                 models.Profession, customer_id=auth_data['customer_id'])
-            profession_object_updated = serializers.ProfessionSerializer().update(profession_object,
-                                                                                  request.data)
+            serializers.ProfessionSerializer().validate_foreign_keys(request.data)
+            profession_object_updated = serializers.ProfessionSerializer().update(
+                profession_object, request.data)
             return Response(serializers.ProfessionSerializer(profession_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -107,12 +117,14 @@ class ProfessionDetail(APIView):
 
 class EducationCreate(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
         if auth_data.get('authorized'):
             serializer = serializers.EducationSerializer(data=request.data)
             if serializer.is_valid():
+                serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -121,7 +133,8 @@ class EducationCreate(APIView):
 
 class EducationDetail(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -131,18 +144,21 @@ class EducationDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
             education_object = get_object_or_404(
                 models.Education, customer_id=auth_data['customer_id'])
-            education_object_updated = serializers.EducationSerializer().update(education_object,
-                                                                                request.data)
+            serializers.EducationSerializer().validate_foreign_keys(request.data)
+            education_object_updated = serializers.EducationSerializer().update(
+                education_object, request.data)
             return Response(serializers.EducationSerializer(education_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):

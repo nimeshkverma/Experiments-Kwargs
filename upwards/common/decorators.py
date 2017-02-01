@@ -1,7 +1,9 @@
 from functools import wraps
+from django.db import IntegrityError
 from rest_framework import status
 from serializers import AuthenticationSerializer
 from response import MetaDataResponse
+from exceptions import NotAcceptableError
 
 
 def session_authorize(customer_id_key='pk', *args, **kwargs):
@@ -37,9 +39,23 @@ def session_authorize(customer_id_key='pk', *args, **kwargs):
     return deco
 
 
-def meta_data_response(f):
+def catch_exception(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        vanilla_response = f(*args, **kwargs)
-        return MetaDataResponse(vanilla_response.data, vanilla_response.status_code)
+        try:
+            return f(*args, **kwargs)
+        except NotAcceptableError as e:
+            return MetaDataResponse(e.response, e.meta, status=e.status)
+        except IntegrityError as e:
+            return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
     return decorated_function
+
+
+def meta_data_response(meta=""):
+    def deco(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            vanilla_response = f(*args, **kwargs)
+            return MetaDataResponse(vanilla_response.data, meta, status=vanilla_response.status_code)
+        return decorated_function
+    return deco

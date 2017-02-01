@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, mixins, generics
 
 from . import response, models, serializers
-from decorators import meta_data_response
+from decorators import meta_data_response, catch_exception
 from data import config_data
 
 
@@ -18,11 +18,13 @@ class CollegeList(mixins.ListModelMixin,
     queryset = models.College.active_objects.all()
     serializer_class = serializers.CollegeSerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
@@ -50,11 +52,13 @@ class CompanyList(mixins.ListModelMixin,
     queryset = models.Company.active_objects.all()
     serializer_class = serializers.CompanySerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
@@ -82,11 +86,13 @@ class SalaryPaymentModeList(mixins.ListModelMixin,
     queryset = models.SalaryPaymentMode.active_objects.all()
     serializer_class = serializers.SalaryPaymentModeSerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
@@ -114,11 +120,13 @@ class OrganisationTypeList(mixins.ListModelMixin,
     queryset = models.OrganisationType.active_objects.all()
     serializer_class = serializers.OrganisationTypeSerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 

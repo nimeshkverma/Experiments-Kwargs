@@ -21,3 +21,8 @@ class LogoutSerializer(serializers.Serializer):
     def save(self):
         return models.Login.delete_session(self.validated_data.get(
             "session_token"), self.validated_data.get("customer_id"))
+
+
+class LinkedinAuthSerializer(serializers.Serializer):
+    platform_token = serializers.CharField()
+    source = serializers.ChoiceField(choices=models.SOURCE_CHOICES)

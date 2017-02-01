@@ -15,6 +15,12 @@ class Customer(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    def validate_customer(self, customer_id):
+        is_valid_customer = False
+        if Customer.active_objects.get(pk=customer_id):
+            is_valid_customer = True
+        return is_valid_customer
+
     class Meta(object):
         db_table = "customer"
 

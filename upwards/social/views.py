@@ -9,7 +9,7 @@ from . import serializers
 
 class SocialLogin(APIView):
 
-    @meta_data_response
+    @meta_data_response()
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -20,7 +20,7 @@ class SocialLogin(APIView):
 
 class SocialLogout(APIView):
 
-    @meta_data_response
+    @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data):
         if auth_data.get("authorized"):
@@ -40,14 +40,14 @@ class LinkedinAuth(APIView):
             return Response({}, status.HTTP_200_OK)
         return Response({}, status.HTTP_400_BAD_REQUEST)
 
-    @meta_data_response
+    @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data):
         if auth_data.get("authorized"):
             return self.authorize_linked(request.data)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data):
         if auth_data.get("authorized"):

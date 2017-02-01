@@ -66,6 +66,12 @@ class College(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    def validate_college(self, college_id):
+        is_valid_college = False
+        if College.active_objects.get(pk=college_id):
+            is_valid_college = True
+        return is_valid_college
+
     class Meta(object):
         db_table = "college"
 
@@ -78,6 +84,12 @@ class Company(ActiveModel):
                             max_length=256, unique=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
+
+    def validate_company(self, company_id):
+        is_valid_company = False
+        if Company.active_objects.get(pk=company_id):
+            is_valid_company = True
+        return is_valid_company
 
     class Meta(object):
         db_table = "company"
