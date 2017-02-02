@@ -9,7 +9,8 @@ from common.models import (	ActiveModel,
 
 
 class Pan(ActiveModel):
-    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
+    customer = models.OneToOneField(
+        'customer.Customer', on_delete=models.CASCADE)
     pan = models.CharField(max_length=10, validators=[
         pan_regex], blank=False, null=False)
     is_verified = models.BooleanField(blank=True, default=False)
@@ -35,6 +36,7 @@ class Pan(ActiveModel):
 
     class Meta(object):
         db_table = "customer_pan"
+        unique_together = ("customer", "id")
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.pan), str(self.first_name))

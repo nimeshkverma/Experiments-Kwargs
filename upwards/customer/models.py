@@ -15,6 +15,12 @@ class Customer(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    def validate_customer(self, customer_id):
+        is_valid_customer = False
+        if Customer.active_objects.get(pk=customer_id):
+            is_valid_customer = True
+        return is_valid_customer
+
     class Meta(object):
         db_table = "customer"
 
@@ -23,7 +29,7 @@ class Customer(ActiveModel):
 
 
 class BankDetails(ActiveModel):
-    customer = models.ForeignKey(
+    customer = models.OneToOneField(
         'customer.Customer', on_delete=models.CASCADE)
     bank_name = models.CharField(max_length=50, blank=False, null=False)
     account_number = models.CharField(max_length=20, blank=False, null=False)

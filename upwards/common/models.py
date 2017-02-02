@@ -61,9 +61,16 @@ class ActiveObjectManager(models.Manager):
 
 
 class College(ActiveModel):
-    name = models.CharField(blank=False, null=False, max_length=256)
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
+
+    def validate_college(self, college_id):
+        is_valid_college = False
+        if College.active_objects.get(pk=college_id):
+            is_valid_college = True
+        return is_valid_college
 
     class Meta(object):
         db_table = "college"
@@ -73,12 +80,45 @@ class College(ActiveModel):
 
 
 class Company(ActiveModel):
-    name = models.CharField(blank=False, null=False, max_length=256)
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    def validate_company(self, company_id):
+        is_valid_company = False
+        if Company.active_objects.get(pk=company_id):
+            is_valid_company = True
+        return is_valid_company
+
+    class Meta(object):
+        db_table = "company"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.id), str(self.name))
+
+
+class SalaryPaymentMode(ActiveModel):
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
     class Meta(object):
-        db_table = "company"
+        db_table = "salary_payment_mode"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.id), str(self.name))
+
+
+class OrganisationType(ActiveModel):
+    name = models.CharField(blank=False, null=False,
+                            max_length=256, unique=True)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "organisation_type"
 
     def __unicode__(self):
         return "%s__%s" % (str(self.id), str(self.name))

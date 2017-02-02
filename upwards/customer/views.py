@@ -6,8 +6,10 @@ from rest_framework.views import APIView
 
 from . import models, serializers
 
-from common.decorators import session_authorize, meta_data_response
+from common.decorators import session_authorize, meta_data_response, catch_exception
 from common.response import MetaDataResponse
+from common.utils.model_utils import check_pk_existence
+from common.exceptions import NotAcceptableError
 
 
 class CustomerList(mixins.ListModelMixin,
@@ -16,11 +18,13 @@ class CustomerList(mixins.ListModelMixin,
     queryset = models.Customer.active_objects.all()
     serializer_class = serializers.CustomerSerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
@@ -32,21 +36,24 @@ class CustomerDetail(mixins.RetrieveModelMixin,
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerSerializer
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get("authorized"):
             return self.retrieve(request, *args, **kwargs)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get("authorized"):
             return self.update(request, *args, **kwargs)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get("authorized"):
@@ -56,12 +63,14 @@ class CustomerDetail(mixins.RetrieveModelMixin,
 
 class BankDetailsCreate(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
         if auth_data.get('authorized'):
             serializer = serializers.BankDetailsSerializer(data=request.data)
             if serializer.is_valid():
+                serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -70,7 +79,8 @@ class BankDetailsCreate(APIView):
 
 class BankDetails(APIView):
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
@@ -80,18 +90,21 @@ class BankDetails(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
             bank_object = get_object_or_404(
                 models.BankDetails, customer_id=auth_data['customer_id'])
+            serializers.BankDetailsSerializer().validate_foreign_keys(request.data)
             bank_object_updated = serializers.BankDetailsSerializer().update(bank_object,
                                                                              request.data)
             return Response(serializers.BankDetailsSerializer(bank_object_updated).data, status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
-    @meta_data_response
+    @catch_exception
+    @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
