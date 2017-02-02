@@ -1,3 +1,4 @@
+from copy import deepcopy
 from rest_framework import serializers
 
 from . import models
@@ -11,7 +12,8 @@ class LoginSerializer(serializers.Serializer):
     platform = serializers.ChoiceField(choices=models.PLATFORM_CHOICES)
 
     def save(self):
-        return get_or_create_sessions(self.validated_data)
+        session_data = get_or_create_sessions(self.validated_data)
+        return session_data
 
 
 class LogoutSerializer(serializers.Serializer):
@@ -24,5 +26,17 @@ class LogoutSerializer(serializers.Serializer):
 
 
 class LinkedinAuthSerializer(serializers.Serializer):
-    platform_token = serializers.CharField()
+    linkedin_token = serializers.CharField()
     source = serializers.ChoiceField(choices=models.SOURCE_CHOICES)
+
+    def save(self):
+        pass
+        # return create_or_update_linkedin_profile(self.validated_data)
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    login_id = serializers.IntegerField()
+
+    class Meta:
+        model = models.Profile
+        exclude = ('login', 'created_at', 'updated_at', 'is_active', 'id')

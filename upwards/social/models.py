@@ -76,7 +76,7 @@ class Profile(LifeTimeTrackingModel):
 
 class LinkedinProfile(LifeTimeTrackingModel):
     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
-    email_id = models.EmailField(blank=False, null=False)
+    email_id = models.EmailField(blank=True, null=True)
     social_data = models.TextField(editable=False, blank=True, null=False)
     linkedin_token = models.TextField(editable=False, blank=True, null=False)
     session_token = models.CharField(
@@ -102,5 +102,5 @@ class LinkedinProfile(LifeTimeTrackingModel):
         db_table = "customer_linkedin_profile"
 
     def __unicode__(self):
-        return "%s__%s__%s" % (str(self.customer), str(self.email_id),
-                               str(self.platform))
+        return "%s__%s__%s" % (str(self.customer), str(self.linkedin_id),
+                               str(self.first_name))
