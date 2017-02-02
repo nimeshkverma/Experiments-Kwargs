@@ -3,7 +3,7 @@ from rest_framework import serializers
 from . import models
 
 from common.utils.model_utils import check_pk_existence
-from common.exceptions import NotAcceptableError
+from common.exceptions import NotAcceptableError, ConflictError
 from customer.models import Customer
 
 
@@ -24,6 +24,16 @@ class DocumentsSerializer(serializers.ModelSerializer):
                 if not check_pk_existence(model_pk['model'], model_pk['pk']):
                     raise NotAcceptableError(
                         model_pk['pk_name'], model_pk['pk'])
+
+    def check_table_conflict(self):
+        customer_id = self.validated_data.get('customer_id')
+        document_type_id = self.validated_data.get('document_type_id')
+
+        document_objects = models.Documents.objects.filter(
+            customer_id=customer_id, document_type_id=document_type_id)
+        if document_objects:
+            raise ConflictError('customer_id and document_type_id', str(
+                customer_id) + ' and ' + str(document_type_id))
 
     class Meta:
         model = models.Documents

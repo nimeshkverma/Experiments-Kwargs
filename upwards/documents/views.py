@@ -52,9 +52,9 @@ class DocumentsCreate(APIView):
             serializer = serializers.DocumentsSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.validate_foreign_keys()
+                serializer.check_table_conflict()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            print serializer.errors
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
@@ -66,8 +66,8 @@ class DocumentsDetail(APIView):
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
-            documents_object = get_object_or_404(
-                models.Documents, customer_id=auth_data['customer_id'])
+            documents_object = get_object_or_404(models.Documents, customer_id=auth_data[
+                                                 'customer_id'], document_type_id=request.query_params.get('document_type_id'))
             serializer = serializers.DocumentsSerializer(documents_object)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
@@ -77,12 +77,17 @@ class DocumentsDetail(APIView):
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
-            documents_object = get_object_or_404(
-                models.Documents, customer_id=auth_data['customer_id'])
-            serializers.DocumentsSerializer().validate_foreign_keys(request.data)
-            documents_object_updated = serializers.DocumentsSerializer().update(
-                documents_object, request.data)
-            return Response(serializers.DocumentsSerializer(documents_object_updated).data, status.HTTP_200_OK)
+            documents_object = get_object_or_404(models.Documents, customer_id=auth_data[
+                                                 'customer_id'], document_type_id=request.data.get('document_type_id'))
+            serializer = serializers.DocumentsSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.validate_foreign_keys()
+                documents_object.delete()
+                serializer.check_table_conflict()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            print serializer.errors
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
     @catch_exception
@@ -90,8 +95,8 @@ class DocumentsDetail(APIView):
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
-            documents_object = get_object_or_404(
-                models.Documents, customer_id=auth_data['customer_id'])
+            documents_object = get_object_or_404(models.Documents, customer_id=auth_data[
+                                                 'customer_id'], document_type_id=request.data.get('document_type_id'))
             documents_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
