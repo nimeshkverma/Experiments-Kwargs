@@ -25,7 +25,7 @@ SECRET_KEY = 'p3*x21u^d6m94%9!ebr2zlgjtxpal##b7_k@bmy_-4xybi39qq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'eligibility.apps.EligibilityConfig',
     'pan.apps.PanConfig',
     'aadhaar.apps.AadhaarConfig',
+    'documents.apps.DocumentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,5 +127,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = './media/'
+MEDIA_URL = "/media/"
 
 BASE_URL = 'http://40237ad1.ngrok.io/'
+
+FACEBOOK = {
+    'data_url': 'https://graph.facebook.com/me?fields=id,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified,email&access_token={platform_token}',
+}
+REQUIRES_FB_REVIEW = ['user_birthday', 'user_education_history', 'user_hometown',
+                      'user_location', 'user_managed_groups', 'user_relationships', 'user_work_history']
+
+GOOGLE = {
+    'data_url': 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=={platform_token}',
+}
+
+LINKEDIN = {
+    'auth_url': 'https://www.linkedin.com/oauth/v2/accessToken',
+    'auth_header': {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'grant_type': 'authorization_code',
+        'code': '{auth_code}',
+        'redirect_uri': BASE_URL + 'customer/linkedin_auth',
+        'client_id': 'client_id',
+        'client_secret': 'client_secret'
+    },
+    'data_url': 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,formatted-name,phonetic-first-name,phonetic-last-name,formatted-phonetic-name,headline,industry,current-share,num-connections,num-connections-capped,specialties,positions,picture-url,picture-urls::(original),site-standard-profile-request,api-standard-profile-request,public-profile-url,location:(name),summary)?format=json',
+    'data_auth': {
+        'Authorization': 'Bearer {platform_token}',
+    }
+
+
+}
