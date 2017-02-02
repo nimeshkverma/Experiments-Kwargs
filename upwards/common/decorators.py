@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from rest_framework import status
 from serializers import AuthenticationSerializer
 from response import MetaDataResponse
-from exceptions import NotAcceptableError
+from exceptions import NotAcceptableError, ConflictError
 
 
 def session_authorize(customer_id_key='pk', *args, **kwargs):
@@ -45,6 +45,8 @@ def catch_exception(f):
         try:
             return f(*args, **kwargs)
         except NotAcceptableError as e:
+            return MetaDataResponse(e.response, e.meta, status=e.status)
+        except ConflictError as e:
             return MetaDataResponse(e.response, e.meta, status=e.status)
         except IntegrityError as e:
             return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)

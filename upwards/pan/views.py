@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from . import models, serializers
 
 from common.decorators import session_authorize, meta_data_response, catch_exception
-from common.response import MetaDataResponse
-from common.utils.model_utils import check_pk_existence
 
 
 class PanCreate(APIView):
