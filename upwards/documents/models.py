@@ -45,3 +45,6 @@ class DocumentType(ActiveModel):
 
     def __unicode__(self):
         return '%s__%s__%s' % (str(self.id), str(self.name), str(self.usage))
+
+    class Meta(object):
+        db_table = 'customer_document_types'
