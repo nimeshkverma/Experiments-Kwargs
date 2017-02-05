@@ -60,23 +60,6 @@ class ActiveObjectManager(models.Manager):
         return super(ActiveObjectManager, self).get_queryset().filter(is_active=True)
 
 
-from django.dispatch import Signal
-post_update = Signal()
-
-
-class UpdateSignalQuerySet(models.query.QuerySet):
-
-    def update(self, kwargs):
-        super(MyCustomQuerySet, self).update(kwargs)
-        post_update.send(sender=self.model)
-
-
-class UpdateSignalManager(models.Manager):
-
-    def getqueryset(self):
-        return UpdateSignalQuerySet(self.model, using=self._db)
-
-
 class College(ActiveModel):
     name = models.CharField(blank=False, null=False,
                             max_length=256, unique=True)
