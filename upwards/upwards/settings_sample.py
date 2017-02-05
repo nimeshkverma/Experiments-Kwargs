@@ -178,3 +178,10 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
+
+
+POST_OTP_MESSAGE = " is your Upwards App OTP"
+SMS_GATEWAY_USER_NAME = ""
+SMS_GATEWAY_API_KEY = ""
+SMS_SENDER_NAME = "Upwards"
+SMS_GATEWAY_URL = "http://api.textlocal.in/send/?"

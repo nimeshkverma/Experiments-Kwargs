@@ -7,7 +7,7 @@ from django.core import signing
 from . import models, serializers
 
 from common.decorators import session_authorize, meta_data_response, catch_exception
-from . tasks import send_verification_mail, update_email_models
+from . tasks import send_verification_mail, update_email_models, send_otp
 
 
 class EmailVerificationCreate(APIView):
@@ -45,3 +45,22 @@ class EmailVerificationDetail(APIView):
             return render(request, 'messenger/email_verification_success.html')
         except Exception as e:
             return render(request, 'messenger/email_verification_failure.html')
+
+
+class OtpCreate(APIView):
+
+    @catch_exception
+    @meta_data_response()
+    @session_authorize('customer_id')
+    def post(self, request, auth_data):
+        if auth_data.get('authorized'):
+            serializer = serializers.OtpSerializer(
+                data=request.data)
+            if serializer.is_valid():
+                serializer.validate_foreign_keys()
+                otp_object = serializer.save()
+                send_otp(
+                    serializers.OtpSerializer(otp_object).data)
+                return Response({"status": "sent"}, status=status.HTTP_200_OK)
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)

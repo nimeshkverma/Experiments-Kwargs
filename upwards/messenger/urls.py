@@ -7,6 +7,8 @@ urlpatterns = [
         name='send_verification_email'),
     url(r'^verify_email/(?P<encoded_data>[\w:_-]+)$',
         views.EmailVerificationDetail.as_view(), name='verify_email'),
+    url(r'^send_otp/$', views.OtpCreate.as_view(),
+        name='send_otp')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
