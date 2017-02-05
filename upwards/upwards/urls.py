@@ -13,8 +13,10 @@ urlpatterns = [
     url(r'^customer/', include('customer.urls')),
     url(r'^customer/', include('pan.urls')),
     url(r'^customer/', include('aadhaar.urls')),
-    url(r'^customer/', include('documents.urls')),
+    url(r'^customer/', include('common.urls')),
+    url(r'^customer/', include('messenger.urls')),
     url(r'^common/', include('common.urls')),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
