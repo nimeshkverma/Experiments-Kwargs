@@ -3,13 +3,13 @@ from rest_framework import status, mixins, generics
 
 from . import response, models, serializers
 from decorators import meta_data_response, catch_exception
-from data import config_data
+import config
 
 
 class Config(APIView):
 
     def get(self, request):
-        return response.MetaDataResponse(config_data, status=status.HTTP_200_OK)
+        return response.MetaDataResponse(config.Config().data, status=status.HTTP_200_OK)
 
 
 class CollegeList(mixins.ListModelMixin,
