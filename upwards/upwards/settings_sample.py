@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from .celery import app as celery_app
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'pan.apps.PanConfig',
     'aadhaar.apps.AadhaarConfig',
     'documents.apps.DocumentsConfig',
+    'messenger.apps.MessengerConfig',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
-MEDIA_URL = "/media/"
+MEDIA_URL = '/media/'
 
 BASE_URL = 'http://40237ad1.ngrok.io/'
 
@@ -159,3 +161,20 @@ LINKEDIN = {
 
 
 }
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'nimesh.aug11@gmail.com'
+SERVER_EMAIL = 'nimesh.aug11@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'nimesh.aug11@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = True
+
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Congratulations!</title>
+    {%load staticfiles%}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+
+<body style="background-color:#E8E8E8">
+<div style="background-color:#f6f6f6;border:solid 5px grey; border-radius: 50px;" >
+<center>
+    <img src="http://i.imgur.com/kPwSuT2.png" class="responsive-img" style='max-height:200px;padding-top:50px' alt="logo">
+</center>
+                  <br>
+                  <center>
+                      <p style="padding-top:80px;"><h4>Hey! thanking you for your interest in Upwards. To complete your registration click <a href="{{ verification_link }}"> this.</a></h4></p>
+                                            <p style="padding-top:5px;"><h4>If the link doesn't load in your browser copy and paste this into your browser:</h4></p><br>
+                      <p><h4>{{verification_link}}</h4></p>
+
+                  </center>
+              </div>
+<footer>
+        <div style='margin-left:40px;position:relative;bottom:0px'>
+            <p><h5><a href="#" target="blank">Contact</a> | <a href="#" target="blank">About</a> | <a href="#" target="blank">Facebook</a> | <a href="#" target="=blank">Twitter</a></h5></p>
+        </div>
+</footer>
+</body>
+</html>
