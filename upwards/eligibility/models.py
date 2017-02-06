@@ -83,3 +83,15 @@ class Education(ActiveModel):
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.college), str(self.qualification))
+
+
+class AmountEligible(ActiveModel):
+    customer = models.OneToOneField(
+        'customer.Customer', on_delete=models.CASCADE)
+    max_amount = models.IntegerField()
+
+    class Meta(object):
+        db_table = "customer_amount_eligible"
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer), str(self.max_amount))
