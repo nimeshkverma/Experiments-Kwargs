@@ -10,5 +10,3 @@ def send_otp(otp_data):
         'message': message, 'sender': settings.SMS_SENDER_NAME
     }
     response = requests.post(settings.SMS_GATEWAY_URL, data=data)
-    print data
-    print response
