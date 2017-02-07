@@ -2,10 +2,14 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from common.models import (	ActiveModel,
-                            ActiveObjectManager,
-                            pan_regex,
-                            alphabet_regex_allow_empty,)
+from django.db.models.signals import post_save
+from activity.models import register_activity, register_customer_state
+from activity.model_constants import PAN_SUBMIT_STATE, CUSTOMER, PAN_SUBMIT
+
+from common.models import (ActiveModel,
+                           ActiveObjectManager,
+                           pan_regex,
+                           alphabet_regex_allow_empty,)
 
 
 class Pan(ActiveModel):
@@ -34,9 +38,16 @@ class Pan(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    @staticmethod
+    def register_pan_submit_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(PAN_SUBMIT_STATE, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_pan"
         unique_together = ("customer", "id")
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.pan), str(self.first_name))
+
+post_save.connect(Pan.register_pan_submit_customer_state, sender=Pan)

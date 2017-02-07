@@ -2,11 +2,15 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import post_save
 
 from common.models import (LifeTimeTrackingModel,
                            alphabet_whitespace_regex_allow_empty,
                            GENDER_CHOICES,
                            MALE)
+
+from activity.models import register_activity, register_customer_state
+from activity.model_constants import SIGN_UP, CUSTOMER, SIGN_UP_STATE
 
 FACEBOOK = 'facebook'
 GOOGLE = 'google'
@@ -14,6 +18,7 @@ PLATFORM_CHOICES = (
     (FACEBOOK, 'Facebook'),
     (GOOGLE, 'Google Plus'),
 )
+
 
 WEB = 'web'
 ANDROID = 'android'
@@ -50,8 +55,21 @@ class Login(LifeTimeTrackingModel):
         Login.objects.filter(session_token=session_token, customer_id=customer_id, is_active=True).update(
             session_token=None, is_active=False, deleted_at=timezone.now())
 
+    @staticmethod
+    def register_login_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(SIGN_UP_STATE, instance.customer_id)
+
+    # @staticmethod
+    # def register_login_activity(sender, instance, created, **kwargs):
+    #     if created:
+    #         register_activity(SIGN_UP, CUSTOMER, instance.customer_id)
+
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.email_id), str(self.platform))
+
+
+post_save.connect(Login.register_login_customer_state, sender=Login)
 
 
 class Profile(LifeTimeTrackingModel):

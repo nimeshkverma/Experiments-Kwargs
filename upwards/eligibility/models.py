@@ -2,19 +2,25 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
+from django.db.models.signals import post_save
+from activity.models import register_activity, register_customer_state
+from activity.model_constants import (PROFESSIONAL_SUBMIT_STATE, CUSTOMER, PROFESSIONAL_SUBMIT, EDUCATION_SUBMIT_STATE,
+                                      EDUCATION_SUBMIT, FINANCE_SUBMIT_STATE, FINANCE_SUBMIT, PROFESSIONAL_EMAIL_UNVERIFIED_STATE)
+from messenger.models import EmailVerification, PROFESSIONAL
 from common.models import (ActiveModel,
                            ActiveObjectManager,
                            YEAR_CHOICES)
 
 
-GRADUATE = 'Graduate'
-POST_GRADUATE = 'Post Graduate or Higher'
-OTHERS = 'Others'
-QUALIFICATION_CHOICES = (
-    (GRADUATE, 'graduate'),
-    (POST_GRADUATE, 'post_graduate'),
-    (OTHERS, 'others'),
-)
+# GRADUATE = 'Graduate'
+# POST_GRADUATE = 'Post Graduate or Higher'
+# OTHERS = 'Others'
+# QUALIFICATION_CHOICES = (
+#     (GRADUATE, 'graduate'),
+#     (POST_GRADUATE, 'post_graduate'),
+#     (OTHERS, 'others'),
+# )
 
 
 class Finance(ActiveModel):
@@ -25,11 +31,34 @@ class Finance(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    @staticmethod
+    def register_finance_submit_customer_state(sender, instance, created, **kwargs):
+        if created:
+            print 1
+            state = PROFESSIONAL_EMAIL_UNVERIFIED_STATE
+            profession_object = Profession.objects.get(
+                customer_id=instance.customer_id)
+            print profession_object, profession_object.is_email_verified
+            if profession_object.is_email_verified:
+                state = FINANCE_SUBMIT_STATE
+            else:
+                email_objects = EmailVerification.objects.filter(
+                    customer_id=instance.customer_id, email_id=profession_object.email, email_type=PROFESSIONAL)
+                print email_objects
+                if email_objects and email_objects[0].is_verified:
+                    state = FINANCE_SUBMIT_STATE
+            print state
+            register_customer_state(state, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_finance"
 
     def __unicode__(self):
         return "%s__any_active_loans:%s__any_owned_vehicles:%s" % (str(self.customer), str(self.any_active_loans), str(self.any_owned_vehicles))
+
+
+post_save.connect(
+    Finance.register_finance_submit_customer_state, sender=Finance)
 
 
 class Profession(ActiveModel):
@@ -58,11 +87,28 @@ class Profession(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    def save(self, *args, **kwargs):
+        if not self.is_email_verified:
+            email_objects = EmailVerification.objects.filter(
+                customer_id=self.customer_id, email_id=self.email, email_type=PROFESSIONAL)
+            if email_objects:
+                self.is_email_verified = email_objects[0].is_verified
+        super(Profession, self).save(*args, **kwargs)
+
+    @staticmethod
+    def register_proffesional_submit_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(
+                PROFESSIONAL_SUBMIT_STATE, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_profession"
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.company), str(self.salary))
+
+post_save.connect(
+    Profession.register_proffesional_submit_customer_state, sender=Profession)
 
 
 class Education(ActiveModel):
@@ -78,11 +124,20 @@ class Education(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    @staticmethod
+    def register_education_submit_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(
+                EDUCATION_SUBMIT_STATE, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_education"
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.college), str(self.qualification))
+
+post_save.connect(
+    Education.register_education_submit_customer_state, sender=Education)
 
 
 class AmountEligible(ActiveModel):
