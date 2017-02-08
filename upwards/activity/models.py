@@ -20,6 +20,12 @@ class CustomerState(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    @staticmethod
+    def get_customer_present_state(customer_id):
+        customer_state_object = CustomerState.objects.get(
+            customer_id=customer_id)
+        return customer_state_object.present_state
+
     class Meta(object):
         db_table = "customer_state"
 
