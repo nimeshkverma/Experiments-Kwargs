@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/bank/$',
         views.BankDetails.as_view(), name='BankDetails'),
     url(r'^(?P<pk>[0-9]+)/homepage/$',
-        views.Homepage.as_view(), name='Homepage'),
+        views.HomepageAPI.as_view(), name='HomepageAPI'),
 ]

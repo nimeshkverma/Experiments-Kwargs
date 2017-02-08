@@ -7,7 +7,7 @@ from django.conf import settings
 from customer.models import Customer
 from eligibility.models import Profession
 from activity.models import register_activity, register_customer_state
-from activity.model_constants import FINANCE_SUBMIT_STATE, DOCUMENT_UPLOAD_SUBMIT_STATE
+from activity.model_constants import FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE
 
 
 def send_verification_mail(email_verify_data):
@@ -25,12 +25,12 @@ email_model_fields = {
     'customer_altername_email': {
         'model': Customer,
         'email_verified_field': 'is_altername_email_id_verified',
-        'user_state': DOCUMENT_UPLOAD_SUBMIT_STATE,
+        'user_state': DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
     },
     'customer_profession_email': {
         'model': Profession,
         'email_verified_field': 'is_email_verified',
-        'user_state': FINANCE_SUBMIT_STATE,
+        'user_state': FINANCE_SUBMIT_EMAIL_VERIFIED_STATE,
     }
 }
 

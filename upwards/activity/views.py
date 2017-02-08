@@ -11,13 +11,18 @@ from common.exceptions import NotAcceptableError
 
 
 from activity.models import register_customer_state
-from activity.model_constants import ELIGIBILITY_SUBMIT_STATE, DOCUMENT_UPLOAD_SUBMIT_STATE, KYC_SUBMIT_STATE, PERSONAL_EMAIL_UNVERIFIED_STATE
+from activity.model_constants import (ELIGIBILITY_SUBMIT_STATE,
+                                      ELIGIBILITY_RESULT_REJECTED_STATE,
+                                      DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
+                                      KYC_SUBMIT_STATE,
+                                      DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE,
+                                      KYC_RESULT_REJECTED_STATE)
 
 
 class CustomerStateChange(APIView):
 
-    allowed_states = [ELIGIBILITY_SUBMIT_STATE,
-                      DOCUMENT_UPLOAD_SUBMIT_STATE, KYC_SUBMIT_STATE]
+    allowed_states = [ELIGIBILITY_SUBMIT_STATE, ELIGIBILITY_RESULT_REJECTED_STATE,
+                      DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, KYC_SUBMIT_STATE, KYC_RESULT_REJECTED_STATE]
 
     def is_personal_email_verified(self, customer_id):
         from customer.models import Customer
@@ -46,9 +51,9 @@ class CustomerStateChange(APIView):
                 present_state = serializer.data.get('present_state')
                 if (present_state in self.allowed_states):
                     serializer.validate_foreign_keys()
-                    if present_state == DOCUMENT_UPLOAD_SUBMIT_STATE:
+                    if present_state == DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE:
                         if not self.is_personal_email_verified(customer_id):
-                            present_state = PERSONAL_EMAIL_UNVERIFIED_STATE
+                            present_state = DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE
                     register_customer_state(present_state, customer_id)
                     return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
