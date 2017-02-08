@@ -17,18 +17,18 @@ FINANCE_SUBMIT_EMAIL_UNVERIFIED = 'finance_submit_email_unverified'
 EDUCATION_SUBMIT = 'education_submit'
 FINANCE_SUBMIT_EMAIL_VERIFIED = 'finance_submit_email_verified'
 ELIGIBILITY_SUBMIT = 'eligibility_submit'
-ELIGIBILITY_PROCCESSING = 'eligibility_proccessing'
-ELIGIBILITY_APPROVED = 'eligibility_approved'
-ELIGIBILITY_REJECTED = 'eligibility_rejected'
+ELIGIBILITY_RESULT_PROCCESSING = 'eligibility_result_proccessing'
+ELIGIBILITY_RESULT_APPROVED = 'eligibility_result_approved'
+ELIGIBILITY_RESULT_REJECTED = 'eligibility_result_rejected'
 AADHAAR_SUBMIT = 'aadhaar_submit'
 AADHAAR_DETAIL_SUBMIT = 'aadhaar_detail_submit'
 PERSONAL_CONTACT_SUBMIT = 'personal_contact_submit'
 DOCUMENT_SUBMIT_EMAIL_UNVERIFIED = 'document_submit_email_unverified'
 DOCUMENT_SUBMIT_EMAIL_VERIFIED = 'document_submit_email_verified'
 KYC_SUBMIT = 'kyc_submit'
-KYC_PROCCESSING = 'kyc_proccessing'
-KYC_APPROVED = 'kyc_approved'
-KYC_REJECTED = 'kyc_rejected'
+KYC_RESULT_PROCCESSING = 'kyc_result_proccessing'
+KYC_RESULT_APPROVED = 'kyc_result_approved'
+KYC_RESULT_REJECTED = 'kyc_result_rejected'
 BANK_DETAIL_SUBMIT = 'bank_detail_submit'
 LOAN_AMOUNT_SUBMIT = 'loan_amount_submit'
 LOAN_APPLICATION_PROCCESSING = 'loan_application_proccessing'
@@ -55,12 +55,12 @@ CUSTOMER_ACTIVITY_TYPE_CHOICES = (
 )
 
 UPWARDS_TYPE_CHOICES = (
-    (ELIGIBILITY_PROCCESSING, 'eligibility_proccessing'),
-    (ELIGIBILITY_APPROVED, 'eligibility_approved'),
-    (ELIGIBILITY_REJECTED, 'eligibility_rejected'),
-    (KYC_PROCCESSING, 'kyc_proccessing'),
-    (KYC_APPROVED, 'kyc_approved'),
-    (KYC_REJECTED, 'kyc_rejected'),
+    (ELIGIBILITY_RESULT_PROCCESSING, 'eligibility_result_proccessing'),
+    (ELIGIBILITY_RESULT_APPROVED, 'eligibility_result_approved'),
+    (ELIGIBILITY_RESULT_REJECTED, 'eligibility_result_rejected'),
+    (KYC_RESULT_PROCCESSING, 'kyc_result_proccessing'),
+    (KYC_RESULT_APPROVED, 'kyc_result_approved'),
+    (KYC_RESULT_REJECTED, 'kyc_rresult_ejected'),
     (LOAN_APPLICATION_PROCCESSING, 'loan_application_proccessing'),
     (LOAN_APPLICATION_PROCCESSED, 'loan_application_proccessed'),
     (LOAN_APPLICATION_ERRORED, 'loan_application_errored'),
@@ -76,12 +76,16 @@ FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE = 'finance_submit_email_unverified'
 EDUCATION_SUBMIT_STATE = 'education_submit'
 FINANCE_SUBMIT_EMAIL_VERIFIED_STATE = 'finance_submit_email_verified'
 ELIGIBILITY_SUBMIT_STATE = 'eligibility_submit'
+ELIGIBILITY_RESULT_APPROVED_STATE = 'eligibility_result_approved'
+ELIGIBILITY_RESULT_REJECTED_STATE = 'eligibility_result_rejected'
 AADHAAR_SUBMIT_STATE = 'aadhaar_submit'
 AADHAAR_DETAIL_SUBMIT_STATE = 'aadhaar_detail_submit'
 PERSONAL_CONTACT_SUBMIT_STATE = 'personal_contact_submit'
 DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE = 'document_submit_email_unverified'
 DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE = 'document_submit_email_verified'
 KYC_SUBMIT_STATE = 'kyc_submit'
+KYC_RESULT_APPROVED_STATE = 'kyc_result_approved'
+KYC_RESULT_REJECTED_STATE = 'kyc_result_rejected'
 BANK_DETAIL_SUBMIT_STATE = 'bank_detail_submit'
 LOAN_AMOUNT_SUBMIT_STATE = 'loan_amount_submit'
 LOAN_APPLICATION_PROCCESSING_STATE = 'loan_application_proccessing'
@@ -97,12 +101,16 @@ CUSTOMER_STATE_CHOICES = (
     (EDUCATION_SUBMIT_STATE, 'education_submit'),
     (FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, 'finance_submit_email_verified'),
     (ELIGIBILITY_SUBMIT_STATE, 'eligibility_submit'),
+    (ELIGIBILITY_RESULT_APPROVED_STATE, 'eligibility_result_approved'),
+    (ELIGIBILITY_RESULT_REJECTED_STATE, 'eligibility_result_rejected'),
     (AADHAAR_SUBMIT_STATE, 'aadhaar_submit'),
     (AADHAAR_DETAIL_SUBMIT_STATE, 'aadhaar_detail_submit'),
     (PERSONAL_CONTACT_SUBMIT_STATE, 'personal_contact_submit'),
     (DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE, 'document_submit_email_unverified'),
     (DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, 'document_submit_email_verified'),
     (KYC_SUBMIT_STATE, 'kyc_submit'),
+    (KYC_RESULT_APPROVED_STATE, 'kyc_result_approved'),
+    (KYC_RESULT_REJECTED_STATE, 'kyc_result_rejected'),
     (BANK_DETAIL_SUBMIT_STATE, 'bank_detail_submit'),
     (LOAN_AMOUNT_SUBMIT_STATE, 'loan_amount_submit'),
     (LOAN_APPLICATION_PROCCESSING_STATE, 'loan_application_proccessing'),
@@ -141,10 +149,18 @@ CUSTOMER_STATE_TREE = {
     },
     ELIGIBILITY_SUBMIT_STATE: {
         'from': [FINANCE_SUBMIT_EMAIL_VERIFIED_STATE],
+        'to': [ELIGIBILITY_RESULT_APPROVED, ELIGIBILITY_RESULT_REJECTED]
+    },
+    ELIGIBILITY_RESULT_APPROVED_STATE: {
+        'from': [ELIGIBILITY_SUBMIT_STATE],
         'to': [AADHAAR_SUBMIT_STATE]
     },
-    AADHAAR_SUBMIT_STATE: {
+    ELIGIBILITY_RESULT_REJECTED_STATE: {
         'from': [ELIGIBILITY_SUBMIT_STATE],
+        'to': [ELIGIBILITY_SUBMIT_STATE]
+    },
+    AADHAAR_SUBMIT_STATE: {
+        'from': [ELIGIBILITY_RESULT_APPROVED_STATE],
         'to': [AADHAAR_DETAIL_SUBMIT_STATE],
     },
     AADHAAR_DETAIL_SUBMIT_STATE: {
@@ -165,10 +181,18 @@ CUSTOMER_STATE_TREE = {
     },
     KYC_SUBMIT_STATE: {
         'from': [DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE],
+        'to': [KYC_RESULT_APPROVED_STATE, KYC_RESULT_REJECTED_STATE]
+    },
+    KYC_RESULT_APPROVED_STATE: {
+        'from': [KYC_SUBMIT_STATE],
         'to': [BANK_DETAIL_SUBMIT_STATE]
     },
-    BANK_DETAIL_SUBMIT_STATE: {
+    KYC_RESULT_REJECTED_STATE: {
         'from': [KYC_SUBMIT_STATE],
+        'to': [KYC_SUBMIT_STATE]
+    },
+    BANK_DETAIL_SUBMIT_STATE: {
+        'from': [KYC_RESULT_APPROVED_STATE],
         'to': [LOAN_AMOUNT_SUBMIT_STATE]
     },
     LOAN_AMOUNT_SUBMIT_STATE: {
@@ -199,12 +223,16 @@ CUSTOMER_STATE_ORDER_LIST = [
     FINANCE_SUBMIT_EMAIL_VERIFIED_STATE,
     FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE,
     ELIGIBILITY_SUBMIT_STATE,
+    ELIGIBILITY_RESULT_APPROVED_STATE,
+    ELIGIBILITY_RESULT_REJECTED_STATE,
     AADHAAR_SUBMIT_STATE,
     AADHAAR_DETAIL_SUBMIT_STATE,
     PERSONAL_CONTACT_SUBMIT_STATE,
     DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
     DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE,
     KYC_SUBMIT_STATE,
+    KYC_RESULT_APPROVED_STATE,
+    KYC_RESULT_REJECTED_STATE,
     BANK_DETAIL_SUBMIT_STATE,
     LOAN_AMOUNT_SUBMIT_STATE,
     LOAN_APPLICATION_PROCCESSING_STATE,

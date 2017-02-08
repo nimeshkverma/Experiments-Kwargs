@@ -11,13 +11,18 @@ from common.exceptions import NotAcceptableError
 
 
 from activity.models import register_customer_state
-from activity.model_constants import ELIGIBILITY_SUBMIT_STATE, DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, KYC_SUBMIT_STATE, DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE
+from activity.model_constants import (ELIGIBILITY_SUBMIT_STATE,
+                                      ELIGIBILITY_RESULT_REJECTED_STATE,
+                                      DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
+                                      KYC_SUBMIT_STATE,
+                                      DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE,
+                                      KYC_RESULT_REJECTED_STATE)
 
 
 class CustomerStateChange(APIView):
 
-    allowed_states = [ELIGIBILITY_SUBMIT_STATE,
-                      DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, KYC_SUBMIT_STATE]
+    allowed_states = [ELIGIBILITY_SUBMIT_STATE, ELIGIBILITY_RESULT_REJECTED_STATE,
+                      DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, KYC_SUBMIT_STATE, KYC_RESULT_REJECTED_STATE]
 
     def is_personal_email_verified(self, customer_id):
         from customer.models import Customer

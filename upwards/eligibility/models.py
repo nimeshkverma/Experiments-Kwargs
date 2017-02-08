@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from activity.models import register_activity, register_customer_state
 from activity.model_constants import (PROFESSIONAL_SUBMIT_STATE, CUSTOMER, PROFESSIONAL_SUBMIT, EDUCATION_SUBMIT_STATE,
-                                      EDUCATION_SUBMIT, FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE)
+                                      EDUCATION_SUBMIT, FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE, ELIGIBILITY_RESULT_APPROVED_STATE)
 from messenger.models import EmailVerification, PROFESSIONAL
 from common.models import (ActiveModel,
                            ActiveObjectManager,
@@ -140,8 +140,17 @@ class AmountEligible(ActiveModel):
         'customer.Customer', on_delete=models.CASCADE)
     max_amount = models.IntegerField()
 
+    @staticmethod
+    def register_eligibility_result_approved_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(
+                ELIGIBILITY_RESULT_APPROVED_STATE, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_amount_eligible"
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer), str(self.max_amount))
+
+post_save.connect(
+    AmountEligible.register_eligibility_result_approved_customer_state, sender=AmountEligible)

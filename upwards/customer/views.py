@@ -14,7 +14,7 @@ from common.exceptions import NotAcceptableError
 from activity.models import register_customer_state
 from activity.model_constants import PERSONAL_CONTACT_SUBMIT_STATE
 
-from . service.homepage_service import get_homepage
+from . service.homepage_service import Homepage
 
 
 class CustomerList(mixins.ListModelMixin,
@@ -123,12 +123,12 @@ class BankDetails(APIView):
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
-class Homepage(APIView):
+class HomepageAPI(APIView):
 
     @catch_exception
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
         if auth_data.get('authorized'):
-            return Response(get_homepage(auth_data['customer_id']), status.HTTP_200_OK)
+            return Response(Homepage(auth_data['customer_id']).data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
