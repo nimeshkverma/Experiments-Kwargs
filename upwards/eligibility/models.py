@@ -33,20 +33,16 @@ class Finance(ActiveModel):
     @staticmethod
     def register_finance_submit_customer_state(sender, instance, created, **kwargs):
         if created:
-            print 1
             state = PROFESSIONAL_EMAIL_UNVERIFIED_STATE
             profession_object = Profession.objects.get(
                 customer_id=instance.customer_id)
-            print profession_object, profession_object.is_email_verified
             if profession_object.is_email_verified:
                 state = FINANCE_SUBMIT_STATE
             else:
                 email_objects = EmailVerification.objects.filter(
                     customer_id=instance.customer_id, email_id=profession_object.email, email_type=PROFESSIONAL)
-                print email_objects
                 if email_objects and email_objects[0].is_verified:
                     state = FINANCE_SUBMIT_STATE
-            print state
             register_customer_state(state, instance.customer_id)
 
     class Meta(object):

@@ -86,7 +86,6 @@ class DocumentsDetail(APIView):
                 serializer.check_table_conflict()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            print serializer.errors
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 

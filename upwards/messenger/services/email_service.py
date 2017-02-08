@@ -36,13 +36,11 @@ email_model_fields = {
 
 
 def update_email_models(email_object):
-    print 1
     if email_object.email_type in email_model_fields.keys():
         email_model = email_model_fields[email_object.email_type]['model']
         email_verified_field = email_model_fields[
             email_object.email_type]['email_verified_field']
         email_model.objects.filter(customer_id=email_object.customer.customer_id).update(
             **{email_verified_field: email_object.is_verified})
-        print email_model_fields[email_object.email_type]['user_state'], email_object.customer_id
         register_customer_state(email_model_fields[email_object.email_type][
             'user_state'], email_object.customer_id)

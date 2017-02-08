@@ -24,12 +24,10 @@ class CustomerStateChange(APIView):
         from messenger.models import EmailVerification, PERSONAL
 
         customer_object = Customer.objects.get(customer_id=customer_id)
-        print customer_object, customer_object.is_altername_email_id_verified
         if customer_object.is_altername_email_id_verified:
             return True
         email_objects = EmailVerification.objects.filter(
             customer_id=customer_id, email_id=customer_object.altername_email_id, email_type=PERSONAL)
-        print email_objects
         if email_objects and email_objects[0].is_verified:
             return True
         return False
@@ -49,7 +47,6 @@ class CustomerStateChange(APIView):
                 if (present_state in self.allowed_states):
                     serializer.validate_foreign_keys()
                     if present_state == DOCUMENT_UPLOAD_SUBMIT_STATE:
-                        print self.is_personal_email_verified(customer_id)
                         if not self.is_personal_email_verified(customer_id):
                             present_state = PERSONAL_EMAIL_UNVERIFIED_STATE
                     register_customer_state(present_state, customer_id)
