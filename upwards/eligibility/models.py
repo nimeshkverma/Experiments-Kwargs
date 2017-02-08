@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from activity.models import register_activity, register_customer_state
 from activity.model_constants import (PROFESSIONAL_SUBMIT_STATE, CUSTOMER, PROFESSIONAL_SUBMIT, EDUCATION_SUBMIT_STATE,
-                                      EDUCATION_SUBMIT, FINANCE_SUBMIT_STATE, FINANCE_SUBMIT, PROFESSIONAL_EMAIL_UNVERIFIED_STATE)
+                                      EDUCATION_SUBMIT, FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE)
 from messenger.models import EmailVerification, PROFESSIONAL
 from common.models import (ActiveModel,
                            ActiveObjectManager,
@@ -33,16 +33,16 @@ class Finance(ActiveModel):
     @staticmethod
     def register_finance_submit_customer_state(sender, instance, created, **kwargs):
         if created:
-            state = PROFESSIONAL_EMAIL_UNVERIFIED_STATE
+            state = FINANCE_SUBMIT_EMAIL_UNVERIFIED_STATE
             profession_object = Profession.objects.get(
                 customer_id=instance.customer_id)
             if profession_object.is_email_verified:
-                state = FINANCE_SUBMIT_STATE
+                state = FINANCE_SUBMIT_EMAIL_VERIFIED_STATE
             else:
                 email_objects = EmailVerification.objects.filter(
                     customer_id=instance.customer_id, email_id=profession_object.email, email_type=PROFESSIONAL)
                 if email_objects and email_objects[0].is_verified:
-                    state = FINANCE_SUBMIT_STATE
+                    state = FINANCE_SUBMIT_EMAIL_VERIFIED_STATE
             register_customer_state(state, instance.customer_id)
 
     class Meta(object):
