@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'aadhaar.apps.AadhaarConfig',
     'documents.apps.DocumentsConfig',
     'messenger.apps.MessengerConfig',
+    'activity.apps.ActivityConfig',
 ]
 
 MIDDLEWARE = [

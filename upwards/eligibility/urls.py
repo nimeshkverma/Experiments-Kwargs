@@ -12,6 +12,10 @@ urlpatterns = [
     url(r'^education/$', views.EducationCreate.as_view(), name='EducationCreate'),
     url(r'^(?P<pk>[0-9]+)/education/$',
         views.EducationDetail.as_view(), name='EducationDetail'),
+    url(r'^amount_eligible/$', views.AmountEligibleCreate.as_view(),
+        name='AmountEligibleCreate'),
+    url(r'^(?P<pk>[0-9]+)/amount_eligible/$',
+        views.AmountEligibleDetail.as_view(), name='AmountEligibleDetail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
