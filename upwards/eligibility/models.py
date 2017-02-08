@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-
 from django.db.models.signals import post_save
 from activity.models import register_activity, register_customer_state
 from activity.model_constants import (PROFESSIONAL_SUBMIT_STATE, CUSTOMER, PROFESSIONAL_SUBMIT, EDUCATION_SUBMIT_STATE,

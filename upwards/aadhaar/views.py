@@ -11,6 +11,9 @@ from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from customer.models import Customer
 
+from activity.models import register_customer_state
+from activity.model_constants import AADHAAR_SUBMIT_STATE, AADHAAR_DETAIL_SUBMIT_STATE
+
 
 class AadhaarCreate(APIView):
 
@@ -23,6 +26,8 @@ class AadhaarCreate(APIView):
             if serializer.is_valid():
                 serializer.validate_foreign_keys()
                 serializer.save()
+                register_customer_state(
+                    AADHAAR_SUBMIT_STATE, auth_data['customer_id'])
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
@@ -49,8 +54,10 @@ class AadhaarDetail(APIView):
             aadhaar_object = get_object_or_404(
                 models.Aadhaar, customer_id=auth_data['customer_id'])
             serializers.AadhaarSerializer().validate_foreign_keys(request.data)
-            aadhaar_object_updated = serializers.AadhaarSerializer().update(aadhaar_object,
-                                                                            request.data)
+            aadhaar_object_updated = serializers.AadhaarSerializer().update(
+                aadhaar_object, request.data)
+            register_customer_state(
+                AADHAAR_DETAIL_SUBMIT_STATE, aadhaar_object_updated.customer_id)
             return Response(serializers.AadhaarSerializer(aadhaar_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 

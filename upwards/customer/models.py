@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex
+from messenger.models import EmailVerification, PERSONAL
 
 
 class Customer(ActiveModel):
@@ -20,6 +21,15 @@ class Customer(ActiveModel):
         if Customer.active_objects.get(pk=customer_id):
             is_valid_customer = True
         return is_valid_customer
+
+    def save(self, *args, **kwargs):
+        if not self.is_altername_email_id_verified:
+            email_objects = EmailVerification.objects.filter(
+                customer_id=self.customer_id, email_id=self.altername_email_id, email_type=PERSONAL)
+            if email_objects:
+                self.is_altername_email_id_verified = email_objects[
+                    0].is_verified
+        super(Customer, self).save(*args, **kwargs)
 
     class Meta(object):
         db_table = "customer"
