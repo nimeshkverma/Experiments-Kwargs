@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^customer/', include('common.urls')),
     url(r'^customer/', include('messenger.urls')),
     url(r'^customer/', include('activity.urls')),
+    url(r'^customer/', include('documents.urls')),
     url(r'^common/', include('common.urls')),
 
 ]

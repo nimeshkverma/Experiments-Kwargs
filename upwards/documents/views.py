@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status, mixins, generics
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from common.decorators import session_authorize, meta_data_response, catch_exception
 
@@ -44,6 +45,8 @@ class DocumentTypeDetail(mixins.RetrieveModelMixin,
 
 class DocumentsCreate(APIView):
 
+    parser_classes = (FormParser, MultiPartParser)
+
     @catch_exception
     @meta_data_response()
     @session_authorize('customer_id')
@@ -60,6 +63,8 @@ class DocumentsCreate(APIView):
 
 
 class DocumentsDetail(APIView):
+
+    parser_classes = (FormParser, MultiPartParser)
 
     @catch_exception
     @meta_data_response()
