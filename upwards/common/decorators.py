@@ -5,6 +5,10 @@ from serializers import AuthenticationSerializer
 from response import MetaDataResponse
 from exceptions import NotAcceptableError, ConflictError
 
+import logging
+
+LOGGER = logging.getLogger(__name__)
+
 
 def session_authorize(customer_id_key='pk', *args, **kwargs):
     def deco(f):
@@ -39,18 +43,28 @@ def session_authorize(customer_id_key='pk', *args, **kwargs):
     return deco
 
 
-def catch_exception(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            return f(*args, **kwargs)
-        except NotAcceptableError as e:
-            return MetaDataResponse(e.response, e.meta, status=e.status)
-        except ConflictError as e:
-            return MetaDataResponse(e.response, e.meta, status=e.status)
-        except IntegrityError as e:
-            return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
-    return decorated_function
+def catch_exception(LOGGER=None):
+    def deco(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except NotAcceptableError as e:
+                LOGGER.error("NotAcceptableError:%s"%str(e))
+                return MetaDataResponse(e.response, e.meta, status=e.status)
+            except ConflictError as e:
+                LOGGER.error("MetaDataRresponse:%s"%str(e))
+                return MetaDataResponse(e.response, e.meta, status=e.status)
+            except IntegrityError as e:
+                LOGGER.error("IntegrityError:%s"%str(e))
+                return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
+            except Exception as e:
+                LOGGER.error("Encountered Exception%s"%str(e))
+                if not LOGGER:
+                    LOGGER = logging.getLogger(__name__)
+                LOGGER.error(str(e))
+        return decorated_function
+    return deco
 
 
 def meta_data_response(meta=""):
