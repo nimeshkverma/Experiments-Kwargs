@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/document/$',
         views.DocumentsDetail.as_view(), name='DocumentsDetail'),
     url(r'^document_type/$', views.DocumentTypeList.as_view()),
-    url(r'^document_type/(?P<pk>[0-9]+)/$',
+    url(r'^(?P<pk>[0-9]+)/document_type/$',
         views.DocumentTypeDetail.as_view()),
 ]
 

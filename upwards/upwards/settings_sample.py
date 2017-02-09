@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'p3*x21u^d6m94%9!ebr2zlgjtxpal##b7_k@bmy_-4xybi39qq'
+SECRET_KEY = 'SECRET_KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'django_extensions',
     'rest_framework',
     'common.apps.CommonConfig',
@@ -132,8 +133,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
 MEDIA_URL = '/media/'
-
-BASE_URL = 'http://40237ad1.ngrok.io/'
+BASE_URL = 'BASE_URL'
 
 FACEBOOK = {
     'data_url': 'https://graph.facebook.com/me?fields=id,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified,email&access_token={platform_token}',
@@ -201,3 +201,9 @@ SMS_GATEWAY_USER_NAME = ""
 SMS_GATEWAY_API_KEY = ""
 SMS_SENDER_NAME = "Upwards"
 SMS_GATEWAY_URL = "http://api.textlocal.in/send/?"
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_S3_ACCESS_KEY_ID = 'AWS_S3_ACCESS_KEY_ID'
+AWS_S3_SECRET_ACCESS_KEY = 'AWS_S3_SECRET_ACCESS_KEY'
+AWS_STORAGE_BUCKET_NAME = 'AWS_STORAGE_BUCKET_NAME'
