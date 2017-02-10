@@ -33,23 +33,23 @@ class SocialLogout(APIView):
 
 class LinkedinAuth(APIView):
 
-    def authorize_linked(self, request_data):
-        serializer = serializer.LinkedinAuthSerializer(request_data)
-        if serializer.is_valid():
-            serializer.authorize()
-            return Response({}, status.HTTP_200_OK)
-        return Response({}, status.HTTP_400_BAD_REQUEST)
+    def authorize_and_parse_linkedin(self, request_data):
+        # serializer = serializer.LinkedinAuthSerializer(request_data)
+        # if serializer.is_valid():
+        #     serializer.authorize()
+        return Response(request_data, status.HTTP_200_OK)
+        # return Response({}, status.HTTP_400_BAD_REQUEST)
 
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data):
         if auth_data.get("authorized"):
-            return self.authorize_linked(request.data)
+            return self.authorize_and_parse_linkedin(request.data)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data):
         if auth_data.get("authorized"):
-            return self.authorize_linked(request.GET)
+            return self.authorize_and_parse_linkedin(request.GET)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
