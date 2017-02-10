@@ -1,3 +1,4 @@
+from copy import deepcopy
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,22 +35,27 @@ class SocialLogout(APIView):
 class LinkedinAuth(APIView):
 
     def authorize_and_parse_linkedin(self, request_data):
-        # serializer = serializer.LinkedinAuthSerializer(request_data)
-        # if serializer.is_valid():
-        #     serializer.authorize()
-        return Response(request_data, status.HTTP_200_OK)
-        # return Response({}, status.HTTP_400_BAD_REQUEST)
+        processed_state = self.process_state(request_data.get('state', ''))
+        request_data.update(processed_state)
+        serializer = serializers.LinkedinAuthSerializer(data=d)
+        if serializer.is_valid():
+            serializer.validate_foreign_keys()
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({}, status.HTTP_400_BAD_REQUEST)
+
+    def process_state(self, state):
+        state_raw_list = state.split(',')
+        state_dict = {}
+        for raw_param in state_raw_list:
+            raw_param_list = raw_param.split(':')
+            state_dict[raw_param_list[0]] = raw_param_list[1]
+        return state_dict
 
     @meta_data_response()
-    @session_authorize()
-    def post(self, request, auth_data):
-        if auth_data.get("authorized"):
-            return self.authorize_and_parse_linkedin(request.data)
-        return Response({}, status.HTTP_401_UNAUTHORIZED)
-
-    @meta_data_response()
-    @session_authorize()
-    def get(self, request, auth_data):
-        if auth_data.get("authorized"):
-            return self.authorize_and_parse_linkedin(request.GET)
-        return Response({}, status.HTTP_401_UNAUTHORIZED)
+    def get(self, request):
+        request_data = deepcopy(request.GET)
+        if request_data:
+            return self.authorize_and_parse_linkedin(request_data)
+        else:
+            return Response({}, status.HTTP_200_OK)

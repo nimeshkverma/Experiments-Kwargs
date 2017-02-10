@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^social_login/$', views.SocialLogin.as_view(), name='SocialLogin'),
     url(r'^(?P<pk>[0-9]+)/social_logout/$',
         views.SocialLogout.as_view(), name='SocialLogout'),
-    url(r'^(?P<pk>[0-9]+)/linkedin_auth/$',
+    url(r'^linkedin_auth/$',
         views.LinkedinAuth.as_view(), name='LinkedinAuth'),
 
 ]

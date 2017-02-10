@@ -150,7 +150,7 @@ LINKEDIN = {
     'auth_header': {
         'Content-Type': 'application/x-www-form-urlencoded',
         'grant_type': 'authorization_code',
-        'code': '{auth_code}',
+        'code': '{code}',
         'redirect_uri': BASE_URL + 'customer/linkedin_auth',
         'client_id': 'client_id',
         'client_secret': 'client_secret'
