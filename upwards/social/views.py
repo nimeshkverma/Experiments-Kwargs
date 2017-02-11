@@ -4,9 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from common.decorators import session_authorize, meta_data_response
+from customer.models import Customer
 
 from . import serializers
 from . import models
+from . import utils
 
 
 class SocialLogin(APIView):
@@ -64,43 +66,9 @@ class LinkedinAuth(APIView):
 
 class CustomerProfile(APIView):
 
-    def get_linkedin_object(self,pk):
-        return models.LinkedinProfile.objects.filter(customer_id=pk)
-
-    def get_social_object(self,pk):
-        return models.SocialProfile.objects.filter(customer_id=pk)
-
-    def check_customer_exists(self,pk):
-        customer = models.Login.objects.filter(pk=pk)
-        if len(customer) > 0: return True
-        return False
-
     @meta_data_response()
-    def get(self, requests, pk):
-        response_json = {}
-        if self.check_customer_exists(pk):
-            linked_profile = serializers.LinkedinAuthSerializer(data=self.get_linkedin_object(pk))
-            if linked_profile.is_valid():
-                response_json['linkedin'] = linked_profile.validated_data
-            else:
-                response_json['linkedin'] = {}
-
-            social_profile = serializers.SocialProfileSerializer(self.get_social_object(pk),many=True)
-            if social_profile:
-                for social_data in social_profile.data:
-                    response_json[social_data['platform']] = social_data
-                if not response_json.has_key('facebook'):
-                    response_json['facebook'] = {}
-                if not response_json.has_key('google'):
-                    response_json['google'] = {}
-            else:
-                response_json['facebook'] = {}
-                response_json['google'] = {}
-
-            return Response(response_json, status.HTTP_200_OK)
+    def get(self, requests, customer_id):
+        if Customer.exists(customer_id):
+            return Response(utils.get_customer_profiles(customer_id), status.HTTP_200_OK)
         else:
-            return Response(response_json,status.HTTP_204_NO_CONTENT)
-
-
-
-        
+            return Response({}, status.HTTP_404_NOT_FOUND)
