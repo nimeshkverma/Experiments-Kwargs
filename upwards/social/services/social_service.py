@@ -54,7 +54,6 @@ class SocialProfile(object):
                 'first_name': self.processed_data['given_name'],
                 'last_name': self.processed_data['family_name'],
                 'profile_link': "https://plus.google.com/" + str(self.processed_data.get('sub')),
-                'gender': None,
                 'email_id': self.email_id,
                 'profile_pic_link': self.processed_data['picture']
             }

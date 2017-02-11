@@ -122,21 +122,10 @@ class SocialProfile(ActiveModel):
     profile_link = models.URLField()
     profile_pic_link = models.URLField()
 
-    def create_or_update(self,customer_id,social_data):
-        if __check_customer(customer_id,social_data['email_id'],social_data['platform']):
-            pass
-        else:
-            SocialProfile.object.create(customer_id=customer_id,**social_data)
-
-    def __check_customer(customer_id,email_id,platform):
-        customer = SocialProfile.object.filter(customer_id=customer_id,email_id=email_id,platform=platform)
-        if len(customer) > 0: return True
-        return False
-
     class Meta(object):
         db_table = 'customer_social_profile'
         unique_together = ('email_id', 'platform')
 
     def __unicode__(self):
-        return "%s__%s__%s" % (str(self.Login), str(self.email_id),
+        return "%s__%s__%s" % (str(self.customer_id), str(self.email_id),
 str(self.platform))

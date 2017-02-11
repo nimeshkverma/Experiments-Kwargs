@@ -168,17 +168,17 @@ def get_or_create_sessions(session_input):
             else:
                 pass
                 # Not Possible
-    social_data = create_or_update_social(session_return_val['customer_id'],social_profile.social_data)
+    social_data = create_or_update(session_return_val['customer_id'],social_profile.social_data)
     return session_return_val
 
 
-def create_or_update_social(customer_id,social_data):
-        if check_customer_social(customer_id,social_data['email_id'],social_data['platform']):
+def create_or_update(customer_id,social_data):
+        if check_customer(customer_id,social_data['email_id'],social_data['platform']):
             models.SocialProfile.objects.update(customer_id=customer_id,**social_data)
         else:
             models.SocialProfile.objects.create(customer_id=customer_id,**social_data)
 
-def check_customer_social(customer_id,email_id,platform):
+def check_customer(customer_id,email_id,platform):
     customer = models.SocialProfile.objects.filter(customer_id=customer_id,email_id=email_id,platform=platform)
     if len(customer) > 0: return True
     return False

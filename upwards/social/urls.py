@@ -8,6 +8,7 @@ urlpatterns = [
         views.SocialLogout.as_view(), name='SocialLogout'),
     url(r'^linkedin_auth/$',
         views.LinkedinAuth.as_view(), name='LinkedinAuth'),
+    url(r'^(?P<pk>[0-9]+)/social_profile/$',views.CustomerProfile.as_view(), name='CustomerProfile')
 
 ]
 

@@ -9,6 +9,7 @@ from services.session_service import get_or_create_sessions
 from services.social_service import LinkedinProfile
 
 
+
 class LoginSerializer(serializers.Serializer):
     platform_token = serializers.CharField()
     source = serializers.ChoiceField(choices=models.SOURCE_CHOICES)
@@ -52,3 +53,9 @@ class LinkedinAuthSerializer(serializers.ModelSerializer):
         model = models.LinkedinProfile
         exclude = ('customer', 'created_at', 'updated_at',
                    'is_active', 'id', 'deleted_at')
+
+class SocialProfileSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.SocialProfile
+        exclude = ('created_at','updated_at','id','is_active')
