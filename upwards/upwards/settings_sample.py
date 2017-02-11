@@ -197,10 +197,11 @@ BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
 
 
 POST_OTP_MESSAGE = " is your Upwards App OTP"
-SMS_GATEWAY_USER_NAME = ""
-SMS_GATEWAY_API_KEY = ""
+SMS_GATEWAY_USER_NAME = "SMS_GATEWAY_USER_NAME"
+SMS_GATEWAY_API_KEY = "SMS_GATEWAY_API_KEY"
 SMS_SENDER_NAME = "Upwards"
-SMS_GATEWAY_URL = "http://api.textlocal.in/send/?"
+SMS_GATEWAY_TEMPLATE = 'ABCDEF'
+SMS_GATEWAY_URL = "http://2factor.in/API/V1/{sms_gateway_api_key}/SMS/{mobile_number}/{otp_code}/{sms_gateway_template}"
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

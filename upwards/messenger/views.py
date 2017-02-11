@@ -7,7 +7,8 @@ from django.core import signing
 from . import models, serializers
 
 from common.decorators import session_authorize, meta_data_response, catch_exception
-from . tasks import send_verification_mail, update_email_models, send_otp
+from . tasks import send_verification_mail, update_email_models
+from . services import otp_service
 
 
 class EmailVerificationCreate(APIView):
@@ -59,7 +60,7 @@ class OtpCreate(APIView):
             if serializer.is_valid():
                 serializer.validate_foreign_keys()
                 otp_object = serializer.save()
-                send_otp(
+                otp_service.send_otp(
                     serializers.OtpSerializer(otp_object).data)
                 return Response({"status": "sent"}, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
