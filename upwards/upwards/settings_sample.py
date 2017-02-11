@@ -142,7 +142,7 @@ REQUIRES_FB_REVIEW = ['user_birthday', 'user_education_history', 'user_hometown'
                       'user_location', 'user_managed_groups', 'user_relationships', 'user_work_history']
 
 GOOGLE = {
-    'data_url': 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=={platform_token}',
+    'data_url': 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={platform_token}',
 }
 
 LINKEDIN = {

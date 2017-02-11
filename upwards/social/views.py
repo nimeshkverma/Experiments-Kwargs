@@ -37,7 +37,7 @@ class LinkedinAuth(APIView):
     def authorize_and_parse_linkedin(self, request_data):
         processed_state = self.process_state(request_data.get('state', ''))
         request_data.update(processed_state)
-        serializer = serializers.LinkedinAuthSerializer(data=d)
+        serializer = serializers.LinkedinAuthSerializer(data=request_data)
         if serializer.is_valid():
             serializer.validate_foreign_keys()
             serializer.save()
