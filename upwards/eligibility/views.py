@@ -9,7 +9,7 @@ from common.decorators import session_authorize, meta_data_response, catch_excep
 
 class FinanceCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -25,7 +25,7 @@ class FinanceCreate(APIView):
 
 class FinanceDetail(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -36,7 +36,7 @@ class FinanceDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -49,7 +49,7 @@ class FinanceDetail(APIView):
             return Response(serializers.FinanceSerializer(finance_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
@@ -63,7 +63,7 @@ class FinanceDetail(APIView):
 
 class ProfessionCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -79,7 +79,7 @@ class ProfessionCreate(APIView):
 
 class ProfessionDetail(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -90,7 +90,7 @@ class ProfessionDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -103,7 +103,7 @@ class ProfessionDetail(APIView):
             return Response(serializers.ProfessionSerializer(profession_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
@@ -117,7 +117,7 @@ class ProfessionDetail(APIView):
 
 class EducationCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -133,7 +133,7 @@ class EducationCreate(APIView):
 
 class EducationDetail(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -144,7 +144,7 @@ class EducationDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -157,7 +157,7 @@ class EducationDetail(APIView):
             return Response(serializers.EducationSerializer(education_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
@@ -171,7 +171,7 @@ class EducationDetail(APIView):
 
 class AmountEligibleCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request):
         serializer = serializers.AmountEligibleSerializer(
@@ -185,7 +185,7 @@ class AmountEligibleCreate(APIView):
 
 class AmountEligibleDetail(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, pk):
         amount_eligible_object = get_object_or_404(
@@ -194,7 +194,7 @@ class AmountEligibleDetail(APIView):
             amount_eligible_object)
         return Response(serializer.data, status.HTTP_200_OK)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def put(self, request, pk):
         amount_eligible_object = get_object_or_404(
@@ -204,7 +204,7 @@ class AmountEligibleDetail(APIView):
             amount_eligible_object, request.data)
         return Response(serializers.AmountEligibleSerializer(amount_eligible_object_updated).data, status.HTTP_200_OK)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def delete(self, request, pk):
         amount_eligible_object = get_object_or_404(

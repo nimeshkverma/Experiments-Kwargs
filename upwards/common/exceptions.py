@@ -19,6 +19,9 @@ class ResponseException(Exception):
         super(Exception, self).__init__(
             meta + ". Status Code: " + str(status))
 
+    def __str__(self):
+        return ("Response: {response}, Meta: {meta}, Status: {status}".format(response=self.response, meta=self.meta, status=self.status))
+
 
 class NotAcceptableError(ResponseException):
 

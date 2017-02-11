@@ -10,7 +10,7 @@ from common.decorators import session_authorize, meta_data_response, catch_excep
 
 class PanCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -26,7 +26,7 @@ class PanCreate(APIView):
 
 class PanDetail(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -37,7 +37,7 @@ class PanDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -49,7 +49,7 @@ class PanDetail(APIView):
             return Response(serializers.PanSerializer(pan_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):

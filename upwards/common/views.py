@@ -18,12 +18,12 @@ class CollegeList(mixins.ListModelMixin,
     queryset = models.College.active_objects.all()
     serializer_class = serializers.CollegeSerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -52,12 +52,12 @@ class CompanyList(mixins.ListModelMixin,
     queryset = models.Company.active_objects.all()
     serializer_class = serializers.CompanySerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -86,12 +86,12 @@ class SalaryPaymentModeList(mixins.ListModelMixin,
     queryset = models.SalaryPaymentMode.active_objects.all()
     serializer_class = serializers.SalaryPaymentModeSerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -120,12 +120,12 @@ class OrganisationTypeList(mixins.ListModelMixin,
     queryset = models.OrganisationType.active_objects.all()
     serializer_class = serializers.OrganisationTypeSerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)

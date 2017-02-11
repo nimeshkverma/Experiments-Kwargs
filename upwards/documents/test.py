@@ -7,13 +7,14 @@ def create_test_file(path):
 
 
 def upload_file():
-    url = 'http://127.0.0.1:8080/customer/document/'
+    url = 'http://ec2-35-163-209-76.us-west-2.compute.amazonaws.com:8000/customer/document/'
+    # file_data = create_test_file('documents/aadhaar_dummy.jpg')
     requests_headers = {
-        'Session-Token': 'upwards_1_PtLdxI8bXc0yGrhh5obPOtape329YlqO'
+        'Session-Token': 'upwards_7_z2DOkn21YHz2c9DFj1MWOOIpPfJZrXnT'
     }
     requests_data = {
-        "customer_id": 1,
-        "document_type_id": 1,
+        "customer_id": 7,
+        "document_type_id": "1",
         "status": "uploaded",
     }
     requests_files = {

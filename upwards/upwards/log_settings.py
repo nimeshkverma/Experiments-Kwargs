@@ -11,17 +11,31 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': 'upwards/logs/apps.log',
-            'formatter': 'verbose'
+            'when': 'M',
+            'interval': 1,
+            'backupCount': 7,
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        '': {
+        ''''':{
             'handlers': ['file'],
             'propagate': True,
-            'level': 'DEBUG',
-        }
+            'level': 'ERROR',
+        },'''
+        'django': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
+
+        'social': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+        },
+
     },
 }

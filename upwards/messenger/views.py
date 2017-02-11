@@ -13,7 +13,7 @@ from . services import otp_service
 
 class EmailVerificationCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -50,7 +50,7 @@ class EmailVerificationDetail(APIView):
 
 class OtpCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):

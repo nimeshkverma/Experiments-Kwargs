@@ -23,12 +23,12 @@ class CustomerList(mixins.ListModelMixin,
     queryset = models.Customer.active_objects.all()
     serializer_class = serializers.CustomerSerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -41,7 +41,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerSerializer
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -49,7 +49,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
             return self.retrieve(request, *args, **kwargs)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -60,7 +60,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
             return response
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
@@ -71,7 +71,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
 
 class BankDetailsCreate(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -87,7 +87,7 @@ class BankDetailsCreate(APIView):
 
 class BankDetails(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -98,7 +98,7 @@ class BankDetails(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -111,7 +111,7 @@ class BankDetails(APIView):
             return Response(serializers.BankDetailsSerializer(bank_object_updated).data, status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
@@ -125,7 +125,7 @@ class BankDetails(APIView):
 
 class HomepageAPI(APIView):
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):

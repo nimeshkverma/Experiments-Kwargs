@@ -37,7 +37,7 @@ class CustomerStateChange(APIView):
             return True
         return False
 
-    @catch_exception
+    @catch_exception()
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data, *args, **kwargs):
