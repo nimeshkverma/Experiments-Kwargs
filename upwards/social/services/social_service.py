@@ -24,7 +24,7 @@ class SocialProfile(object):
         self.email_id = self.data.get(
             SocialProfile.__email_keys.get(self.__platform))
         self.processed_data = deepcopy(self.data)
-        self.__process_data()
+        self.social_data = self.__get_social_data()
 
     def __fetch_platform_data(self, data_url):
         try:
@@ -39,29 +39,39 @@ class SocialProfile(object):
         else:
             raise ErrorMessage("Platform not supported")
 
-    def __process_data(self):
+    def __get_social_data(self):
         if self.__platform == 'google':
-            self.processed_data['login_id'] = None
-            self.processed_data['platform'] = self.__platform
-            self.processed_data['platform_id'] = self.processed_data.get('sub')
-            self.processed_data[
-                'first_name'] = self.processed_data['given_name']
-            self.processed_data[
-                'last_name'] = self.processed_data['family_name']
-            self.processed_data['profile_link'] = "https://plus.google.com/" + \
-                str(self.processed_data.get('sub'))
-            self.processed_data['gender'] = None
+            return self.__get_google_data()
         elif self.__platform == 'facebook':
-            self.processed_data['login_id'] = None
-            self.processed_data['platform'] = self.__platform
-            self.processed_data['platform_id'] = self.processed_data.get('id')
-            self.processed_data[
-                'profile_link'] = self.processed_data.get('link')
-            self.processed_data['profile_pic_link'] = self.processed_data.get(
-                'picture', {}).get('data', {}).get('url')
+            return self.__get_facebook_data()
         else:
             raise ErrorMessage("Platform not supported")
 
+    def __get_google_data(self):
+            model_data = {
+                'platform': self.__platform,
+                'platform_id': self.processed_data.get('sub'),
+                'first_name': self.processed_data['given_name'],
+                'last_name': self.processed_data['family_name'],
+                'profile_link': "https://plus.google.com/" + str(self.processed_data.get('sub')),
+                'gender': None,
+                'email_id': self.email_id,
+                'profile_pic_link': self.processed_data['picture']
+            }
+            return model_data
+
+    def __get_facebook_data(self):
+            model_data = {
+                'platform': self.__platform,
+                'platform_id': self.processed_data.get('id'),
+                'first_name': self.processed_data['first_name'],
+                'last_name': self.processed_data['last_name'],
+                'profile_link': self.processed_data['link'],
+                'gender': self.processed_data["gender"],
+                'email_id': self.email_id,
+                'profile_pic_link': self.processed_data['picture']['data']['url']
+            }
+            return model_data
 
 class LinkedinProfile(object):
 

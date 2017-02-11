@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 
-from common.models import (LifeTimeTrackingModel,
+from common.models import (LifeTimeTrackingModel, ActiveModel,
                            alphabet_whitespace_regex_allow_empty,
                            GENDER_CHOICES,
                            MALE)
@@ -104,3 +104,39 @@ class LinkedinProfile(LifeTimeTrackingModel):
 
     def __unicode__(self):
         return "%s__LinkedinId_%s" % (str(self.customer), str(self.linkedin_id))
+
+
+
+class SocialProfile(ActiveModel):
+    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
+    email_id = models.EmailField(blank=False, null=False)
+    platform = models.CharField(
+        max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
+    platform_id = models.CharField(max_length=256, blank=False, null=False)
+    first_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    last_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    gender = models.CharField(
+        max_length=1, default=MALE, choices=GENDER_CHOICES)
+    profile_link = models.URLField()
+    profile_pic_link = models.URLField()
+
+    def create_or_update(self,customer_id,social_data):
+        if __check_customer(customer_id,social_data['email_id'],social_data['platform']):
+            pass
+        else:
+            SocialProfile.object.create(customer_id=customer_id,**social_data)
+
+    def __check_customer(customer_id,email_id,platform):
+        customer = SocialProfile.object.filter(customer_id=customer_id,email_id=email_id,platform=platform)
+        if len(customer) > 0: return True
+        return False
+
+    class Meta(object):
+        db_table = 'customer_social_profile'
+        unique_together = ('email_id', 'platform')
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.Login), str(self.email_id),
+str(self.platform))
