@@ -142,7 +142,7 @@ REQUIRES_FB_REVIEW = ['user_birthday', 'user_education_history', 'user_hometown'
                       'user_location', 'user_managed_groups', 'user_relationships', 'user_work_history']
 
 GOOGLE = {
-    'data_url': 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=={platform_token}',
+    'data_url': 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={platform_token}',
 }
 
 LINKEDIN = {
@@ -150,7 +150,7 @@ LINKEDIN = {
     'auth_header': {
         'Content-Type': 'application/x-www-form-urlencoded',
         'grant_type': 'authorization_code',
-        'code': '{auth_code}',
+        'code': '{code}',
         'redirect_uri': BASE_URL + 'customer/linkedin_auth',
         'client_id': 'client_id',
         'client_secret': 'client_secret'
@@ -197,10 +197,11 @@ BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
 
 
 POST_OTP_MESSAGE = " is your Upwards App OTP"
-SMS_GATEWAY_USER_NAME = ""
-SMS_GATEWAY_API_KEY = ""
+SMS_GATEWAY_USER_NAME = "SMS_GATEWAY_USER_NAME"
+SMS_GATEWAY_API_KEY = "SMS_GATEWAY_API_KEY"
 SMS_SENDER_NAME = "Upwards"
-SMS_GATEWAY_URL = "http://api.textlocal.in/send/?"
+SMS_GATEWAY_TEMPLATE = 'ABCDEF'
+SMS_GATEWAY_URL = "http://2factor.in/API/V1/{sms_gateway_api_key}/SMS/{mobile_number}/{otp_code}/{sms_gateway_template}"
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

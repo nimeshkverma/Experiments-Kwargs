@@ -1,10 +1,14 @@
+from copy import deepcopy
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from common.decorators import session_authorize, meta_data_response
+from customer.models import Customer
 
 from . import serializers
+from . import models
+from . import utils
 
 
 class SocialLogin(APIView):
@@ -33,23 +37,38 @@ class SocialLogout(APIView):
 
 class LinkedinAuth(APIView):
 
-    def authorize_linked(self, request_data):
-        serializer = serializer.LinkedinAuthSerializer(request_data)
+    def authorize_and_parse_linkedin(self, request_data):
+        processed_state = self.process_state(request_data.get('state', ''))
+        request_data.update(processed_state)
+        serializer = serializers.LinkedinAuthSerializer(data=request_data)
         if serializer.is_valid():
-            serializer.authorize()
-            return Response({}, status.HTTP_200_OK)
+            serializer.validate_foreign_keys()
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_400_BAD_REQUEST)
 
-    @meta_data_response()
-    @session_authorize()
-    def post(self, request, auth_data):
-        if auth_data.get("authorized"):
-            return self.authorize_linked(request.data)
-        return Response({}, status.HTTP_401_UNAUTHORIZED)
+    def process_state(self, state):
+        state_raw_list = state.split(',')
+        state_dict = {}
+        for raw_param in state_raw_list:
+            raw_param_list = raw_param.split(':')
+            state_dict[raw_param_list[0]] = raw_param_list[1]
+        return state_dict
 
     @meta_data_response()
-    @session_authorize()
-    def get(self, request, auth_data):
-        if auth_data.get("authorized"):
-            return self.authorize_linked(request.GET)
-        return Response({}, status.HTTP_401_UNAUTHORIZED)
+    def get(self, request):
+        request_data = deepcopy(request.GET)
+        if request_data:
+            return self.authorize_and_parse_linkedin(request_data)
+        else:
+            return Response({}, status.HTTP_200_OK)
+
+
+class CustomerProfile(APIView):
+
+    @meta_data_response()
+    def get(self, requests, customer_id):
+        if Customer.exists(customer_id):
+            return Response(utils.get_customer_profiles(customer_id), status.HTTP_200_OK)
+        else:
+            return Response({}, status.HTTP_404_NOT_FOUND)

@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 
-from common.models import (LifeTimeTrackingModel,
+from common.models import (LifeTimeTrackingModel, ActiveModel,
                            alphabet_whitespace_regex_allow_empty,
                            GENDER_CHOICES,
                            MALE)
@@ -72,53 +72,60 @@ class Login(LifeTimeTrackingModel):
 post_save.connect(Login.register_login_customer_state, sender=Login)
 
 
-class Profile(LifeTimeTrackingModel):
-    login = models.ForeignKey('Login', on_delete=models.CASCADE)
-    email_id = models.EmailField(blank=False, null=False)
-    platform_id = models.CharField(max_length=256, blank=False, null=False)
-    platform = models.CharField(
-        max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
-    first_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex_allow_empty], default="")
-    last_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex_allow_empty], default="")
-    gender = models.CharField(
-        max_length=1, default=MALE, choices=GENDER_CHOICES)
-    profile_link = models.URLField()
-    profile_pic_link = models.URLField()
-
-    def __unicode__(self):
-        return "%s__%s__%s" % (str(self.Login), str(self.email_id),
-                               str(self.platform))
-
-
 class LinkedinProfile(LifeTimeTrackingModel):
     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
-    email_id = models.EmailField(blank=False, null=False)
-    social_data = models.TextField(editable=False, blank=True, null=False)
-    linkedin_token = models.TextField(editable=False, blank=True, null=False)
-    session_token = models.CharField(
-        editable=False, blank=True, null=True, max_length=64)
-    linkedin_id = models.CharField(max_length=256, blank=False, null=False)
     source = models.CharField(
         max_length=20, default=ANDROID, choices=SOURCE_CHOICES)
+    code = models.TextField()
+    state = models.CharField(max_length=256)
+    auth_token = models.TextField(editable=False, blank=True, null=True)
+    social_data = models.TextField(editable=False, blank=True, null=True)
+    email_id = models.EmailField(blank=True, null=True)
+    linkedin_id = models.CharField(max_length=256, blank=True, null=True)
     first_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex_allow_empty], default="")
+        alphabet_whitespace_regex_allow_empty], default="", blank=True, null=True)
     last_name = models.CharField(max_length=25, validators=[
-        alphabet_whitespace_regex_allow_empty], default="")
+        alphabet_whitespace_regex_allow_empty], default="", blank=True, null=True)
     gender = models.CharField(
-        max_length=1, default=MALE, choices=GENDER_CHOICES)
-    profile_link = models.URLField()
-    profile_pic_link = models.URLField()
-    industry = models.CharField(max_length=100, default="")
-    location = models.CharField(max_length=100, default="")
-    last_employer = models.CharField(max_length=100, default="")
-    join_date_last_employer = models.DateField(blank=False, null=False)
-    connections = models.IntegerField(default=500)
+        max_length=20, blank=True, null=True)
+    profile_link = models.URLField(blank=True, null=True)
+    profile_pic_link = models.URLField(blank=True, null=True)
+    industry = models.CharField(
+        max_length=100, default="", blank=True, null=True)
+    location = models.CharField(
+        max_length=100, default="", blank=True, null=True)
+    last_employer = models.CharField(
+        max_length=100, default="", blank=True, null=True)
+    join_date_last_employer = models.DateField(blank=True, null=True)
+    connections = models.IntegerField(default=500, blank=True, null=True)
 
     class Meta(object):
         db_table = "customer_linkedin_profile"
 
     def __unicode__(self):
-        return "%s__%s__%s" % (str(self.customer), str(self.email_id),
-                               str(self.platform))
+        return "%s__LinkedinId_%s" % (str(self.customer), str(self.linkedin_id))
+
+
+
+class SocialProfile(ActiveModel):
+    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
+    email_id = models.EmailField(blank=False, null=False)
+    platform = models.CharField(
+        max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
+    platform_id = models.CharField(max_length=256, blank=False, null=False)
+    first_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    last_name = models.CharField(max_length=25, validators=[
+        alphabet_whitespace_regex_allow_empty], default="")
+    gender = models.CharField(
+        max_length=1, default=MALE, choices=GENDER_CHOICES)
+    profile_link = models.URLField()
+    profile_pic_link = models.URLField()
+
+    class Meta(object):
+        db_table = 'customer_social_profile'
+        unique_together = ('email_id', 'platform')
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer_id), str(self.email_id),
+str(self.platform))

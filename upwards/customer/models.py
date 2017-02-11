@@ -31,6 +31,14 @@ class Customer(ActiveModel):
                     0].is_verified
         super(Customer, self).save(*args, **kwargs)
 
+    @staticmethod
+    def exists(customer_id):
+        exists = False
+        customer_objects = Customer.objects.filter(customer_id=customer_id)
+        if customer_objects:
+            exists = True
+        return exists
+
     class Meta(object):
         db_table = "customer"
 

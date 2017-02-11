@@ -14,6 +14,6 @@ def update_email_models(email_object_updated):
     email_service.update_email_models(email_object_updated)
 
 
-@app.task
-def send_otp(otp_data):
-    otp_service.send_otp(otp_data)
+# @app.task
+# def send_otp(otp_data):
+#     otp_service.send_otp(otp_data)
