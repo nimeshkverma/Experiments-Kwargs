@@ -106,7 +106,6 @@ class LinkedinProfile(LifeTimeTrackingModel):
         return "%s__LinkedinId_%s" % (str(self.customer), str(self.linkedin_id))
 
 
-
 class SocialProfile(ActiveModel):
     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
     email_id = models.EmailField(blank=False, null=False)
@@ -128,4 +127,4 @@ class SocialProfile(ActiveModel):
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer_id), str(self.email_id),
-str(self.platform))
+                               str(self.platform))

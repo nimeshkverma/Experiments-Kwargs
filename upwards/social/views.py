@@ -64,7 +64,7 @@ class LinkedinAuth(APIView):
             return Response({}, status.HTTP_200_OK)
 
 
-class CustomerProfile(APIView):
+class SocialProfiles(APIView):
 
     @meta_data_response()
     def get(self, requests, customer_id):
