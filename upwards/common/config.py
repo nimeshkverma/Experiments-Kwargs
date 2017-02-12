@@ -4,24 +4,15 @@ from . serializers import SalaryPaymentModeSerializer, OrganisationTypeSerialize
 
 
 class Config(object):
-    USER_STATE = {
-        "KYC": {
-            "personal": 75,
-            "not_started": 0,
-            "AADHAR": 25,
-            "AADHAR_details": 50,
-            "uploads": 100
-        },
-        "eligiblity": {
-            "professional": 50,
-            "not_started": 0,
-            "education": 75,
-            "miscellaneous": 100,
-            "PAN": 25
-        }
-    }
+    user_state = ['unknown', 'sign_up', 'pan_submit', 'professional_submit', 'education_submit',
+                  'finance_submit_email_verified', 'finance_submit_email_unverified', 'eligibility_submit',
+                  'eligibility_result_approved', 'eligibility_result_rejected', 'aadhaar_submit',
+                  'aadhaar_detail_submit', 'personal_contact_submit', 'document_submit_email_verified',
+                  'document_submit_email_unverified', 'kyc_submit', 'kyc_result_approved',
+                  'kyc_result_rejected', 'bank_detail_submit', 'loan_amount_submit',
+                  'loan_application_proccessing', 'loan_application_proccessed', 'loan_application_errored']
 
-    EMAIL_TYPE = {
+    email_type = {
         "personal": "customer_altername_email",
         "professional": "customer_profession_email"
     }
@@ -45,11 +36,11 @@ class Config(object):
 
     def __get_data(self):
         config_data = {
-            "USER_STATE": self.USER_STATE,
-            "BASE_URL": self.__get_base_url(),
-            "POST_OTP_MESSAGE": self.__get_post_otp_message(),
-            "EMAIL_TYPE": self.EMAIL_TYPE,
-            "SALARY_PAYMENT_MODE": self.__get_salary_payment_mode(),
-            "ORGANISATION_TYPE": self.__get_organisation_type()
+            "user_state": self.user_state,
+            "base_url": self.__get_base_url(),
+            "post_otp_message": self.__get_post_otp_message(),
+            "email_type": self.email_type,
+            "salary_payment_mode": self.__get_salary_payment_mode(),
+            "organisation_type": self.__get_organisation_type()
         }
         return config_data
