@@ -48,7 +48,7 @@ class LinkedinAuth(APIView):
         serializer = serializers.LinkedinAuthSerializer(data=request_data)
         if serializer.is_valid():
             serializer.validate_foreign_keys()
-            serializer.save()
+            serializer.upsert()
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_400_BAD_REQUEST)
 

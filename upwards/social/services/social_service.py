@@ -105,7 +105,7 @@ class LinkedinProfile(object):
             'code'].format(code=self.__code)
         try:
             linkedin_response = requests.post(auth_url, auth_header).json()
-            linkedin_token = linkedin_response["code"][0]
+            linkedin_token = linkedin_response['access_token']
             return linkedin_token
         except Exception as e:
             return None

@@ -9,7 +9,6 @@ from services.session_service import get_or_create_sessions
 from services.social_service import LinkedinProfile
 
 
-
 class LoginSerializer(serializers.Serializer):
     platform_token = serializers.CharField()
     source = serializers.ChoiceField(choices=models.SOURCE_CHOICES)
@@ -43,19 +42,26 @@ class LinkedinAuthSerializer(serializers.ModelSerializer):
                     raise NotAcceptableError(
                         model_pk['pk_name'], model_pk['pk'])
 
-    def save(self):
+    def upsert(self):
         linkedin_profile = LinkedinProfile(self.validated_data.get(
-            "auth_code"), self.validated_data.get("state"))
+            "code"), self.validated_data.get("state"))
         self.validated_data.update(linkedin_profile.model_data)
-        super(LinkedinAuthSerializer, self).save()
+        linkedin_objects = models.LinkedinProfile.objects.filter(
+            customer_id=self.validated_data['customer_id'])
+        if linkedin_objects:
+            models.LinkedinProfile.objects.filter(
+                customer_id=self.validated_data['customer_id']).update(**self.validated_data)
+        else:
+            super(LinkedinAuthSerializer, self).save()
 
     class Meta:
         model = models.LinkedinProfile
         exclude = ('customer', 'created_at', 'updated_at',
                    'is_active', 'id', 'deleted_at')
 
+
 class SocialProfileSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = models.SocialProfile
-        exclude = ('created_at','updated_at','id','is_active')
+        exclude = ('created_at', 'updated_at', 'id', 'is_active')
