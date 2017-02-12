@@ -6,8 +6,6 @@ from serializers import AuthenticationSerializer
 from response import MetaDataResponse
 from exceptions import NotAcceptableError, ConflictError
 
-LOGGER = logging.getLogger(__name__)
-
 
 def session_authorize(customer_id_key='pk', *args, **kwargs):
     def deco(f):
@@ -42,7 +40,12 @@ def session_authorize(customer_id_key='pk', *args, **kwargs):
     return deco
 
 
-def catch_exception(LOGGER=None):
+def default_logger():
+    logger = logging.getLogger("From the Decorator file")
+    return logger
+
+
+def catch_exception(LOGGER=default_logger()):
     def deco(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -59,9 +62,7 @@ def catch_exception(LOGGER=None):
                 return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
             except Exception as e:
                 LOGGER.error("Encountered Exception%s" % str(e))
-                if not LOGGER:
-                    LOGGER = logging.getLogger(__name__)
-                LOGGER.error(str(e))
+                return MetaDataResponse({}, str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return decorated_function
     return deco
 

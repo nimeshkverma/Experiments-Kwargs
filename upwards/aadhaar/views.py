@@ -14,10 +14,13 @@ from customer.models import Customer
 from activity.models import register_customer_state
 from activity.model_constants import AADHAAR_SUBMIT_STATE, AADHAAR_DETAIL_SUBMIT_STATE
 
+import logging
+LOGGER = logging.getLogger(__name__)
+
 
 class AadhaarCreate(APIView):
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -35,7 +38,7 @@ class AadhaarCreate(APIView):
 
 class AadhaarDetail(APIView):
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -46,7 +49,7 @@ class AadhaarDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -61,7 +64,7 @@ class AadhaarDetail(APIView):
             return Response(serializers.AadhaarSerializer(aadhaar_object_updated).data, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):

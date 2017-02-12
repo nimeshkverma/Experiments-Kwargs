@@ -3,16 +3,20 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from common.decorators import session_authorize, meta_data_response
+from common.decorators import session_authorize, meta_data_response, catch_exception
 from customer.models import Customer
 
 from . import serializers
 from . import models
 from . import utils
 
+import logging
+LOGGER = logging.getLogger(__name__)
+
 
 class SocialLogin(APIView):
 
+    @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
@@ -24,6 +28,7 @@ class SocialLogin(APIView):
 
 class SocialLogout(APIView):
 
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data):
@@ -55,6 +60,7 @@ class LinkedinAuth(APIView):
             state_dict[raw_param_list[0]] = raw_param_list[1]
         return state_dict
 
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, request):
         request_data = deepcopy(request.GET)
@@ -66,6 +72,7 @@ class LinkedinAuth(APIView):
 
 class SocialProfiles(APIView):
 
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, requests, customer_id):
         if Customer.exists(customer_id):

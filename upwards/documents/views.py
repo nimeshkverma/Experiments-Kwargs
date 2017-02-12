@@ -8,6 +8,9 @@ from common.decorators import session_authorize, meta_data_response, catch_excep
 
 from . import models, serializers
 
+import logging
+LOGGER = logging.getLogger(__name__)
+
 
 class DocumentTypeList(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
@@ -15,12 +18,12 @@ class DocumentTypeList(mixins.ListModelMixin,
     queryset = models.DocumentType.active_objects.all()
     serializer_class = serializers.DocumentTypeSerializer
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -47,7 +50,7 @@ class DocumentsCreate(APIView):
 
     parser_classes = (FormParser, MultiPartParser)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -66,7 +69,7 @@ class DocumentsDetail(APIView):
 
     parser_classes = (FormParser, MultiPartParser)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
@@ -77,7 +80,7 @@ class DocumentsDetail(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
@@ -94,7 +97,7 @@ class DocumentsDetail(APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @catch_exception()
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
