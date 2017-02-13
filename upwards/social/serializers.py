@@ -57,7 +57,7 @@ class LinkedinAuthSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LinkedinProfile
         exclude = ('customer', 'created_at', 'updated_at',
-                   'is_active', 'id', 'deleted_at')
+                   'is_active', 'id')
 
 
 class SocialProfileSerializer(serializers.ModelSerializer):
