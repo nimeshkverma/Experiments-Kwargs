@@ -8,7 +8,7 @@ mobile_number_regex = RegexValidator(
 pan_regex = RegexValidator(
     regex=r'[A-Z]{5}\d{4}[A-Z]{1}', message="PAN must be entered in the format: 'ABCDE1234F'. 10 Characters allowed.")
 aadhaar_regex = RegexValidator(
-    regex=r'^$\d{12}$', message="AADHAAR must be entered in the format: '123456789123'. 12 digits allowed.")
+    regex=r'^\d{12}$', message="AADHAAR must be entered in the format: '123456789123'. 12 digits allowed.")
 alphabet_regex = RegexValidator(
     regex=r'[a-zA-Z]+', message="Data must be entered in Alphabets only.")
 alphabet_regex_allow_empty = RegexValidator(
