@@ -54,6 +54,15 @@ class ActiveModel(models.Model):
         abstract = True
 
 
+class InActiveModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
 class ActiveObjectManager(models.Manager):
 
     def get_queryset(self):
