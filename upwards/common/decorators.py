@@ -1,3 +1,4 @@
+import logging
 from functools import wraps
 from django.db import IntegrityError
 from rest_framework import status
@@ -39,18 +40,31 @@ def session_authorize(customer_id_key='pk', *args, **kwargs):
     return deco
 
 
-def catch_exception(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            return f(*args, **kwargs)
-        except NotAcceptableError as e:
-            return MetaDataResponse(e.response, e.meta, status=e.status)
-        except ConflictError as e:
-            return MetaDataResponse(e.response, e.meta, status=e.status)
-        except IntegrityError as e:
-            return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
-    return decorated_function
+def default_logger():
+    logger = logging.getLogger("From the Decorator file")
+    return logger
+
+
+def catch_exception(LOGGER=default_logger()):
+    def deco(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except NotAcceptableError as e:
+                LOGGER.error("NotAcceptableError:%s" % str(e))
+                return MetaDataResponse(e.response, e.meta, status=e.status)
+            except ConflictError as e:
+                LOGGER.error("MetaDataRresponse:%s" % str(e))
+                return MetaDataResponse(e.response, e.meta, status=e.status)
+            except IntegrityError as e:
+                LOGGER.error("IntegrityError:%s" % str(e))
+                return MetaDataResponse({}, str(e), status=status.HTTP_409_CONFLICT)
+            except Exception as e:
+                LOGGER.error("Encountered Exception%s" % str(e))
+                return MetaDataResponse({}, str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return decorated_function
+    return deco
 
 
 def meta_data_response(meta=""):

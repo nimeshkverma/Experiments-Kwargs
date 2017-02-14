@@ -18,6 +18,9 @@ from activity.model_constants import (ELIGIBILITY_SUBMIT_STATE,
                                       DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE,
                                       KYC_RESULT_REJECTED_STATE)
 
+import logging
+LOGGER = logging.getLogger(__name__)
+
 
 class CustomerStateChange(APIView):
 
@@ -37,7 +40,7 @@ class CustomerStateChange(APIView):
             return True
         return False
 
-    @catch_exception
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data, *args, **kwargs):

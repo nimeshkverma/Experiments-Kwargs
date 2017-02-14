@@ -72,8 +72,9 @@ class Login(LifeTimeTrackingModel):
 post_save.connect(Login.register_login_customer_state, sender=Login)
 
 
-class LinkedinProfile(LifeTimeTrackingModel):
-    customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
+class LinkedinProfile(ActiveModel):
+    customer = models.OneToOneField(
+        'customer.Customer', on_delete=models.CASCADE)
     source = models.CharField(
         max_length=20, default=ANDROID, choices=SOURCE_CHOICES)
     code = models.TextField()

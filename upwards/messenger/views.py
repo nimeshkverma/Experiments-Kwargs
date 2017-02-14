@@ -10,10 +10,13 @@ from common.decorators import session_authorize, meta_data_response, catch_excep
 from . tasks import send_verification_mail, update_email_models
 from . services import otp_service
 
+import logging
+LOGGER = logging.getLogger(__name__)
+
 
 class EmailVerificationCreate(APIView):
 
-    @catch_exception
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
@@ -50,7 +53,7 @@ class EmailVerificationDetail(APIView):
 
 class OtpCreate(APIView):
 
-    @catch_exception
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize('customer_id')
     def post(self, request, auth_data):
