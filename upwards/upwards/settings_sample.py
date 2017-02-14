@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'documents.apps.DocumentsConfig',
     'messenger.apps.MessengerConfig',
     'activity.apps.ActivityConfig',
+    'participant.apps.ParticipantConfig',
 ]
 
 MIDDLEWARE = [
