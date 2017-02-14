@@ -81,23 +81,3 @@ class EducationSerializer(serializers.ModelSerializer):
         model = models.Education
         exclude = ('customer', 'college', 'created_at',
                    'updated_at', 'is_active', 'id')
-
-
-class AmountEligibleSerializer(serializers.ModelSerializer):
-    customer_id = serializers.IntegerField()
-
-    def validate_foreign_keys(self, data=None):
-        data = data if data else self.validated_data
-        model_pk_list = [
-            {"model": Customer, "pk": data.get(
-                'customer_id', -1), "pk_name": "customer_id"}
-        ]
-        for model_pk in model_pk_list:
-            if model_pk["pk_name"] in data.keys():
-                if not check_pk_existence(model_pk['model'], model_pk['pk']):
-                    raise NotAcceptableError(
-                        model_pk['pk_name'], model_pk['pk'])
-
-    class Meta:
-        model = models.AmountEligible
-        exclude = ('customer', 'created_at', 'updated_at', 'is_active', 'id')
