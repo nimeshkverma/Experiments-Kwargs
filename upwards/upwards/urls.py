@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^customer/', include('documents.urls')),
     url(r'^common/', include('common.urls')),
     url(r'^participant/', include('participant.urls')),
+    url(r'^loan/', include('loan.urls')),
 ]
 
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

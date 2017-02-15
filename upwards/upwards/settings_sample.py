@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'messenger.apps.MessengerConfig',
     'activity.apps.ActivityConfig',
     'participant.apps.ParticipantConfig',
+    'loan.apps.LoanConfig',
 ]
 
 MIDDLEWARE = [
