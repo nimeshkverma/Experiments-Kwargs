@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -53,3 +53,71 @@ class BorrowerDetail(APIView):
             models.Borrower, customer_id=pk)
         borrower_object.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BorrowerTypeList(mixins.ListModelMixin,
+                       mixins.CreateModelMixin,
+                       generics.GenericAPIView):
+    queryset = models.BorrowerType.active_objects.all()
+    serializer_class = serializers.BorrowerTypeSerializer
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class BorrowerTypeDetail(mixins.RetrieveModelMixin,
+                         mixins.UpdateModelMixin,
+                         mixins.DestroyModelMixin,
+                         generics.GenericAPIView):
+    queryset = models.BorrowerType.objects.all()
+    serializer_class = serializers.BorrowerTypeSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class LenderList(mixins.ListModelMixin,
+                 mixins.CreateModelMixin,
+                 generics.GenericAPIView):
+    queryset = models.Lender.active_objects.all()
+    serializer_class = serializers.LenderSerializer
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class LenderDetail(mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   generics.GenericAPIView):
+    queryset = models.Lender.objects.all()
+    serializer_class = serializers.LenderSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

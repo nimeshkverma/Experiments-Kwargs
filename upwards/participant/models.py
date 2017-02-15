@@ -7,6 +7,13 @@ from common.models import InActiveModel, ActiveObjectManager, ActiveModel
 from activity.models import register_customer_state
 from activity.model_constants import ELIGIBILITY_RESULT_APPROVED_STATE
 
+NBFC = 'nbfc'
+BANK = 'bank'
+LENDER_TYPE_CHOICES = (
+    (NBFC, 'NBFC'),
+    (BANK, 'Bank'),
+)
+
 
 class Borrower(InActiveModel):
     customer = models.OneToOneField(
@@ -40,18 +47,26 @@ class BorrowerType(ActiveModel):
     type_name = models.CharField(
         max_length=100, unique=True)
     max_current_loans_allowed = models.IntegerField(default=1)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "borrower_type"
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.id), str(self.type_name), str(self.max_current_loans_allowed))
 
 
 class Lender(ActiveModel):
     name = models.CharField(max_length=100, unique=True)
+    lender_type = models.CharField(
+        max_length=50, default=NBFC, choices=LENDER_TYPE_CHOICES)
+    allocation_limit = models.IntegerField(default=10000000)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
 
+    class Meta(object):
+        db_table = "lender"
 
-# lender_id
-# name
-# type
-# allocation_limit
-# created_at
-# updated_at
-# is_active
-# borrower_type
-# borrower_type_id
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.id), str(self.name), str(self.lender_type))
