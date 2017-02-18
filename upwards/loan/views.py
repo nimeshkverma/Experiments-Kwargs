@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status, mixins, generics
+from rest_framework.response import Response
+
 
 from . import models, serializers
 from common.decorators import meta_data_response, catch_exception
@@ -40,3 +42,20 @@ class LoanTypeDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class CostBreakupDetails(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, requests):
+        print 1
+        serializer = serializers.CostBreakupSerializer(
+            data=requests.query_params)
+        print 2
+        if serializer.is_valid():
+            print 3
+            serializer.validate_foreign_keys()
+            return Response(serializer.cost_breakup(), status.HTTP_200_OK)
+        print 4
+        Response({}, status=status.HTTP_400_BAD_REQUEST)
