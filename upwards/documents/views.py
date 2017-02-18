@@ -107,3 +107,29 @@ class DocumentsDetail(APIView):
             documents_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class DocumentsUploadDetails(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def get(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            document_objects = models.Documents.objects.filter(
+                customer_id=auth_data['customer_id'])
+            response = {
+                'customer_id': auth_data['customer_id'],
+                'documents_uploaded': {
+                    '1': False,
+                    '2': False,
+                    '3': False,
+                    '4': False,
+                    '5': False,
+                }
+            }
+            for document_object in document_objects:
+                document_type_id = document_object.document_type_id
+                response['documents_uploaded'][str(document_type_id)] = True
+            return Response(response, status.HTTP_200_OK)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
