@@ -72,7 +72,7 @@ class LoanType(ActiveModel):
         db_table = "loan_type"
 
     def __unicode__(self):
-        return "%s__%s__%s" % (str(self.id), str(self.type_name), str(self.number_of_repayment_cycles), str(self.calender_days_in_cycle))
+        return "%s__%s__%s__%s" % (str(self.id), str(self.type_name), str(self.number_of_repayment_cycles), str(self.calender_days_in_cycle))
 
 
 class Installment(ActiveModel):

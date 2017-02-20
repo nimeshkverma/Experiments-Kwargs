@@ -49,13 +49,9 @@ class CostBreakupDetails(APIView):
     @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, requests):
-        print 1
         serializer = serializers.CostBreakupSerializer(
             data=requests.query_params)
-        print 2
         if serializer.is_valid():
-            print 3
             serializer.validate_foreign_keys()
             return Response(serializer.cost_breakup(), status.HTTP_200_OK)
-        print 4
-        Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
