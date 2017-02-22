@@ -32,7 +32,7 @@ class AadhaarCreate(APIView):
                 register_customer_state(
                     AADHAAR_SUBMIT_STATE, auth_data['customer_id'])
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 

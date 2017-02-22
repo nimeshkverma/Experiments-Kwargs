@@ -53,6 +53,7 @@ class BankDetails(ActiveModel):
     account_number = models.CharField(max_length=20, blank=False, null=False)
     account_holder_name = models.CharField(
         max_length=50, blank=False, null=False)
+    branch_detail = models.CharField(max_length=256, blank=False, null=False)
     ifsc = models.CharField(max_length=20, blank=False, null=False)
     upi_mobile_number = models.CharField(max_length=12, validators=[
         mobile_number_regex], blank=True, default="")
