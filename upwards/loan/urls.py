@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^type/(?P<pk>[0-9]+)/$',
         views.LoanTypeDetail.as_view()),
     url(r'^cost_breakup/$', views.CostBreakupDetails.as_view()),
+    url(r'^repayment_schedule/$', views.RepaymentScheduleDetails.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

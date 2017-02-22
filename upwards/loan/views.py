@@ -54,4 +54,17 @@ class CostBreakupDetails(APIView):
         if serializer.is_valid():
             serializer.validate_foreign_keys()
             return Response(serializer.cost_breakup(), status.HTTP_200_OK)
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RepaymentScheduleDetails(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, requests):
+        serializer = serializers.RepaymentScheduleSerializer(
+            data=requests.query_params)
+        if serializer.is_valid():
+            serializer.validate_foreign_keys()
+            return Response(serializer.repayment_schedule(), status.HTTP_200_OK)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
