@@ -23,7 +23,7 @@ class PanCreate(APIView):
                 serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 

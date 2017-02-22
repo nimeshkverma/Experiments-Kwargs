@@ -29,7 +29,7 @@ class EmailVerificationCreate(APIView):
                 send_verification_mail(
                     serializers.EmailVerificationSerializer(email_object).data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -44,7 +44,7 @@ class EmailVerificationDetail(APIView):
                 models.EmailVerification, **email_data)
             serializers.EmailVerificationSerializer().validate_foreign_keys(email_data)
             email_object_updated = serializers.EmailVerificationSerializer().update(
-                email_verification_object, {"is_verified": True})
+                email_verification_object, {'is_verified': True})
             update_email_models(email_object_updated)
             return render(request, 'messenger/email_verification_success.html')
         except Exception as e:
@@ -65,6 +65,6 @@ class OtpCreate(APIView):
                 otp_object = serializer.save()
                 otp_service.send_otp(
                     serializers.OtpSerializer(otp_object).data)
-                return Response({"status": "sent"}, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status': 'sent'}, status=status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)

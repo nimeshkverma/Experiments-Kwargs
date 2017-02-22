@@ -61,7 +61,7 @@ class DocumentsCreate(APIView):
                 serializer.check_table_conflict()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -94,7 +94,7 @@ class DocumentsDetail(APIView):
                 serializer.check_table_conflict()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
     @catch_exception(LOGGER)
