@@ -16,7 +16,8 @@ from activity.model_constants import (ELIGIBILITY_SUBMIT_STATE,
                                       DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
                                       KYC_SUBMIT_STATE,
                                       DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE,
-                                      KYC_RESULT_REJECTED_STATE)
+                                      KYC_RESULT_REJECTED_STATE,
+                                      KYC_RESULT_APPROVED_STATE,)
 
 import logging
 LOGGER = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ LOGGER = logging.getLogger(__name__)
 
 class CustomerStateChange(APIView):
 
-    allowed_states = [ELIGIBILITY_SUBMIT_STATE, ELIGIBILITY_RESULT_REJECTED_STATE,
+    allowed_states = [ELIGIBILITY_SUBMIT_STATE, ELIGIBILITY_RESULT_REJECTED_STATE, KYC_RESULT_APPROVED_STATE,
                       DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE, KYC_SUBMIT_STATE, KYC_RESULT_REJECTED_STATE]
 
     def is_personal_email_verified(self, customer_id):
@@ -59,5 +60,17 @@ class CustomerStateChange(APIView):
                             present_state = DOCUMENT_SUBMIT_EMAIL_UNVERIFIED_STATE
                     register_customer_state(present_state, customer_id)
                     return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def get(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            customer_state_object = get_object_or_404(
+                models.CustomerState, customer_id=auth_data['customer_id'])
+            serializer = serializers.CustomerStateSerializer(
+                customer_state_object)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)

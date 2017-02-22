@@ -23,7 +23,7 @@ class SocialLogin(APIView):
         if serializer.is_valid():
             social_login_data = serializer.save()
             return Response(social_login_data, status=status.HTTP_200_OK)
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SocialLogout(APIView):
@@ -32,7 +32,7 @@ class SocialLogout(APIView):
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data):
-        if auth_data.get("authorized"):
+        if auth_data.get('authorized'):
             serializer = serializers.LogoutSerializer(data=auth_data)
             if serializer.is_valid():
                 serializer.save()
@@ -50,7 +50,7 @@ class LinkedinAuth(APIView):
             serializer.validate_foreign_keys()
             serializer.upsert()
             return Response(serializer.data, status.HTTP_200_OK)
-        return Response({}, status.HTTP_400_BAD_REQUEST)
+        return Response({'error': serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
     def process_state(self, state):
         state_raw_list = state.split(',')

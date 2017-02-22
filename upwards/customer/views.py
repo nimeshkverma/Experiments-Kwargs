@@ -48,7 +48,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
     @meta_data_response()
     @session_authorize()
     def get(self, request, auth_data, *args, **kwargs):
-        if auth_data.get("authorized"):
+        if auth_data.get('authorized'):
             return self.retrieve(request, *args, **kwargs)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
@@ -56,7 +56,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
     @meta_data_response()
     @session_authorize()
     def put(self, request, auth_data, *args, **kwargs):
-        if auth_data.get("authorized"):
+        if auth_data.get('authorized'):
             response = self.update(request, *args, **kwargs)
             register_customer_state(
                 PERSONAL_CONTACT_SUBMIT_STATE, auth_data['customer_id'])
@@ -67,7 +67,7 @@ class CustomerDetail(mixins.RetrieveModelMixin,
     @meta_data_response()
     @session_authorize()
     def delete(self, request, auth_data, *args, **kwargs):
-        if auth_data.get("authorized"):
+        if auth_data.get('authorized'):
             return self.destroy(request, *args, **kwargs)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
@@ -84,7 +84,7 @@ class BankDetailsCreate(APIView):
                 serializer.validate_foreign_keys()
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
