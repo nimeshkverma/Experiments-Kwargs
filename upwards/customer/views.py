@@ -135,3 +135,13 @@ class HomepageAPI(APIView):
         if auth_data.get('authorized'):
             return Response(Homepage(auth_data['customer_id']).data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class ClearAllCustomerData(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, customer_id):
+        from adhoc_scipts.delete_all_user_data import delete_user_all_data
+        response = delete_user_all_data(customer_id)
+        return Response({'customer_id': customer_id, 'result': response}, status.HTTP_200_OK)

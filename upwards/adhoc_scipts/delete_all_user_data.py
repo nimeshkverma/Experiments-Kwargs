@@ -4,26 +4,28 @@ from aadhaar.models import Aadhaar
 from activity.models import Activity, CustomerState
 from common.models import College, Company, OrganisationType, SalaryPaymentMode
 from customer.models import BankDetails, Customer
-from django.contrib.admin.models import LogEntry
-from django.contrib.auth.models import Group, Permission, User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.sessions.models import Session
 from documents.models import DocumentType, Documents
-from eligibility.models import AmountEligible, Education, Finance, Profession
+from eligibility.models import Education, Finance, Profession
+from loan.models import Installment, Loan, LoanType
 from messenger.models import EmailVerification, Otp
 from pan.models import Pan
+from participant.models import Borrower, BorrowerType, Lender
 from social.models import LinkedinProfile, Login, SocialProfile
 
 
 def delete_user_all_data(customer_id):
-    model_list = [BankDetails, Otp, EmailVerification, Documents, Aadhaar, Finance, Education, Profession,
-                  Pan, AmountEligible, CustomerState, Activity, LinkedinProfile, SocialProfile, Customer, Login]
-
+    response = ""
+    loan_objects = Loan.objects.filter(customer_id=customer_id)
+    for loan_object in loan_objects:
+        response += str(Installment.objects.filter(loan_id=loan_object.id).delete())
+    model_list = [Loan, Borrower, BankDetails, Otp, EmailVerification, Documents, Aadhaar, Finance, Education, Profession,
+                  Pan, CustomerState, Activity, LinkedinProfile, SocialProfile, Customer, Login]
     for model in model_list:
         try:
-            print model.objects.filter(customer_id=customer_id).delete()
+            response += str(model.objects.filter(customer_id=customer_id).delete())
         except Exception as e:
             print e
+    return response
 
 
 if __name__ == '__main__':
@@ -38,4 +40,4 @@ if __name__ == '__main__':
     else:
         customer_id = identifier
 
-    delete_user_all_data(customer_id)
+    print delete_user_all_data(customer_id)
