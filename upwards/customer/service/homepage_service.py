@@ -1,5 +1,5 @@
 from activity.models import CustomerState
-from eligibility.models import AmountEligible
+from participant.models import Borrower
 from homepage_config import (ELIGIBILITY_TITLE, KYC_TITLE,
                              USER_STATES_WITH_ELIGIBILITY_AMOUNT, USER_STATE_MESSAGES)
 
@@ -19,10 +19,10 @@ class Homepage(object):
     def __get_eligibility_amount(self):
         eligibility_amount = None
         if self.present_state in USER_STATES_WITH_ELIGIBILITY_AMOUNT:
-            amount_eligible_objects = AmountEligible.objects.filter(
+            borrower_objects = Borrower.objects.filter(
                 customer_id=self.customer_id)
-            if amount_eligible_objects:
-                eligibility_amount = amount_eligible_objects[0].max_amount
+            if borrower_objects:
+                eligibility_amount = borrower_objects[0].credit_limit
         return eligibility_amount
 
     def __get_eligibility_section(self):
