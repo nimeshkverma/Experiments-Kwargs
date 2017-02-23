@@ -4,14 +4,14 @@ from django.db import models
 
 from common.models import ActiveObjectManager, ActiveModel
 
-INSTALLMENTS = 'installments',
+INSTALLMENTS = 'installments'
 STAGGERED = 'staggered'
 REPAYMENT_TYPE_CHOICES = (
-    (INSTALLMENTS, 'installments'),
-    (STAGGERED, 'staggered'),
+    (INSTALLMENTS, 'Installments'),
+    (STAGGERED, 'Staggered'),
 )
 
-SIMPLE = 'simple',
+SIMPLE = 'simple'
 MOMRB = 'momrb'
 INTEREST_RATE_TYPE_CHOICES = (
     (SIMPLE, 'Simple'),

@@ -11,4 +11,6 @@ urlpatterns = [
         views.BankDetails.as_view(), name='BankDetails'),
     url(r'^(?P<pk>[0-9]+)/homepage/$',
         views.HomepageAPI.as_view(), name='HomepageAPI'),
+    url(r'^(?P<customer_id>[0-9]+)/clear_all_customer_data/$',
+        views.ClearAllCustomerData.as_view(), name='ClearAllCustomerData'),
 ]
