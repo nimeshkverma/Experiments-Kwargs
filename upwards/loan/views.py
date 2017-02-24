@@ -16,12 +16,12 @@ class LoanTypeList(mixins.ListModelMixin,
     queryset = models.LoanType.active_objects.all()
     serializer_class = serializers.LoanTypeSerializer
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -46,7 +46,7 @@ class LoanTypeDetail(mixins.RetrieveModelMixin,
 
 class CostBreakupDetails(APIView):
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, requests):
         serializer = serializers.CostBreakupSerializer(
@@ -59,7 +59,7 @@ class CostBreakupDetails(APIView):
 
 class RepaymentScheduleDetails(APIView):
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     def get(self, requests):
         serializer = serializers.RepaymentScheduleSerializer(

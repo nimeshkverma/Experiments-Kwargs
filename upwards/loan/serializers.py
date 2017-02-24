@@ -36,10 +36,8 @@ class CostBreakupSerializer(serializers.Serializer):
             models.LoanType, id=self.validated_data.get('loan_type_id', -1))
         cost_breakup_data = 'N.A'
         if loan_type_object.type_name in ['Bullet', 'bullet', 'BULLET']:
-            print 1
             bullet_loan = BulletLoan(self.validated_data.get(
                 'loan_amount_asked'), self.validated_data.get('loan_type_id'))
-            print 2
             cost_breakup_data = bullet_loan.cost_breakup_data()
         data = {
             "heading": "Transfer Details",
