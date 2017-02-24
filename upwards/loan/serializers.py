@@ -1,7 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
+from services.loan_service import BulletLoan
 
 from . import models
 
@@ -30,32 +32,16 @@ class CostBreakupSerializer(serializers.Serializer):
                         model_pk['pk_name'], model_pk['pk'])
 
     def cost_breakup(self):
-        # loan_amount_asked = self.validated_data.get('loan_amount_asked')
-        # loan_type_id = self.validated_data.get('loan_type_id')
-        # print 100
-        # print models.LoanType.objects.get(pk=loan_type_id)
-        # return {"q": "q"}
+        loan_type_object = get_object_or_404(
+            models.LoanType, id=self.validated_data.get('loan_type_id', -1))
+        cost_breakup_data = 'N.A'
+        if loan_type_object.type_name in ['Bullet', 'bullet', 'BULLET']:
+            bullet_loan = BulletLoan(self.validated_data.get(
+                'loan_amount_asked'), self.validated_data.get('loan_type_id'))
+            cost_breakup_data = bullet_loan.cost_breakup_data()
         data = {
             "heading": "Transfer Details",
-            "cost_breakup_data": [
-                {
-                    "field_name": "Loan Principal (Rs)",
-                    "field_value": "5000"
-                },
-                {
-                    "field_name": "Processing fee @ 3% (Rs)",
-                    "field_value": "-150"
-                },
-                {
-                    "field_name": "Interest fee @ 2% (Rs)",
-                    "field_value": "-100"
-                },
-                {
-                    "field_name": "Net amount credited (Rs)",
-                    "field_value": "4750"
-                }
-            ]
-        }
+            "cost_breakup_data": cost_breakup_data}
         return data
 
 
@@ -77,26 +63,15 @@ class RepaymentScheduleSerializer(serializers.Serializer):
                         model_pk['pk_name'], model_pk['pk'])
 
     def repayment_schedule(self):
+        loan_type_object = get_object_or_404(
+            models.LoanType, id=self.validated_data.get('loan_type_id', -1))
+        repayment_schedule_data = 'N.A'
+        if loan_type_object.type_name in ['Bullet', 'bullet', 'BULLET']:
+            bullet_loan = BulletLoan(self.validated_data.get(
+                'loan_amount_asked'), self.validated_data.get('loan_type_id'))
+            repayment_schedule_data = bullet_loan.repayment_schedule_data(
+                self.validated_data.get('application_date'))
         data = {
             "heading": "Repayment Schedule",
-            "repayment_schedule_data": [
-                {
-                    "field_name": "Number of Payment Cycles",
-                    "field_value": "1"
-                },
-                {
-                    "field_name": "Repayment amount per Cycle (Rs)",
-                    "field_value": "5000"
-                },
-                {
-                    "field_name": "Due Date",
-                    "field_value": "17 March 2017"
-                },
-                {
-                    "field_name": "Late fee per payment cycle (Rs)",
-                    "field_value": "500"
-                }
-            ]
-        }
-
+            "repayment_schedule_data": repayment_schedule_data}
         return data
