@@ -4,7 +4,7 @@ from common.utils import math_utils
 from customer.models import Customer
 from participant.models import Lender
 
-SWASTIKA = Lender.objects.get(name='Swastika')
+SWASTIKA = 'Swastika'
 DUE_DAYS = 31
 
 
@@ -140,7 +140,8 @@ class BulletLoan(object):
             date, datetime.datetime.min.time())
         return datetime
 
-    def create_loan(self, customer_id, lender_object=SWASTIKA):
+    def create_loan(self, customer_id, lender_name=SWASTIKA):
+        lender_object = Lender.objects.get(name=SWASTIKA)
         self.customer_object = Customer.objects.get(customer_id=customer_id)
         self.lender_object = lender_object
         loan_data = {
