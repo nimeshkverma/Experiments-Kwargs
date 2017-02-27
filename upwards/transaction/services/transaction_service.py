@@ -100,3 +100,17 @@ class BulletTransaction(object):
             'status_actor': status_actor
         }
         return Transaction.objects.create(**transaction_data)
+
+    def update_borrower(self, loan_amount):
+        number_of_active_loans = self.borrower_object.number_of_active_loans + 1
+        total_current_debt = self.borrower_object.total_current_debt + loan_amount
+        number_of_loan_eligibility = number_of_active_loans < self.borrower_object.borrower_type.max_current_loans_allowed
+        loan_amount_eligibility = total_current_debt < self.borrower_object.credit_limit
+        eligible_for_loan = number_of_loan_eligibility and loan_amount_eligibility
+        borrower_data = {
+            'number_of_active_loans': number_of_loan_eligibility,
+            'total_current_debt': total_current_debt,
+            'eligible_for_loan': eligible_for_loan
+        }
+        Borrower.objects.filter(
+            customer_id=self.customer_id).update(**borrower_data)

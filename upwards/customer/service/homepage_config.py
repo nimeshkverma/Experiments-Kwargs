@@ -18,6 +18,13 @@ USER_STATES_WITH_ELIGIBILITY_AMOUNT = [
     'loan_application_proccessed',
 ]
 
+BORROWER_STATES = [
+    'loan_amount_submit',
+    'loan_application_proccessing',
+    'loan_application_errored',
+    'loan_application_proccessed',
+]
+
 USER_STATE_MESSAGES = {
     'unknown': {
         'eligibility': {

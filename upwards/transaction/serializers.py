@@ -51,6 +51,7 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
             data['loan_id'] = str(loan_object.id)
             data['installment_id'] = str(installment_object.id)
             data['transaction_id'] = transaction_object.id
+            bullet_transaction.update_borrower(loan_object.loan_amount_applied)
             TransactionUserState(transaction_status,
                                  transaction_type, status_actor).set_state(self.validated_data.get('customer_id'))
         return data
