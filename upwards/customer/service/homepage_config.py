@@ -19,6 +19,7 @@ USER_STATES_WITH_ELIGIBILITY_AMOUNT = [
 ]
 
 BORROWER_STATES = [
+    'bank_detail_submit',
     'loan_amount_submit',
     'loan_application_proccessing',
     'loan_application_errored',
