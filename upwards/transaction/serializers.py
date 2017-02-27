@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
@@ -52,3 +53,13 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
             data['installment_id'] = str(installment_object.id)
             data['transaction_id'] = transaction_object.id
         return data
+
+        def loan_request_transactions_atomic(self):
+            data = {
+                'loan_id': 'N/A',
+                'installment_id': 'N/A',
+                'transaction_id': 'N/A'
+            }
+            with transaction.atomic():
+                data = self.loan_request_transactions()
+            return data

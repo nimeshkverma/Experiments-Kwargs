@@ -6,7 +6,6 @@ from participant.models import Lender, Borrower
 class BulletTransaction(object):
 
     def __init__(self, customer_id, loan_id, lender_id, installment_id):
-        print 'customer_id, loan_id, lender_id, installment_id', customer_id, loan_id, lender_id, installment_id
         self.customer_id = customer_id
         self.borrower_object = Borrower.objects.get(
             customer_id=self.customer_id)
