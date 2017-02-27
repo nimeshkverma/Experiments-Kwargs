@@ -20,11 +20,11 @@ INTEREST_RATE_TYPE_CHOICES = (
 
 
 class Loan(ActiveModel):
-    customer = models.OneToOneField(
+    customer = models.ForeignKey(
         'customer.Customer', on_delete=models.CASCADE)
     loan_type = models.ForeignKey(
         'LoanType', on_delete=models.CASCADE)
-    loan_amount_applied = models.DecimalField(max_digits=6, decimal_places=4)
+    loan_amount_applied = models.DecimalField(max_digits=14, decimal_places=4)
     lender = models.ForeignKey('participant.Lender')
     is_rejected = models.BooleanField(default=True)
     application_datetime = models.DateTimeField(auto_now_add=True)
@@ -49,14 +49,14 @@ class LoanType(ActiveModel):
     type_name = models.CharField(
         max_length=100, unique=True)
     one_time_processing_fee = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     number_of_repayment_cycles = models.IntegerField(default=1)
     accounting_days_in_cycle = models.IntegerField(default=30)
     calender_days_in_cycle = models.IntegerField(default=30)
     repayment_type = models.CharField(
         max_length=50, default=INSTALLMENTS, choices=REPAYMENT_TYPE_CHOICES)
     interest_rate_per_day = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     interest_rate_type = models.CharField(
         max_length=50, default=MOMRB, choices=INTEREST_RATE_TYPE_CHOICES)
     is_processing_fee_deducted_at_source = models.BooleanField(default=True)
@@ -64,7 +64,7 @@ class LoanType(ActiveModel):
     penalty_amount_per_cycle = models.IntegerField(
         default=1, null=True, blank=True)
     penalty_percent_per_cycle = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
@@ -78,34 +78,35 @@ class LoanType(ActiveModel):
 class Installment(ActiveModel):
     loan = models.ForeignKey(
         'Loan', on_delete=models.CASCADE)
+    installment_number = models.IntegerField()
     expected_principal_outstanding = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     expected_principal_paid = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     expected_interest_paid = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     expected_interest_outstanding = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     expected_installment_amount = models.DecimalField(
-        max_digits=6, decimal_places=4)
+        max_digits=14, decimal_places=4)
     expected_repayment_date = models.DateTimeField()
     actual_principal_outstanding = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_principal_paid = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_interest_paid = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_installment_amount = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_repayment_date = models.DateTimeField(null=True, blank=True)
     actual_principal_overdue = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_interest_overdue = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_interest_overdue_cumulative = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     actual_total_shortfall = models.DecimalField(
-        max_digits=6, decimal_places=4, null=True, blank=True)
+        max_digits=14, decimal_places=4, null=True, blank=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 

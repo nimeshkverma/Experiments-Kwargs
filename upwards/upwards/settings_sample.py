@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'activity.apps.ActivityConfig',
     'participant.apps.ParticipantConfig',
     'loan.apps.LoanConfig',
+    'transaction.apps.TransactionConfig',
 ]
 
 MIDDLEWARE = [

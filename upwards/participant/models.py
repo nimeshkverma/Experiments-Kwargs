@@ -16,7 +16,6 @@ LENDER_TYPE_CHOICES = (
 
 
 class Borrower(InActiveModel):
-
     customer = models.OneToOneField(
         'customer.Customer', on_delete=models.CASCADE)
     borrower_type = models.ForeignKey(
