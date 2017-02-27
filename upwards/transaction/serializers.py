@@ -4,6 +4,7 @@ from rest_framework import serializers
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from loan.services.loan_service import BulletLoan
+from transaction.services.transaction_service import BulletTransaction
 
 from . import models
 from customer.models import Customer
@@ -42,9 +43,12 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
                 'loan_amount_asked'), self.validated_data.get('loan_type_id'))
             loan_object = bullet_loan.create_loan(self.validated_data.get(
                 'customer_id'))
-            transaction_id = 1
             installment_object = bullet_loan.create_installments()
+            bullet_transaction = BulletTransaction(
+                loan_object.customer_id, loan_object.id, loan_object.lender_id, installment_object.id)
+            transaction_object = bullet_transaction.create_loan_request_transaction(
+                models.INITIATED, models.LOAN_AVAIL, models.UPWARDS)
             data['loan_id'] = str(loan_object.id)
             data['installment_id'] = str(installment_object.id)
-            data['transaction_id'] = '1'
+            data['transaction_id'] = transaction_object.id
         return data
