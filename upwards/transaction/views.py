@@ -21,6 +21,6 @@ class LoanRequestTransactionDetails(APIView):
                 data=request.data)
             if serializer.is_valid():
                 serializer.validate_foreign_keys()
-                return Response(serializer.loan_request_transactions_atomic(), status.HTTP_200_OK)
+                return Response(serializer.loan_request_transactions_atomic(models.INITIATED, models.LOAN_AVAIL, models.UPWARDS), status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)

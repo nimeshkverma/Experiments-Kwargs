@@ -2,14 +2,13 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from . import models
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
-from loan.services.loan_service import BulletLoan
-from transaction.services.transaction_service import BulletTransaction
-
-from . import models
 from customer.models import Customer
+from loan.services.loan_service import BulletLoan
 from loan.models import LoanType
+from transaction.services.transaction_service import BulletTransaction, TransactionUserState
 
 
 class LoanRequestTransactionSerializers(serializers.Serializer):
@@ -31,7 +30,7 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
                     raise NotAcceptableError(
                         model_pk['pk_name'], model_pk['pk'])
 
-    def loan_request_transactions(self):
+    def loan_request_transactions(self, transaction_status, transaction_type, status_actor):
         loan_type_object = get_object_or_404(
             LoanType, id=self.validated_data.get('loan_type_id', -1))
         data = {
@@ -48,18 +47,21 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
             bullet_transaction = BulletTransaction(
                 loan_object.customer_id, loan_object.id, loan_object.lender_id, installment_object.id)
             transaction_object = bullet_transaction.create_loan_request_transaction(
-                models.INITIATED, models.LOAN_AVAIL, models.UPWARDS)
+                transaction_status, transaction_type, status_actor)
             data['loan_id'] = str(loan_object.id)
             data['installment_id'] = str(installment_object.id)
             data['transaction_id'] = transaction_object.id
+            TransactionUserState(transaction_status,
+                                 transaction_type, status_actor).set_state(self.validated_data.get('customer_id'))
         return data
 
-        def loan_request_transactions_atomic(self):
-            data = {
-                'loan_id': 'N/A',
-                'installment_id': 'N/A',
-                'transaction_id': 'N/A'
-            }
-            with transaction.atomic():
-                data = self.loan_request_transactions()
-            return data
+    def loan_request_transactions_atomic(self, transaction_status, transaction_type, status_actor):
+        data = {
+            'loan_id': 'N/A',
+            'installment_id': 'N/A',
+            'transaction_id': 'N/A'
+        }
+        with transaction.atomic():
+            data = self.loan_request_transactions(
+                transaction_status, transaction_type, status_actor)
+        return data

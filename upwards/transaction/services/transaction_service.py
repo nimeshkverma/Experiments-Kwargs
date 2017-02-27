@@ -1,6 +1,77 @@
 from transaction.models import Transaction
 from loan.models import Loan, Installment
 from participant.models import Lender, Borrower
+from activity.models import register_customer_state
+from activity.model_constants import LOAN_AMOUNT_SUBMIT_STATE
+
+
+class TransactionUserState(object):
+
+    def __init__(self, transaction_status, transaction_type, status_actor):
+        self.__transaction_status = transaction_status
+        self.__transaction_type = transaction_type
+        self.__status_actor = status_actor
+        self.__user_transaction_all_state = {
+            'upwards': {
+                'loan_avail': {
+                    'initiated': LOAN_AMOUNT_SUBMIT_STATE,
+                    'processing': None,
+                    'completed': None,
+                },
+                'loan_repay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'interest_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'processing_fee_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'late_fee_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+            },
+            'nbfc': {
+                'loan_avail': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'loan_repay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'interest_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'processing_fee_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+                'late_fee_pay': {
+                    'initiated': None,
+                    'processing': None,
+                    'completed': None,
+                },
+            }
+        }
+        self.user_transaction_state = self.__user_transaction_all_state.get(
+            self.__status_actor).get(self.__transaction_type, {}).get(self.__transaction_status, {})
+
+    def set_state(self, customer_id):
+        register_customer_state(self.user_transaction_state, customer_id)
 
 
 class BulletTransaction(object):

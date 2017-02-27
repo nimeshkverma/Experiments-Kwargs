@@ -1,9 +1,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models.signals import post_save
 
 from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex
 from messenger.models import EmailVerification, PERSONAL
+from activity.models import register_customer_state
+from activity.model_constants import BANK_DETAIL_SUBMIT
 
 
 class Customer(ActiveModel):
@@ -61,8 +64,20 @@ class BankDetails(ActiveModel):
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
+    @staticmethod
+    def register_bank_submit_customer_state(sender, instance, created, **kwargs):
+        if created:
+            register_customer_state(
+                BANK_DETAIL_SUBMIT, instance.customer_id)
+
     class Meta(object):
         db_table = "customer_bank_details"
 
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer_id), str(self.account_holder_name), str(self.bank_name))
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer), str(self.company), str(self.salary))
+
+post_save.connect(
+    BankDetails.register_bank_submit_customer_state, sender=BankDetails)
