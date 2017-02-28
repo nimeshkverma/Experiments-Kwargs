@@ -90,7 +90,10 @@ class Homepage(object):
                 'is_eligible_for_loan': None,
             },
             'mast_message': "",
-            'sections': {},
+            'sections': {
+                'eligibility': self.__get_eligibility_section(),
+                'kyc': self.__get_kyc_section(),
+            },
         }
         homepage_data['customer'].update(self.__borrower_credit_data())
         return homepage_data
