@@ -214,7 +214,7 @@ NCODE = {
             'url': 'url',
             'payload': """ """
         },
-        'kyc': {
+        'sign': {
             'url': 'url',
             'payload': """ """
         }

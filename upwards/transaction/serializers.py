@@ -36,7 +36,9 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
         data = {
             'loan_id': 'N/A',
             'installment_id': 'N/A',
-            'transaction_id': 'N/A'
+            'transaction_id': 'N/A',
+            'loan_principal': str(self.validated_data.get('loan_amount_asked', 'N/A')),
+            'amount_transfered': 'N/A',
         }
         if loan_type_object.type_name in ['Bullet', 'bullet', 'BULLET']:
             bullet_loan = BulletLoan(self.validated_data.get(
@@ -50,7 +52,9 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
                 transaction_status, transaction_type, status_actor)
             data['loan_id'] = str(loan_object.id)
             data['installment_id'] = str(installment_object.id)
-            data['transaction_id'] = transaction_object.id
+            data['transaction_id'] = str(transaction_object.id)
+            data['amount_transfered'] = str(
+                bullet_loan.net_amount_credited_field_value())
             bullet_transaction.update_borrower(loan_object.loan_amount_applied)
             TransactionUserState(transaction_status,
                                  transaction_type, status_actor).set_state(self.validated_data.get('customer_id'))
