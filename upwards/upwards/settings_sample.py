@@ -178,6 +178,49 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
 MEDIA_URL = '/media/'
 BASE_URL = 'BASE_URL'
+NCODE_USER = {
+    'ekyc': {
+        'asp_id': 'asp_id',
+        'sign_cert_path': 'sign_cert_path',
+        'sign_cert_password': 'sign_cert_password',
+    },
+    'esign': {
+        'asp_id': 'asp_id',
+        'sign_cert_path': 'sign_cert_path',
+        'sign_cert_password': 'sign_cert_password',
+    },
+}
+
+NCODE = {
+    'ekyc': {
+        'otp': {
+            'url': 'url',
+            'payload': """<NekycOtpRequest uid="{uid}" aspid=" """ + NCODE_USER['ekyc']['asp_id'] + """ " ts="{ts}" txn="{txn}">
+                            <signCert>""" + NCODE_USER['ekyc']['sign_cert_path'] + """</signCert>
+                            <password>""" + NCODE_USER['ekyc']['sign_cert_password'] + """</password>
+                            </NekycOtpRequest>"""
+        },
+        'kyc': {
+            'url': 'url',
+            'payload': """<nekycRequest ts="{ts}" txn="{txn}" uid="{uid}" aspId=" """ + NCODE_USER['esign']['asp_id'] + """ " eSignClass="1" ver="2.0" pfr="Y">
+                            <otp>{otp}</otp>
+                            <signCert>""" + NCODE_USER['ekyc']['sign_cert_path'] + """</signCert>
+                            <password>""" + NCODE_USER['ekyc']['sign_cert_password'] + """</password>
+                            </nekycRequest>"""
+        }
+    },
+    'esign': {
+        'otp': {
+            'url': 'url',
+            'payload': """ """
+        },
+        'kyc': {
+            'url': 'url',
+            'payload': """ """
+        }
+    },
+}
+
 
 FACEBOOK = {
     'data_url': 'https://graph.facebook.com/me?fields=id,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified,email&access_token={platform_token}',
