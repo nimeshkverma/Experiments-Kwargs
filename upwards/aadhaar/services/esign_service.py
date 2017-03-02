@@ -8,21 +8,21 @@ import requests
 from django.conf import settings
 
 
-class EKYC(object):
+class ESign(object):
 
     def __init__(self, aadhaar):
         self.__aadhaar = str(aadhaar) if aadhaar else None
-        self.__otp_url = settings.NCODE['ekyc']['otp']['url']
+        self.__otp_url = settings.NCODE['esign']['otp']['url']
         self.__otp_payload = self.__get_otp_payload()
 
     def __get_datetime_iso(self):
         return datetime.datetime.now().isoformat()
 
     def __get_transaction_id(self):
-        return self.__aadhaar + "__upwards__ekyc__" + self.__get_datetime_iso()
+        return self.__aadhaar + "__upwards__esign__" + self.__get_datetime_iso()
 
     def __get_otp_payload(self):
-        return settings.NCODE['ekyc']['otp']['payload'].format(uid=self.__aadhaar, ts=self.__get_datetime_iso(), txn=self.__get_transaction_id())
+        return settings.NCODE['esign']['otp']['payload'].format(uid=self.__aadhaar, ts=self.__get_datetime_iso(), txn=self.__get_transaction_id())
 
     def generate_otp(self):
         otp_generation_successful = False
