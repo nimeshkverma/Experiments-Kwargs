@@ -73,7 +73,7 @@ class BulletLoan(object):
         }
         return interest_fee_data
 
-    def __net_amount_credited_field_value(self):
+    def net_amount_credited_field_value(self):
         net_amount_credited = self.loan_amount_asked - \
             self.__interest_fee_field_value() - self.__processing_fee_field_value()
         return math_utils.floor(net_amount_credited)
@@ -81,7 +81,7 @@ class BulletLoan(object):
     def __net_amount_credited(self):
         net_amount_credited = {
             "field_name": "Net amount credited (Rs)",
-            "field_value": str(self.__net_amount_credited_field_value()),
+            "field_value": str(self.net_amount_credited_field_value()),
         }
         return net_amount_credited
 

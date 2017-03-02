@@ -5,6 +5,8 @@ from . import models
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from customer.models import Customer
+from services.ekyc_service import EKYC
+from services.esign_service import ESign
 
 
 class AadhaarSerializer(serializers.ModelSerializer):
@@ -26,3 +28,24 @@ class AadhaarSerializer(serializers.ModelSerializer):
         model = models.Aadhaar
         exclude = ('customer', 'created_at',
                    'updated_at', 'is_active', 'id')
+
+
+class AadhaarOTPSerializer(serializers.Serializer):
+    aadhaar = serializers.CharField(
+        max_length=12, min_length=12, allow_blank=False)
+    service_type = serializers.CharField(
+        max_length=16, min_length=1, allow_blank=False)
+
+    def otp_data(self):
+        otp_generation_data = {
+            'otp_generation_successful': False
+        }
+        if self.validated_data.get('service_type') in ['ekyc', 'Ekyc', 'EKYC']:
+            ekyc = EKYC(self.validated_data.get('aadhaar'))
+            otp_generation_data[
+                'otp_generation_successful'] = ekyc.generate_otp()
+        elif self.validated_data.get('service_type') in ['esign', 'Esign', 'ESIGN']:
+            esign = ESign(self.validated_data.get('aadhaar'))
+            otp_generation_data[
+                'otp_generation_successful'] = esign.generate_otp()
+        return otp_generation_data

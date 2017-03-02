@@ -74,3 +74,18 @@ class AadhaarDetail(APIView):
             aadhaar_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class AadhaarOTP(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def get(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            serializer = serializers.AadhaarOTPSerializer(
+                data=request.query_params)
+            if serializer.is_valid():
+                return Response(serializer.otp_data(), status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
