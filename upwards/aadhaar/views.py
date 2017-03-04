@@ -97,7 +97,7 @@ class AadhaarOTP(APIView):
 
 class AadhaarEKYC(APIView):
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data, *args, **kwargs):
@@ -108,5 +108,22 @@ class AadhaarEKYC(APIView):
             serializer = serializers.AadhaarEKYCSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.kyc_data(), status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class AadhaarESign(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def post(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            customer_id = auth_data['customer_id']
+            data = request.data
+            data.update({'customer_id': customer_id})
+            serializer = serializers.AadhaarESignSerializer(data=data)
+            if serializer.is_valid():
+                return Response(serializer.sign_data(), status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
