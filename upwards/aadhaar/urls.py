@@ -12,8 +12,6 @@ urlpatterns = [
         views.AadhaarEKYC.as_view(), name='AadhaarEKYC'),
     url(r'^(?P<pk>[0-9]+)/aadhaar_esign/$',
         views.AadhaarESign.as_view(), name='AadhaarESign'),
-
-
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
