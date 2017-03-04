@@ -10,6 +10,9 @@ urlpatterns = [
         views.AadhaarOTP.as_view(), name='AadhaarOTP'),
     url(r'^(?P<pk>[0-9]+)/aadhaar_ekyc/$',
         views.AadhaarEKYC.as_view(), name='AadhaarEKYC'),
+    url(r'^(?P<pk>[0-9]+)/aadhaar_esign/$',
+        views.AadhaarESign.as_view(), name='AadhaarESign'),
+
 
 ]
 
