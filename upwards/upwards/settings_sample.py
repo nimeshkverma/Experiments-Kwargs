@@ -202,7 +202,7 @@ NCODE = {
         },
         'kyc': {
             'url': 'url',
-            'payload': """<nekycRequest ts="{ts}" txn="{txn}" uid="{uid}" aspId=" """ + NCODE_USER['esign']['asp_id'] + """ " eSignClass="1" ver="2.0" pfr="Y">
+            'payload': """<nekycRequest ts="{ts}" txn="{txn}" uid="{uid}" aspId=" """ + NCODE_USER['ekyc']['asp_id'] + """ " eSignClass="1" ver="2.0" pfr="Y">
                             <otp>{otp}</otp>
                             <signCert>""" + NCODE_USER['ekyc']['sign_cert_path'] + """</signCert>
                             <password>""" + NCODE_USER['ekyc']['sign_cert_password'] + """</password>
