@@ -8,6 +8,9 @@ urlpatterns = [
         views.AadhaarDetail.as_view(), name='AadhaarDetail'),
     url(r'^(?P<pk>[0-9]+)/aadhaar_otp/$',
         views.AadhaarOTP.as_view(), name='AadhaarOTP'),
+    url(r'^(?P<pk>[0-9]+)/aadhaar_ekyc/$',
+        views.AadhaarEKYC.as_view(), name='AadhaarEKYC'),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
