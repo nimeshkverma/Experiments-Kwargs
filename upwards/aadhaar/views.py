@@ -114,7 +114,7 @@ class AadhaarEKYC(APIView):
 
 class AadhaarESign(APIView):
 
-    @catch_exception(LOGGER)
+    # @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data, *args, **kwargs):
