@@ -80,19 +80,6 @@ class ESign(object):
                 command_key].format(customer_id=customer_id)
             subprocess.call(SIGN_DOCUMENT_COMMANDS[command_key].format(
                 customer_id=customer_id), shell=True)
-
-        # unsigned_pdf = open(UNSIGNED_PDF_PATH.format(
-        #     customer_id=customer_id), 'rb')
-        # unsigned_pdf.seek(0)
-        # buff = StringIO.StringIO(unsigned_pdf.read())
-        # document = InMemoryUploadedFile(
-        #     buff, 'file', self.__get_file_name(customer_id), None, buff, None)
-        # unsign_data = {
-        #     'customer_id': customer_id,
-        #     'document_type_id': 6,
-        #     'status': UPLOADED,
-        #     'document_1': document,
-        # }
         response[
             'unsigned_loan_agreement_uploaded'] = self.__upload_loan_agreement(customer_id)
         response['loan_agreement_url'] = self.__s3_loan_agreement_url(
@@ -100,18 +87,6 @@ class ESign(object):
 
         if self.__sign_document(otp, customer_id):
             response['esigned_process_completed'] = True
-            # signed_pdf = open(SIGNED_PDF_PATH.format(
-            #     customer_id=customer_id), 'rb')
-            # signed_pdf.seek(0)
-            # buff = StringIO.StringIO(signed_pdf.read())
-            # document = InMemoryUploadedFile(
-            #     buff, 'file', 'customer' + str(customer_id) + '_signed_loan_agreement', None, buff, None)
-            # sign_data = {
-            #     'customer_id': customer_id,
-            #     'document_type_id': 7,
-            #     'status': UPLOADED,
-            #     'document_1': document,
-            # }
             response['signed_loan_agreement_uploaded'] = self.__upload_loan_agreement(
                 customer_id, True)
             response['loan_agreement_url'] = self.__s3_loan_agreement_url(
@@ -130,10 +105,7 @@ class ESign(object):
         if self.__aadhaar:
             response = requests.post(self.__sign_url, data=self.__sign_payload,
                                      headers={'Content-Type': 'application/xml'})
-            print response.content
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
-        print 10
-        print subprocess.call('touch ' + SIGNED_PDF_PATH.format(customer_id=customer_id), shell=True)
-        return True
+        return sign_generation_successful
