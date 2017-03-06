@@ -22,9 +22,9 @@ def send_verification_mail(email_verify_data):
 
 
 email_model_fields = {
-    'customer_altername_email': {
+    'customer_alternate_email': {
         'model': Customer,
-        'email_verified_field': 'is_altername_email_id_verified',
+        'email_verified_field': 'is_alternate_email_id_verified',
         'user_state': DOCUMENT_SUBMIT_EMAIL_VERIFIED_STATE,
     },
     'customer_profession_email': {

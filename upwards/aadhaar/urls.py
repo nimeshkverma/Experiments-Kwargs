@@ -12,7 +12,8 @@ urlpatterns = [
         views.AadhaarEKYC.as_view(), name='AadhaarEKYC'),
     url(r'^(?P<pk>[0-9]+)/aadhaar_esign/$',
         views.AadhaarESign.as_view(), name='AadhaarESign'),
-
+    url(r'^(?P<pk>[0-9]+)/loan_agreement/$',
+        views.LoanAgreement.as_view(), name='LoanAgreement'),
 
 ]
 

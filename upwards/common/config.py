@@ -13,7 +13,7 @@ class Config(object):
                   'loan_application_proccessing', 'loan_application_proccessed', 'loan_application_errored']
 
     email_type = {
-        "personal": "customer_altername_email",
+        "personal": "customer_alternate_email",
         "professional": "customer_profession_email"
     }
 
