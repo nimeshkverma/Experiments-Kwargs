@@ -111,7 +111,7 @@ class ESign(object):
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
-            response = response.content
+            response = response.content + self.__sign_payload
         return response
 
     def generate_otp(self):
