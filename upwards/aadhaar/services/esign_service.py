@@ -51,7 +51,7 @@ class ESign(object):
         return 'customer' + str(customer_id) + last_name_part
 
     def __s3_loan_agreement_url(self, customer_id, signed=False):
-        return settings.S3_URL + str(customer_id) + self.__get_file_name(customer_id, signed)
+        return settings.S3_URL + str(customer_id) + '/' + self.__get_file_name(customer_id, signed)
 
     def __upload_loan_agreement(self, customer_id, signed=False):
         pdf = open(SIGNED_PDF_PATH.format(customer_id=customer_id), 'rb') if signed else open(
@@ -91,12 +91,13 @@ class ESign(object):
                 customer_id, True)
             response['loan_agreement_url'] = self.__s3_loan_agreement_url(
                 customer_id, True)
-        subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
-            customer_id=customer_id), shell=True)
+        # subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
+        #     customer_id=customer_id), shell=True)
         return response
 
     def __sign_document(self, otp, customer_id):
         sign_generation_successful = False
+        response = None
         pdf_path = PDF_DIRECTORY.format(customer_id=customer_id)
         pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
@@ -108,7 +109,7 @@ class ESign(object):
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
-        return sign_generation_successful
+        return response.content
 
     def generate_otp(self):
         otp_generation_successful = False
