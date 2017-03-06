@@ -84,24 +84,22 @@ class ESign(object):
             'unsigned_loan_agreement_uploaded'] = self.__upload_loan_agreement(customer_id)
         response['loan_agreement_url'] = self.__s3_loan_agreement_url(
             customer_id)
-        response['signed_loan_agreement_uploaded'] = self.__sign_document(
-            otp, customer_id)
-
-        # if self.__sign_document(otp, customer_id):
-        #     response['esigned_process_completed'] = True
-        #     response['signed_loan_agreement_uploaded'] = self.__upload_loan_agreement(
-        #         customer_id, True)
-        #     response['loan_agreement_url'] = self.__s3_loan_agreement_url(
-        #         customer_id, True)
-        # subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
-        #     customer_id=customer_id), shell=True)
+        if self.__sign_document(otp, customer_id):
+            response['esigned_process_completed'] = True
+            response['signed_loan_agreement_uploaded'] = self.__upload_loan_agreement(
+                customer_id, True)
+            response['loan_agreement_url'] = self.__s3_loan_agreement_url(
+                customer_id, True)
+        subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
+            customer_id=customer_id), shell=True)
         return response
 
     def __sign_document(self, otp, customer_id):
         sign_generation_successful = False
-        response = None
-        pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
-        pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
+        # pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
+        pdf_path = '/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_17/'
+        # pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
+        pdf_name = 'customer_17_loan_agreement.pdf'
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
         self.__sign_payload = self.__get_sign_payload(
             otp, pdf_path, pdf_name, sign_pdf)
@@ -111,8 +109,7 @@ class ESign(object):
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
-            response = response.content + self.__sign_payload
-        return response
+        return sign_generation_successful
 
     def generate_otp(self):
         otp_generation_successful = False
