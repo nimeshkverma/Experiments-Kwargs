@@ -11,7 +11,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from documents.models import UPLOADED
 from documents.serializers import DocumentsSerializer
-from esign_constants import SIGN_DOCUMENT_COMMANDS, UNSIGNED_PDF_PATH, UNSIGNED_PDF_NAME, PDF_DIRECTORY, SIGNED_PDF_PATH
+from esign_constants import SIGN_DOCUMENT_COMMANDS, UNSIGNED_PDF_PATH, UNSIGNED_PDF_NAME, PDF_DIRECTORY, SIGNED_PDF_PATH, SIGNED_PDF_PAYLOAD_PATH
 
 
 class ESign(object):
@@ -75,7 +75,7 @@ class ESign(object):
             'esigned_process_completed': False,
             'signed_loan_agreement_uploaded': False
         }
-        for command_key in ['new_directory', 'make_unsigned_pdf']:
+        for command_key in ['new_directory', 'change_directory_mode', 'make_unsigned_pdf', 'change_pdf_mode']:
             command_key, SIGN_DOCUMENT_COMMANDS[
                 command_key].format(customer_id=customer_id)
             subprocess.call(SIGN_DOCUMENT_COMMANDS[command_key].format(
@@ -99,7 +99,7 @@ class ESign(object):
         sign_generation_successful = False
         pdf_path = PDF_DIRECTORY.format(customer_id=customer_id)
         pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
-        sign_pdf = SIGNED_PDF_PATH.format(customer_id=customer_id)
+        sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
         self.__sign_payload = self.__get_sign_payload(
             otp, pdf_path, pdf_name, sign_pdf)
         if self.__aadhaar:
