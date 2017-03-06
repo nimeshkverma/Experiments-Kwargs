@@ -11,7 +11,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from documents.models import UPLOADED
 from documents.serializers import DocumentsSerializer
-from esign_constants import SIGN_DOCUMENT_COMMANDS, UNSIGNED_PDF_PATH, UNSIGNED_PDF_NAME, PDF_DIRECTORY, SIGNED_PDF_PATH, SIGNED_PDF_PAYLOAD_PATH
+from esign_constants import SIGN_DOCUMENT_COMMANDS, UNSIGNED_PDF_PATH, UNSIGNED_PDF_NAME, PDF_DIRECTORY, SIGNED_PDF_PATH, SIGNED_PDF_PAYLOAD_PATH, PDF_PAYLOAD_DIRECTORY
 
 
 class ESign(object):
@@ -91,14 +91,14 @@ class ESign(object):
                 customer_id, True)
             response['loan_agreement_url'] = self.__s3_loan_agreement_url(
                 customer_id, True)
-        # subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
-        #     customer_id=customer_id), shell=True)
+        subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
+            customer_id=customer_id), shell=True)
         return response
 
     def __sign_document(self, otp, customer_id):
         sign_generation_successful = False
         response = None
-        pdf_path = PDF_DIRECTORY.format(customer_id=customer_id)
+        pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
         pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
         self.__sign_payload = self.__get_sign_payload(
@@ -109,7 +109,8 @@ class ESign(object):
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
-        return response.content
+            response = response.content
+        return response
 
     def generate_otp(self):
         otp_generation_successful = False
