@@ -11,11 +11,11 @@ from activity.model_constants import BANK_DETAIL_SUBMIT
 
 class Customer(ActiveModel):
     customer_id = models.AutoField(primary_key=True)
-    altername_email_id = models.EmailField()
-    is_altername_email_id_verified = models.BooleanField(default=False)
-    altername_mob_no = models.CharField(max_length=12, validators=[
+    alternate_email_id = models.EmailField()
+    is_alternate_email_id_verified = models.BooleanField(default=False)
+    alternate_mob_no = models.CharField(max_length=12, validators=[
                                         mobile_number_regex], blank=True, default="")
-    is_altername_mob_no_verified = models.BooleanField(default=False)
+    is_alternate_mob_no_verified = models.BooleanField(default=False)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
@@ -26,11 +26,11 @@ class Customer(ActiveModel):
         return is_valid_customer
 
     def save(self, *args, **kwargs):
-        if not self.is_altername_email_id_verified:
+        if not self.is_alternate_email_id_verified:
             email_objects = EmailVerification.objects.filter(
-                customer_id=self.customer_id, email_id=self.altername_email_id, email_type=PERSONAL)
+                customer_id=self.customer_id, email_id=self.alternate_email_id, email_type=PERSONAL)
             if email_objects:
-                self.is_altername_email_id_verified = email_objects[
+                self.is_alternate_email_id_verified = email_objects[
                     0].is_verified
         super(Customer, self).save(*args, **kwargs)
 

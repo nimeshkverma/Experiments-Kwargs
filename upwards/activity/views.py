@@ -33,10 +33,10 @@ class CustomerStateChange(APIView):
         from messenger.models import EmailVerification, PERSONAL
 
         customer_object = Customer.objects.get(customer_id=customer_id)
-        if customer_object.is_altername_email_id_verified:
+        if customer_object.is_alternate_email_id_verified:
             return True
         email_objects = EmailVerification.objects.filter(
-            customer_id=customer_id, email_id=customer_object.altername_email_id, email_type=PERSONAL)
+            customer_id=customer_id, email_id=customer_object.alternate_email_id, email_type=PERSONAL)
         if email_objects and email_objects[0].is_verified:
             return True
         return False

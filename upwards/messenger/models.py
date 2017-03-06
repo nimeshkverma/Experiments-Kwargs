@@ -5,11 +5,11 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from common.models import ActiveModel, mobile_number_regex
 
-PERSONAL = 'customer_altername_email'
+PERSONAL = 'customer_alternate_email'
 PROFESSIONAL = 'customer_profession_email'
 
 MESSAGE_TYPE_CHOICES = (
-    (PERSONAL, 'customer_altername_email'),
+    (PERSONAL, 'customer_alternate_email'),
     (PROFESSIONAL, 'customer_profession_email'),
 )
 

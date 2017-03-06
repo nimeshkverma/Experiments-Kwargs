@@ -103,5 +103,6 @@ class AadhaarESignSerializer(serializers.Serializer):
             'loan_document': 'https://s3-us-west-2.amazonaws.com/kycdocument/5/customer5_aadhaar1.pdf'
         }
         esign = ESign(self.validated_data.get('aadhaar'))
-        esign.sign_document(self.validated_data.get('otp'))
+        esign.sign_document(self.validated_data.get(
+            'otp'), self.validated_data.get('customer_id'))
         return data

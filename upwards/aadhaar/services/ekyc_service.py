@@ -93,7 +93,7 @@ class EKYC(object):
             if poa.get('co'):
                 name_list = str(poa.get('co')).split(' ')
                 if name_list:
-                    data['father_first_name'] = ' '.join(name_list[:1])
+                    data['father_first_name'] = ' '.join(name_list[:2])
                     data['father_last_name'] = ' '.join(name_list[2:])
             if poa.get('pc'):
                 data['pincode'] = poa['pc']

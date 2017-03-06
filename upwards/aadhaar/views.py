@@ -1,4 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.views.generic import View
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,6 +15,7 @@ from customer.models import Customer
 
 from activity.models import register_customer_state
 from activity.model_constants import AADHAAR_SUBMIT_STATE, AADHAAR_DETAIL_SUBMIT_STATE
+from services import loan_agreement_service
 
 import logging
 LOGGER = logging.getLogger(__name__)
@@ -127,3 +130,15 @@ class AadhaarESign(APIView):
                 return Response(serializer.sign_data(), status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class LoanAgreement(View):
+    loan_agreement_template = 'aadhaar/loan_agreement.html'
+    unauthorized_template = 'aadhaar/unauthorized.html'
+
+    def get_loan_data(self, customer_id):
+        return loan_agreement_service.LoanAgreement(customer_id).data
+
+    def get(self, request, pk):
+        context = self.get_loan_data(pk)
+        return render(request, self.loan_agreement_template, context)
