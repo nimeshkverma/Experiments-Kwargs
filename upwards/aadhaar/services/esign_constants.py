@@ -3,11 +3,11 @@ from django.conf import settings
 PDF_URL = "http://localhost:" + settings.BASE_PORT + \
     "/customer/{customer_id}/loan_agreement/"
 
-UNSIGNED_PDF_PATH = "pdfs/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
-SIGNED_PDF_PATH = "pdfs/customer_{customer_id}/signcustomer_{customer_id}_loan_agreement_Sign.pdf"
-SIGNED_PDF_PAYLOAD_PATH = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/sign"
-UNSIGNED_PDF_PAYLOAD_PATH = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
-PDF_PAYLOAD_DIRECTORY = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/"
+UNSIGNED_PDF_PATH = "/home/esign/customer/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
+SIGNED_PDF_PATH = "/home/esign/customer/customer_{customer_id}/sign.pdfcustomer_{customer_id}_loan_agreement_Sign.pdf"
+SIGNED_PDF_PAYLOAD_PATH = "/home/esign/customer/customer_{customer_id}/sign.pdf"
+UNSIGNED_PDF_PAYLOAD_PATH = "/home/esign/customer/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
+PDF_PAYLOAD_DIRECTORY = "/home/esign/customer/customer_{customer_id}/"
 
 PDF_DIRECTORY = "pdfs/customer_{customer_id}"
 SIGN_DOCUMENT_COMMANDS = {
