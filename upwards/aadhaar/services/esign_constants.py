@@ -15,7 +15,7 @@ SIGN_DOCUMENT_COMMANDS = {
     "change_directory_mode": "sudo chmod 777 " + PDF_DIRECTORY,
     "make_unsigned_pdf": "wkhtmltopdf --zoom " + str(settings.PDF_CONVERSION['zoom']) + " " + PDF_URL + " " + UNSIGNED_PDF_PATH,
     "change_pdf_mode": "sudo chmod 777 " + UNSIGNED_PDF_PATH,
-    "delete_directory": "rm -rf " + PDF_DIRECTORY,
+    "delete_directory": "sudo rm -rf " + PDF_DIRECTORY,
 }
 
 UNSIGNED_PDF_NAME = "customer_{customer_id}_loan_agreement.pdf"
