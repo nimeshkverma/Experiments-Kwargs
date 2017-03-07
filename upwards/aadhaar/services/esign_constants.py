@@ -8,6 +8,7 @@ SIGNED_PDF_PATH = "pdfs/customer_{customer_id}/signcustomer_{customer_id}_loan_a
 SIGNED_PDF_PAYLOAD_PATH = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/sign"
 UNSIGNED_PDF_PAYLOAD_PATH = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
 PDF_PAYLOAD_DIRECTORY = "/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_{customer_id}/"
+
 PDF_DIRECTORY = "pdfs/customer_{customer_id}"
 SIGN_DOCUMENT_COMMANDS = {
     "new_directory": "mkdir " + PDF_DIRECTORY,
@@ -17,4 +18,4 @@ SIGN_DOCUMENT_COMMANDS = {
     "delete_directory": "rm -rf " + PDF_DIRECTORY,
 }
 
-UNSIGNED_PDF_NAME = "customer_{customer_id}_unsigned_loan_agreement.pdf"
+UNSIGNED_PDF_NAME = "customer_{customer_id}_loan_agreement.pdf"

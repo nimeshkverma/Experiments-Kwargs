@@ -96,10 +96,10 @@ class ESign(object):
 
     def __sign_document(self, otp, customer_id):
         sign_generation_successful = False
-        # pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
-        pdf_path = '/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_17/'
-        # pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
-        pdf_name = 'customer_17_loan_agreement.pdf'
+        pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
+        # pdf_path = '/home/ec2-user/www/UpwardsBackend/upwards/pdfs/customer_17/'
+        pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
+        # pdf_name = 'customer_17_loan_agreement.pdf'
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
         self.__sign_payload = self.__get_sign_payload(
             otp, pdf_path, pdf_name, sign_pdf)
