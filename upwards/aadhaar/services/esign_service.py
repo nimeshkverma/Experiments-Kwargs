@@ -101,12 +101,14 @@ class ESign(object):
         pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
         # pdf_name = 'customer_17_loan_agreement.pdf'
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
+        print pdf_path, pdf_name, sign_pdf
         self.__sign_payload = self.__get_sign_payload(
             otp, pdf_path, pdf_name, sign_pdf)
         if self.__aadhaar:
             response = requests.post(self.__sign_url, data=self.__sign_payload,
                                      headers={'Content-Type': 'application/xml'})
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
+            print response.content
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
         return sign_generation_successful
