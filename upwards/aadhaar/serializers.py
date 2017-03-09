@@ -35,7 +35,7 @@ class AadhaarSerializer(serializers.ModelSerializer):
                     raise NotAcceptableError(
                         model_pk['pk_name'], model_pk['pk'])
 
-    def current_address_update(customer_id, data, delete=False):
+    def current_address_update(self, customer_id, data, delete=False):
         updation_dict = {current_address_key: data.get(
             current_address_key) for current_address_key in CURRENT_ADDRESS_DICT} if not delete else CURRENT_ADDRESS_DICT
         Customer.objects.filter(
