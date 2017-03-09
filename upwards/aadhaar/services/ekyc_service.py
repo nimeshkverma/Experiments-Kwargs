@@ -8,7 +8,7 @@ import datetime
 import requests
 from django.conf import settings
 from common.models import MALE, FEMALE, OTHER
-from aadhaar.models import Aadhaar
+from aadhaar.models import Aadhaar, EKYC as EKYC_source
 from documents.models import UPLOADED
 from documents.serializers import DocumentsSerializer
 
@@ -78,12 +78,17 @@ class EKYC(object):
                 if name_list:
                     data['first_name'] = name_list[0]
                     data['last_name'] = ' '.join(name_list[1:])
+                    data['first_name_source'] = EKYC_source
+                    data['last_name_source'] = EKYC_source
             if poi.get('phone'):
                 data['mobile_no'] = poi['phone']
+                data['mobile_no_source'] = EKYC_source
             if poi.get('gender') and GENDER_MAP.get(poi['gender']):
                 data['gender'] = GENDER_MAP[poi['gender']]
+                data['gender_source'] = EKYC_source
             if poi.get('dob'):
                 data['dob'] = '-'.join(poi['dob'].split('-')[::-1])
+                data['dob_source'] = EKYC_source
         return data
 
     def __get_proccessed_poa(self):
@@ -95,18 +100,24 @@ class EKYC(object):
                 if name_list:
                     data['father_first_name'] = ' '.join(name_list[:2])
                     data['father_last_name'] = ' '.join(name_list[2:])
+                    data['father_first_name_source'] = EKYC_source
+                    data['father_last_name_source'] = EKYC_source
             if poa.get('pc'):
-                data['pincode'] = poa['pc']
+                data['permanent_pincode'] = poa['pc']
+                data['permanent_pincode_source'] = EKYC_source
             if poa.get('house'):
-                data['address_line1'] = poa['house']
+                data['permanent_address_line1'] = poa['house']
+                data['permanent_address_line1_source'] = EKYC_source
             if poa.get('loc'):
-                data['address_line2'] = poa['loc'] + ' ' + poa.get('dist', '')
+                data['permanent_address_line2'] = poa[
+                    'loc'] + ' ' + poa.get('dist', '')
+                data['permanent_address_line2_source'] = EKYC_source
             if poa.get('state'):
-                data['state'] = poa['state']
+                data['permanent_state'] = poa['state']
+                data['permanent_state_source'] = EKYC_source
             if poa.get('vtc'):
-                data['city'] = poa['vtc']
-            if poa.get('dob'):
-                data['dob'] = '-'.join(poa['dob'].split('-')[::-1])
+                data['permanent_city'] = poa['vtc']
+                data['permanent_city_source'] = EKYC_source
         return data
 
     def update_aadhaar_table(self, customer_id):
