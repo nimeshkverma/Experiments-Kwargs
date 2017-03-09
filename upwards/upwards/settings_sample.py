@@ -178,6 +178,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
 MEDIA_URL = '/media/'
 BASE_URL = 'BASE_URL'
+BASE_PORT = 'BASE_PORT'
+
 NCODE_USER = {
     'ekyc': {
         'asp_id': 'asp_id',
@@ -295,3 +297,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_S3_ACCESS_KEY_ID = 'AWS_S3_ACCESS_KEY_ID'
 AWS_S3_SECRET_ACCESS_KEY = 'AWS_S3_SECRET_ACCESS_KEY'
 AWS_STORAGE_BUCKET_NAME = 'AWS_STORAGE_BUCKET_NAME'
+S3_URL = "https://s3-us-west-2.amazonaws.com/kycdocument/"
+PDF_CONVERSION = {
+    'zoom': 4
+}

@@ -112,7 +112,7 @@ class EKYC(object):
     def update_aadhaar_table(self, customer_id):
         aadhaar_detail_data = self.__get_proccessed_poi()
         aadhaar_detail_data.update(self.__get_proccessed_poa())
-        Aadhaar.objects.filter(aadhaar=self.__aadhaar).update(
+        Aadhaar.objects.filter(aadhaar=self.__aadhaar, customer_id=customer_id).update(
             **aadhaar_detail_data)
 
     def __upload_documents(self, document_data):

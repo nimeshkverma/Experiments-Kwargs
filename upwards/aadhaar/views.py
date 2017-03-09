@@ -117,7 +117,7 @@ class AadhaarEKYC(APIView):
 
 class AadhaarESign(APIView):
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @session_authorize()
     def post(self, request, auth_data, *args, **kwargs):
@@ -139,6 +139,14 @@ class LoanAgreement(View):
     def get_loan_data(self, customer_id):
         return loan_agreement_service.LoanAgreement(customer_id).data
 
+    @catch_exception(LOGGER)
     def get(self, request, pk):
-        context = self.get_loan_data(pk)
-        return render(request, self.loan_agreement_template, context)
+        serializer = serializers.LoanAgreementSerializer(
+            data={'customer_id': pk})
+        if serializer.is_valid():
+            if serializer.validate_foreign_keys():
+                return render(request, self.loan_agreement_template, serializer.get_loan_data())
+            else:
+                return render(request, self.unauthorized_template)
+
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
