@@ -10,7 +10,17 @@ from services.esign_service import ESign
 from services.loan_agreement_service import LoanAgreement
 
 
+CURRENT_ADDRESS_DICT = {
+    'current_address_line1': None,
+    'current_address_line2': None,
+    'current_city': None,
+    'current_state': None,
+    'current_pincode': None,
+}
+
+
 class AadhaarSerializer(serializers.ModelSerializer):
+
     customer_id = serializers.IntegerField()
 
     def validate_foreign_keys(self, data=None):
@@ -24,6 +34,14 @@ class AadhaarSerializer(serializers.ModelSerializer):
                 if not check_pk_existence(model_pk['model'], model_pk['pk']):
                     raise NotAcceptableError(
                         model_pk['pk_name'], model_pk['pk'])
+
+    def current_address_update(customer_id, data, delete=False):
+        updation_dict = {current_address_key: data.get(
+            current_address_key) for current_address_key in CURRENT_ADDRESS_DICT} if not delete else CURRENT_ADDRESS_DICT
+        Customer.objects.filter(
+            customer_id=customer_id).update(**updation_dict)
+        customer_dict = Customer.objects.get(customer_id=customer_id).__dict__
+        return {current_address_key: customer_dict.get(current_address_key) for current_address_key in CURRENT_ADDRESS_DICT}
 
     class Meta:
         model = models.Aadhaar
