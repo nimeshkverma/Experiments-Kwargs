@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import post_save
 
-from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex
+from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex, pincode_regex
 from messenger.models import EmailVerification, PERSONAL
 from activity.models import register_customer_state
 from activity.model_constants import BANK_DETAIL_SUBMIT
@@ -16,6 +16,14 @@ class Customer(ActiveModel):
     alternate_mob_no = models.CharField(max_length=12, validators=[
                                         mobile_number_regex], blank=True, default="")
     is_alternate_mob_no_verified = models.BooleanField(default=False)
+    current_address_line1 = models.CharField(
+        max_length=256, default='', blank=True, null=True)
+    current_address_line2 = models.CharField(
+        max_length=256, default='', blank=True, null=True)
+    current_city = models.CharField(max_length=25, blank=True, null=True)
+    current_state = models.CharField(max_length=25, blank=True, null=True)
+    current_pincode = models.CharField(max_length=6, validators=[
+        pincode_regex], blank=True, null=True)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
