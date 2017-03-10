@@ -24,3 +24,19 @@ class LoanRequestTransactionDetails(APIView):
                 return Response(serializer.loan_request_transactions_atomic(models.INITIATED, models.LOAN_AVAIL, models.UPWARDS), status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class TransactionHistoryDetails(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize('customer_id')
+    def post(self, request, auth_data):
+        if auth_data.get('authorized'):
+            serializer = serializers.TransactionHistorySerializers(
+                data=request.data)
+            if serializer.is_valid():
+                serializer.validate_foreign_keys()
+                return Response(serializer.transaction_history_data(), status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
