@@ -64,7 +64,8 @@ def create_new_session(session_input, social_profile):
         'customer': new_customer,
         'social_data': json.dumps(social_profile.data),
         'email_id': social_profile.email_id,
-        'session_token': generate_session_token(new_customer.customer_id)
+        'session_token': generate_session_token(new_customer.customer_id),
+        "imei": session_input["imei"]
     }
     new_session = Login.objects.create(**session_object_dict)
     return session_success_data(new_session)
@@ -81,6 +82,7 @@ def create_session_from_obj(session_obj, session_input, social_profile, new_sess
     session_obj.platform_token = session_input['platform_token']
     session_obj.platform = session_input['platform']
     session_obj.social_data = json.dumps(social_profile.data)
+    session_obj.imei = session_input["imei"]
     if new_session_token:
         session_obj.session_token = generate_session_token(
             session_obj.customer_id)
@@ -92,6 +94,7 @@ def get_or_create_sessions(session_input):
     platform = session_input['platform']
     platform_token = session_input['platform_token']
     source = session_input['source']
+    imei = session_input["imei"]
     social_profile = SocialProfile(platform, platform_token)
     email_sessions = email_related_sessions(social_profile.email_id)
     opposite_platform = get_opposite_platform(platform)
@@ -110,6 +113,7 @@ def get_or_create_sessions(session_input):
                 session_data = {
                     "platform_token": platform_token,
                     "social_data": json.dumps(social_profile.data),
+                    "imei": imei,
                     "deleted_at": None,
                 }
                 session_response = update_session(
@@ -125,6 +129,7 @@ def get_or_create_sessions(session_input):
                         "platform_token": platform_token,
                         "social_data": json.dumps(social_profile.data),
                         "session_token": email_sessions[opposite_platform]["object"].session_token,
+                        "imei": imei,
                         "is_active": True,
                         "deleted_at": None,
                     }
@@ -139,6 +144,7 @@ def get_or_create_sessions(session_input):
                             "platform_token": platform_token,
                             "social_data": json.dumps(social_profile.data),
                             "session_token": generate_session_token(email_sessions[platform]["object"].customer_id),
+                            "imei": imei,
                             "is_active": True,
                             "deleted_at": None,
                         }
@@ -152,6 +158,7 @@ def get_or_create_sessions(session_input):
                             "platform_token": platform_token,
                             "social_data": json.dumps(social_profile.data),
                             "session_token": generate_session_token(email_sessions[platform]["object"].customer_id),
+                            "imei": imei,
                             "is_active": True,
                             "deleted_at": None,
 
