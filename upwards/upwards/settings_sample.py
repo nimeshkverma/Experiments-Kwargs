@@ -301,3 +301,8 @@ S3_URL = "https://s3-us-west-2.amazonaws.com/kycdocument/"
 PDF_CONVERSION = {
     'zoom': 4
 }
+
+ALGO360 = {
+    'credentials_url': 'credentials_url',
+    'user_data_url': 'user_data_url',
+}
