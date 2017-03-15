@@ -43,7 +43,8 @@ class Login(LifeTimeTrackingModel):
     session_token = models.CharField(
         editable=False, blank=True, null=True, max_length=64)
     imei = models.CharField(
-        validators=[numeric_regex], editable=False, blank=True, null=False, max_length=16)
+        validators=[numeric_regex], blank=True, null=False, max_length=16)
+    app_registration_id = models.TextField(blank=True, null=False)
 
     @staticmethod
     def email_related_logins(email_id):

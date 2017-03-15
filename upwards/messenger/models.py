@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from django.db import models
 from django.utils.crypto import get_random_string
-from common.models import ActiveModel, mobile_number_regex
+from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex, numeric_regex
 
 PERSONAL = 'customer_alternate_email'
 PROFESSIONAL = 'customer_profession_email'
@@ -54,3 +54,18 @@ class Otp(ActiveModel):
 
     def __unicode__(self):
         return '%s__%s__%s' % (str(self.customer), str(self.email_id), str(self.is_verified))
+
+
+class PreSignupData(ActiveModel):
+    app_registration_id = models.TextField(blank=True, null=False, unique=True)
+    imei = models.CharField(
+        validators=[numeric_regex], blank=True, null=False, max_length=16, unique=True)
+
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "pre_signup_data"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.registration_id), str(self.imei))

@@ -84,8 +84,5 @@ class BankDetails(ActiveModel):
     def __unicode__(self):
         return "%s__%s__%s" % (str(self.customer_id), str(self.account_holder_name), str(self.bank_name))
 
-    def __unicode__(self):
-        return "%s__%s__%s" % (str(self.customer), str(self.company), str(self.salary))
-
 post_save.connect(
     BankDetails.register_bank_submit_customer_state, sender=BankDetails)

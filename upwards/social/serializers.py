@@ -14,6 +14,7 @@ class LoginSerializer(serializers.Serializer):
     source = serializers.ChoiceField(choices=models.SOURCE_CHOICES)
     platform = serializers.ChoiceField(choices=models.PLATFORM_CHOICES)
     imei = serializers.CharField()
+    app_registration_id = serializers.CharField()
 
     def save(self):
         return get_or_create_sessions(self.validated_data)
