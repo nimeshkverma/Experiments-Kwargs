@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db import models
 from django.utils.crypto import get_random_string
 from common.models import ActiveModel, ActiveObjectManager, mobile_number_regex, numeric_regex
+from activity.model_constants import CUSTOMER_STATE_CHOICES, UNKNOWN_STATE
 
 PERSONAL = 'customer_alternate_email'
 PROFESSIONAL = 'customer_profession_email'
@@ -69,3 +70,19 @@ class PreSignupData(ActiveModel):
 
     def __unicode__(self):
         return "%s__%s" % (str(self.registration_id), str(self.imei))
+
+
+class Notification(ActiveModel):
+    message_title = models.TextField(blank=True, null=True)
+    message_body = models.TextField(blank=True, null=True)
+    data_message = models.TextField(blank=True, null=True)
+    notification_type = models.CharField(
+        choices=CUSTOMER_STATE_CHOICES, default=UNKNOWN_STATE, null=False, max_length=50)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "notification"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.message_title), str(self.notification_type))

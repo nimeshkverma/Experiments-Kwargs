@@ -306,3 +306,5 @@ ALGO360 = {
     'credentials_url': 'credentials_url',
     'user_data_url': 'user_data_url',
 }
+
+FCM_API_KEY = 'FCM_API_KEY'
