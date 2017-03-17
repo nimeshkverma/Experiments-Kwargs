@@ -24,3 +24,16 @@ class Algo360DataDetails(APIView):
                 return Response(serializer.store_algo360_data(), status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreditReportDetails(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, pk, *args, **kwargs):
+        data = {'customer_id': pk}
+        serializer = serializers.CreditReportSerializer(data=data)
+        if serializer.is_valid():
+            serializer.validate_foreign_keys()
+            return Response(serializer.report_data(), status.HTTP_200_OK)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

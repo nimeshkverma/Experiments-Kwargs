@@ -1,7 +1,7 @@
 import json
 import requests
 from django.conf import settings
-from algo360_constants import ALGO360_UPWARDS_MAPPING, CREDENTIALS_FILE
+from analytics_service_constants import ALGO360_UPWARDS_MAPPING, CREDENTIALS_FILE
 
 
 class Algo360(object):
@@ -29,8 +29,6 @@ class Algo360(object):
         post_data = {
             'client_id': settings.ALGO360.get('client_id'),
             'client_secret': settings.ALGO360.get('client_secret'),
-            'grant_type': settings.ALGO360.get('grant_type', {}).get('refresh_token'),
-            'refresh_token': self.credentials.get('refresh_token')
         }
         response = requests.post(credentials_url, post_data)
         credentials = {
@@ -44,7 +42,6 @@ class Algo360(object):
     def __fetch_user_data(self):
         data_url = settings.ALGO360.get('user_data_url').format(
             algo360_user_id=self.algo360_user_id)
-        print data_url
         headers = {
             'Authorization': 'Bearer {access_token}'.format(access_token=self.credentials.get('access_token'))
         }
@@ -71,5 +68,5 @@ class Algo360(object):
             for data_key in ALGO360_UPWARDS_MAPPING.keys():
                 if data_key in user_data:
                     model_data[ALGO360_UPWARDS_MAPPING[
-                        data_key]] = user_data.get(data_key)
+                        data_key]] = int(float(user_data.get(data_key)))
         return model_data

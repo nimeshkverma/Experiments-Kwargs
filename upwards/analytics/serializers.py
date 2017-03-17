@@ -6,7 +6,7 @@ from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from customer.models import Customer
 from social.models import Login
-from services import algo360_service
+from services import algo360_service, credit_service
 
 
 class Algo360DataSerializer(serializers.ModelSerializer):
@@ -54,3 +54,23 @@ class Algo360DataSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Algo360
         exclude = ('customer', 'created_at', 'updated_at', 'is_active', 'id')
+
+
+class CreditReportSerializer(serializers.Serializer):
+    customer_id = serializers.IntegerField()
+
+    def validate_foreign_keys(self, data=None):
+        valid_data = False
+        data = data if data else self.validated_data
+        model_pk_list = [
+            {"model": Customer, "pk": data.get(
+                'customer_id', -1), "pk_name": "customer_id"},
+        ]
+        for model_pk in model_pk_list:
+            if model_pk["pk_name"] in data.keys():
+                if check_pk_existence(model_pk['model'], model_pk['pk']):
+                    valid_data = True
+        return valid_data
+
+    def report_data(self):
+        return credit_service.CreditReport(self.validated_data.get('customer_id')).data

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from . import models, serializers
 from common.decorators import session_authorize, meta_data_response, catch_exception
-from analytics.services.credit_limit_service import CustomerCreditLimit
+from analytics.services.credit_service import CustomerCreditLimit
 
 import logging
 LOGGER = logging.getLogger(__name__)
