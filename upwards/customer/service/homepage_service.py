@@ -1,3 +1,4 @@
+from social.models import SocialProfile
 from activity.models import CustomerState
 from participant.models import Borrower
 from homepage_config import (ELIGIBILITY_TITLE, KYC_TITLE,
@@ -14,8 +15,8 @@ class Homepage(object):
         self.data = self.__borrower_homepage_data(
         ) if self.present_state in BORROWER_STATES else self.__pre_borrower_homepage_data()
 
-    def __get_mast_message(self):
-        return "Hello User!"
+    def __get_mast_message(self, customer_profile):
+        return "Hello {first_name} {last_name}!".format(first_name=customer_profile.get('first_name', 'User'), last_name=customer_profile.get('last_name', ''))
 
     def __get_eligibility_amount(self):
         eligibility_amount = None
@@ -48,12 +49,14 @@ class Homepage(object):
         return section
 
     def __pre_borrower_homepage_data(self):
+        customer_profile = self.__customer_profile()
         homepage_data = {
             'customer': {
                 'id': self.customer_id,
                 'state': self.present_state,
+                'customer_profile': customer_profile,
             },
-            'mast_message': self.__get_mast_message(),
+            'mast_message': self.__get_mast_message(customer_profile),
             'sections': {
                 'eligibility': self.__get_eligibility_section(),
                 'kyc': self.__get_kyc_section(),
@@ -80,11 +83,42 @@ class Homepage(object):
                 0].eligible_for_loan
         return borrower_credit_data
 
+    def __customer_profile(self):
+        social_data = {
+            'google': {
+                'first_name': None,
+                'last_name': None,
+                'profile_pic_link': None
+            },
+            'facebook': {
+                'first_name': None,
+                'last_name': None,
+                'profile_pic_link': None
+            }
+        }
+        social_profile_objects = SocialProfile.objects.filter(
+            customer_id=self.customer_id)
+        for social_profile_object in social_profile_objects:
+            if social_profile_object.platform in social_data.keys():
+                social_data[social_profile_object.platform][
+                    'first_name'] = social_profile_object.first_name
+                social_data[social_profile_object.platform][
+                    'last_name'] = social_profile_object.last_name
+                social_data[social_profile_object.platform][
+                    'profile_pic_link'] = social_profile_object.profile_pic_link
+        customer_data = {
+            'first_name': social_data['google']['first_name'] if social_data['google']['first_name'] else social_data['facebook']['first_name'],
+            'last_name': social_data['google']['last_name'] if social_data['google']['last_name'] else social_data['facebook']['last_name'],
+            'profile_pic_link': social_data['google']['profile_pic_link'] if social_data['google']['profile_pic_link'] else social_data['facebook']['profile_pic_link'],
+        }
+        return customer_data
+
     def __borrower_homepage_data(self):
         homepage_data = {
             'customer': {
                 'id': self.customer_id,
                 'state': self.present_state,
+                'customer_profile': self.__customer_profile(),
                 'credit_limit': None,
                 'credit_available': None,
                 'is_eligible_for_loan': None,
