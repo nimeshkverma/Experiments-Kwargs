@@ -62,11 +62,11 @@ class Algo360(object):
         return user_data
 
     def get_model_data(self):
-        model_data = {}
-        user_data_list = self.get_user_data()
-        for user_data in user_data_list:
+        model_data = {key: 'N.A' for key in ALGO360_UPWARDS_MAPPING.values()}
+        user_data_dict = self.get_user_data()
+        for user_data in user_data_dict:
             for data_key in ALGO360_UPWARDS_MAPPING.keys():
                 if data_key in user_data:
                     model_data[ALGO360_UPWARDS_MAPPING[
-                        data_key]] = int(float(user_data.get(data_key)))
+                        data_key]] = user_data.get(data_key)
         return model_data

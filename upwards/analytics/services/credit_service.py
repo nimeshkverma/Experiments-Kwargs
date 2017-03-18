@@ -11,9 +11,10 @@ class CustomerCreditLimit(object):
     def __get_minimum_average_balance(self, algo360_object):
         minimum_average_balance_list = []
         for minimum_average_balance_key in CREDIT_LIMIT_VARIABLES:
-            minimum_average_balance_list.append(
-                algo360_object.__dict__.get(minimum_average_balance_key, 0))
-        return min(minimum_average_balance_list) if minimum_average_balance_list else 0
+            if algo360_object.__dict__.get(minimum_average_balance_key, 0) != 'N.A':
+                minimum_average_balance_list.append(
+                    int(float(algo360_object.__dict__.get(minimum_average_balance_key, 0))))
+        return min(minimum_average_balance_list) if minimum_average_balance_list else None
 
     def get_limit(self):
         minimum_average_balance = None
@@ -69,9 +70,12 @@ class CreditReport(object):
     def __get_derived_data(self, report_data):
         derived_data = {}
         credit_card_last_payment_due = report_data.get(
-            'credit_card_last_payment_due', 1) if report_data.get('credit_card_last_payment_due', 1) else 1
-        derived_data['leverage'] = round(report_data.get(
-            'monthly_average_balance_lifetime', 0) * 1.0 / credit_card_last_payment_due, 3)
+            'credit_card_last_payment_due', 'N.A') if report_data.get('credit_card_last_payment_due') else 'N.A'
+        if credit_card_last_payment_due == 'N.A' or report_data.get('monthly_average_balance_lifetime') == 'N.A':
+            derived_data['leverage'] = 'N.A'
+        else:
+            derived_data['leverage'] = round(float(report_data.get(
+                'monthly_average_balance_lifetime', 0)) * 1.0 / credit_card_last_payment_due, 3)
         return derived_data
 
     def __get_report_data(self):

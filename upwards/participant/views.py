@@ -21,7 +21,6 @@ class BorrowerCreate(APIView):
             data = {'credit_limit': CustomerCreditLimit(
                 auth_data['customer_id']).get_limit()}
             data.update(request.data)
-            print data
             serializer = serializers.BorrowerSerializer(
                 data=data)
             if serializer.is_valid():
