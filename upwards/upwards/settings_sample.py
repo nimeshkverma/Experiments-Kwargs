@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'participant.apps.ParticipantConfig',
     'loan.apps.LoanConfig',
     'transaction.apps.TransactionConfig',
+    'analytics.apps.AnalyticsConfig',
 ]
 
 MIDDLEWARE = [
