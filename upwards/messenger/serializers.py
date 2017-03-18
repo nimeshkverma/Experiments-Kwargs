@@ -58,3 +58,17 @@ class OtpSerializer(serializers.ModelSerializer):
         model = models.Otp
         exclude = ('customer', 'created_at', 'updated_at',
                    'is_active', 'id', 'times', 'is_verified')
+
+
+class PreSignupDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.PreSignupData
+        exclude = ('created_at', 'updated_at', 'is_active',)
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Notification
+        exclude = ('created_at', 'updated_at', 'is_active',)

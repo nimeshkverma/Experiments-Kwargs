@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 
 from common.models import (LifeTimeTrackingModel, ActiveModel,
                            alphabet_whitespace_regex_allow_empty,
+                           numeric_regex,
                            GENDER_CHOICES,
                            MALE)
 
@@ -41,6 +42,9 @@ class Login(LifeTimeTrackingModel):
     platform_token = models.TextField(editable=False, blank=True, null=False)
     session_token = models.CharField(
         editable=False, blank=True, null=True, max_length=64)
+    imei = models.CharField(
+        validators=[numeric_regex], blank=True, null=False, max_length=16)
+    app_registration_id = models.TextField(blank=True, null=False)
 
     @staticmethod
     def email_related_logins(email_id):

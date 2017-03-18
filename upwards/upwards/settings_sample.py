@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'participant.apps.ParticipantConfig',
     'loan.apps.LoanConfig',
     'transaction.apps.TransactionConfig',
+    'analytics.apps.AnalyticsConfig',
 ]
 
 MIDDLEWARE = [
@@ -301,3 +302,10 @@ S3_URL = "https://s3-us-west-2.amazonaws.com/kycdocument/"
 PDF_CONVERSION = {
     'zoom': 4
 }
+
+ALGO360 = {
+    'credentials_url': 'credentials_url',
+    'user_data_url': 'user_data_url',
+}
+
+FCM_API_KEY = 'FCM_API_KEY'

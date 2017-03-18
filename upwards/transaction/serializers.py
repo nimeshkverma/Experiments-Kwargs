@@ -70,3 +70,34 @@ class LoanRequestTransactionSerializers(serializers.Serializer):
             data = self.loan_request_transactions(
                 transaction_status, transaction_type, status_actor)
         return data
+
+
+class TransactionHistorySerializers(serializers.Serializer):
+    customer_id = serializers.IntegerField()
+
+    def validate_foreign_keys(self, data=None):
+        data = data if data else self.validated_data
+        model_pk_list = [
+            {'model': Customer, 'pk': data.get(
+                'customer_id', -1), 'pk_name': 'customer_id'},
+        ]
+        for model_pk in model_pk_list:
+            if model_pk['pk_name'] in data.keys():
+                if not check_pk_existence(model_pk['model'], model_pk['pk']):
+                    raise NotAcceptableError(
+                        model_pk['pk_name'], model_pk['pk'])
+
+    def transaction_history_data(self):
+        transaction_fields = ['loan_id', 'installment_id', 'lender_id',
+                              'utr', 'transaction_status', 'transaction_type', 'status_actor', 'created_at', 'updated_at']
+        transaction_objects = models.Transaction.objects.filter(customer_id=self.validated_data.get(
+            'customer_id'), transaction_status=models.COMPLETED).order_by('created_at')
+        data_list = []
+        for transaction_object in transaction_objects:
+            data = {}
+            for transaction_field in transaction_fields:
+                data[transaction_field] = transaction_object.__dict__.get(
+                    transaction_field)
+            data['loan_amount_applied'] = transaction_object.loan.loan_amount_applied
+            data_list.append(data)
+        return {'customer_id': self.validated_data['customer_id'], 'timeline': data_list}

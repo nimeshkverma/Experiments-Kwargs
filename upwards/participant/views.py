@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from . import models, serializers
 from common.decorators import session_authorize, meta_data_response, catch_exception
+from analytics.services.credit_service import CustomerCreditLimit
 
 import logging
 LOGGER = logging.getLogger(__name__)
@@ -14,14 +15,20 @@ class BorrowerCreate(APIView):
 
     @catch_exception(LOGGER)
     @meta_data_response()
-    def post(self, request):
-        serializer = serializers.BorrowerSerializer(
-            data=request.data)
-        if serializer.is_valid():
-            serializer.validate_foreign_keys()
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    @session_authorize('customer_id')
+    def post(self, request, auth_data):
+        if auth_data.get('authorized'):
+            data = {'credit_limit': CustomerCreditLimit(
+                auth_data['customer_id']).get_limit()}
+            data.update(request.data)
+            serializer = serializers.BorrowerSerializer(
+                data=data)
+            if serializer.is_valid():
+                serializer.validate_foreign_keys()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
 class BorrowerDetail(APIView):

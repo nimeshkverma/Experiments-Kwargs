@@ -32,9 +32,12 @@ class AadhaarCreate(APIView):
             if serializer.is_valid():
                 serializer.validate_foreign_keys()
                 serializer.save()
+                response = serializer.data
+                response.update(serializer.current_address_update(
+                    auth_data['customer_id'], request.data))
                 register_customer_state(
                     AADHAAR_SUBMIT_STATE, auth_data['customer_id'])
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(response, status=status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
@@ -50,9 +53,8 @@ class AadhaarDetail(APIView):
                 models.Aadhaar, customer_id=auth_data['customer_id'])
             serializer = serializers.AadhaarSerializer(aadhaar_object)
             response_data = serializer.data
-            response_data.update({
-                'editable_fields': ['mother_first_name', 'mother_last_name', 'mobile_no']
-            })
+            response_data.update(serializer.current_address_update(
+                auth_data['customer_id'], request.data))
             return Response(response_data, status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
@@ -68,7 +70,12 @@ class AadhaarDetail(APIView):
                 aadhaar_object, request.data)
             register_customer_state(
                 AADHAAR_DETAIL_SUBMIT_STATE, aadhaar_object_updated.customer_id)
-            return Response(serializers.AadhaarSerializer(aadhaar_object_updated).data, status.HTTP_200_OK)
+            aadhaar_data_serializer = serializers.AadhaarSerializer(
+                aadhaar_object_updated)
+            response = aadhaar_data_serializer.data
+            response.update(aadhaar_data_serializer.current_address_update(
+                auth_data['customer_id'], request.data))
+            return Response(response, status.HTTP_200_OK)
         return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
     @catch_exception(LOGGER)
@@ -78,6 +85,9 @@ class AadhaarDetail(APIView):
         if auth_data.get('authorized'):
             aadhaar_object = get_object_or_404(
                 models.Aadhaar, customer_id=auth_data['customer_id'])
+            serializer = serializers.AadhaarSerializer(aadhaar_object)
+            serializer.current_address_update(
+                auth_data['customer_id'], request.data, True)
             aadhaar_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from rest_framework import status
+from rest_framework import mixins, generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core import signing
@@ -68,3 +68,39 @@ class OtpCreate(APIView):
                 return Response({'status': 'sent'}, status=status.HTTP_200_OK)
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        from django.shortcuts import get_object_or_404
+
+
+class PreSignupDataDetails(mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           generics.GenericAPIView):
+    queryset = models.PreSignupData.active_objects.all()
+    serializer_class = serializers.PreSignupDataSerializer
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class NotificationDetails(mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
+                          generics.GenericAPIView):
+    queryset = models.Notification.active_objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
