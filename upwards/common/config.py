@@ -13,8 +13,8 @@ class Config(object):
                   'loan_application_proccessing', 'loan_application_proccessed', 'loan_application_errored']
 
     email_type = {
-        "personal": "customer_alternate_email",
-        "professional": "customer_profession_email"
+        'personal': 'customer_alternate_email',
+        'professional': 'customer_profession_email'
     }
 
     def __init__(self):
@@ -34,13 +34,17 @@ class Config(object):
         organisation_type_objects = OrganisationType.objects.all()
         return OrganisationTypeSerializer(organisation_type_objects, many=True).data
 
+    def __get_customer_default_profile_pic(self):
+        return settings.CUSTOMER_DEFAULT_PROFILE_PIC
+
     def __get_data(self):
         config_data = {
-            "user_state": self.user_state,
-            "base_url": self.__get_base_url(),
-            "post_otp_message": self.__get_post_otp_message(),
-            "email_type": self.email_type,
-            "salary_payment_mode": self.__get_salary_payment_mode(),
-            "organisation_type": self.__get_organisation_type()
+            'user_state': self.user_state,
+            'base_url': self.__get_base_url(),
+            'post_otp_message': self.__get_post_otp_message(),
+            'email_type': self.email_type,
+            'salary_payment_mode': self.__get_salary_payment_mode(),
+            'organisation_type': self.__get_organisation_type(),
+            'customer_default_profile_pic': self.__get_customer_default_profile_pic(),
         }
         return config_data

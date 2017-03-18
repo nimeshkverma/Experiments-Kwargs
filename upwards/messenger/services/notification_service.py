@@ -52,5 +52,5 @@ class Notification(object):
                     registration_ids=registration_ids_chunk, message_title=self.message_title, message_body=self.message_body)
         else:
             for registration_ids_chunk in self.__chunks(registration_ids, 950):
-            result = push_service.notify_multiple_devices(
-                registration_ids=registration_ids_chunk, data_message=self.data_message, message_body=self.message_body)
+                result = push_service.notify_multiple_devices(
+                    registration_ids=registration_ids_chunk, data_message=self.data_message, message_body=self.message_body)

@@ -16,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 
 class SocialLogin(APIView):
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
