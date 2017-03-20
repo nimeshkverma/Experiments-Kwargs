@@ -305,8 +305,16 @@ PDF_CONVERSION = {
 }
 
 ALGO360 = {
-    'credentials_url': 'credentials_url',
+    'credentials_url': {
+        'refresh_token': 'refresh_token_url',
+        'access_token': 'access_token_url'
+    },
     'user_data_url': 'user_data_url',
+    'client_id': 'client_id',
+    'client_secret': 'client_secret',
+    'grant_type': {
+        'refresh_token': 'refresh_token',
+    }
 }
 
 FCM_API_KEY = 'FCM_API_KEY'
