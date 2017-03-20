@@ -31,15 +31,15 @@ class LoanAgreement(object):
         aadhaar_data['mothers_full_name'] = self.__get_full_name(
             aadhaar_object.mother_first_name, aadhaar_object.mother_first_name).title()
         aadhaar_data[
-            'address_line_1'] = aadhaar_object.address_line1.title() if aadhaar_object.address_line1 else ''
+            'address_line_1'] = aadhaar_object.permanent_address_line1.title() if aadhaar_object.permanent_address_line1 else ''
         aadhaar_data[
-            'address_line_2'] = aadhaar_object.address_line2 .title()if aadhaar_object.address_line2 else ''
+            'address_line_2'] = aadhaar_object.permanent_address_line2 .title()if aadhaar_object.permanent_address_line2 else ''
         aadhaar_data[
-            'city'] = aadhaar_object.city.title() if aadhaar_object.city else ''
+            'city'] = aadhaar_object.permanent_city.title() if aadhaar_object.permanent_city else ''
         aadhaar_data[
-            'state'] = aadhaar_object.state.title() if aadhaar_object.state else ''
+            'state'] = aadhaar_object.permanent_state.title() if aadhaar_object.permanent_state else ''
         aadhaar_data[
-            'pincode'] = aadhaar_object.pincode if aadhaar_object.pincode else ''
+            'pincode'] = aadhaar_object.permanent_pincode if aadhaar_object.permanent_pincode else ''
         aadhaar_data[
             'aadhaar_mob_no'] = str(aadhaar_object.mobile_no) if aadhaar_object.mobile_no else ''
         aadhaar_data['age'] = self.__age(aadhaar_object.dob)
