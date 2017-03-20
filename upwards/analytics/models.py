@@ -39,3 +39,6 @@ class Algo360(ActiveModel):
 
     class Meta(object):
         db_table = "analytics_algo360"
+
+    def __unicode__(self):
+        return '%s__%s__%s' % (str(self.customer), str(self.monthly_average_balance_lifetime), str(self.salary))

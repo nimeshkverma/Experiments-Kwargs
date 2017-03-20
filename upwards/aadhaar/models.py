@@ -59,7 +59,7 @@ class Aadhaar(ActiveModel):
     dob_source = models.CharField(
         max_length=25, default=UPWARDS, choices=AADHAAR_DATA_SOURCE_CHOICES, blank=True)
     gender = models.CharField(
-        max_length=1, default=MALE, choices=GENDER_CHOICES, blank=True, null=True)
+        max_length=25, default=MALE, choices=GENDER_CHOICES, blank=True, null=True)
     gender_source = models.CharField(
         max_length=25, default=UPWARDS, choices=AADHAAR_DATA_SOURCE_CHOICES, blank=True)
     mobile_no = models.CharField(max_length=12, validators=[
