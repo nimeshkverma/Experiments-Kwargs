@@ -66,7 +66,7 @@ def create_new_session(session_input, social_profile):
         'email_id': social_profile.email_id,
         'session_token': generate_session_token(new_customer.customer_id),
         'imei': session_input['imei'],
-        'app_registration_id': session_input['app_registration_id'],
+        'app_registration_id': session_input.get('app_registration_id'),
     }
     new_session = Login.objects.create(**session_object_dict)
     return session_success_data(new_session)
@@ -84,7 +84,7 @@ def create_session_from_obj(session_obj, session_input, social_profile, new_sess
     session_obj.platform = session_input['platform']
     session_obj.social_data = json.dumps(social_profile.data)
     session_obj.imei = session_input['imei']
-    session_obj.app_registration_id = session_input['app_registration_id']
+    session_obj.app_registration_id = session_input.get('app_registration_id')
     if new_session_token:
         session_obj.session_token = generate_session_token(
             session_obj.customer_id)
@@ -97,7 +97,7 @@ def get_or_create_sessions(session_input):
     platform_token = session_input['platform_token']
     source = session_input['source']
     imei = session_input['imei']
-    app_registration_id = session_input['app_registration_id']
+    app_registration_id = session_input.get('app_registration_id')
     social_profile = SocialProfile(platform, platform_token)
     email_sessions = email_related_sessions(social_profile.email_id)
     opposite_platform = get_opposite_platform(platform)
