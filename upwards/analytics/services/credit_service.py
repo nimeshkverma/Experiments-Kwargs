@@ -14,7 +14,7 @@ class CustomerCreditLimit(object):
             if algo360_object.__dict__.get(minimum_average_balance_key, 0) != 'N.A':
                 minimum_average_balance_list.append(
                     int(float(algo360_object.__dict__.get(minimum_average_balance_key, 0))))
-        return min(minimum_average_balance_list) if minimum_average_balance_list else None
+        return min(minimum_average_balance_list) if minimum_average_balance_list and min(minimum_average_balance_list) else None
 
     def get_limit(self):
         minimum_average_balance = None

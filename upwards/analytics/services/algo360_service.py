@@ -24,11 +24,30 @@ class Algo360(object):
         with open(self.credentials_file, 'w') as credentials_file:
             json.dump(credentials_dict, credentials_file)
 
-    def __get_new_credentials(self):
-        credentials_url = settings.ALGO360.get('credentials_url')
+    def __get_all_new_credentials(self):
+        credentials_url = settings.ALGO360.get(
+            'credentials_url', {}).get('refresh_token')
         post_data = {
             'client_id': settings.ALGO360.get('client_id'),
             'client_secret': settings.ALGO360.get('client_secret'),
+        }
+        response = requests.post(credentials_url, post_data)
+        credentials = {
+            'access_token': None,
+            'refresh_token': None
+        }
+        for credential_key in credentials:
+            credentials[credential_key] = response.json().get(credential_key)
+        return credentials
+
+    def __get_access_token_credentials(self):
+        credentials_url = settings.ALGO360.get(
+            'credentials_url', {}).get('access_token')
+        post_data = {
+            'client_id': settings.ALGO360.get('client_id'),
+            'client_secret': settings.ALGO360.get('client_secret'),
+            'grant_type': settings.ALGO360.get('grant_type', {}).get('refresh_token'),
+            'refresh_token': self.credentials.get('refresh_token')
         }
         response = requests.post(credentials_url, post_data)
         credentials = {
@@ -51,11 +70,16 @@ class Algo360(object):
     def get_user_data(self):
         user_data = {}
         user_data_response = self.__fetch_user_data()
-        if user_data_response.status_code == 401:
-            new_credentials = self.__get_new_credentials()
-            self.__update_credentials_json(new_credentials)
-            self.__set_credentials(new_credentials)
+        if user_data_response.status_code in [401, 403, 500]:
+            new_access_token_credentials = self.__get_access_token_credentials()
+            self.__update_credentials_json(new_access_token_credentials)
+            self.__set_credentials(new_access_token_credentials)
             user_data_response = self.__fetch_user_data()
+            if user_data_response.status_code in [401, 403, 500]:
+                all_new_credentials = self.__get_all_new_credentials()
+                self.__update_credentials_json(all_new_credentials)
+                self.__set_credentials(all_new_credentials)
+                user_data_response = self.__fetch_user_data()
         if user_data_response.status_code == 200:
             user_data = user_data_response.json().get(
                 'result', {}).get('data')
