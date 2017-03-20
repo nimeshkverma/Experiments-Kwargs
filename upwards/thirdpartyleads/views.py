@@ -16,7 +16,7 @@ class ThirdPartyLeadList(mixins.ListModelMixin,
     queryset = models.ThirdPartyLead.active_objects.all()
     serializer_class = serializers.ThirdPartyLeadSerializer
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def get(self, request, third_party_auth, *args, **kwargs):
@@ -25,7 +25,7 @@ class ThirdPartyLeadList(mixins.ListModelMixin,
         else:
             return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def post(self, request, third_party_auth, *args, **kwargs):
@@ -42,7 +42,7 @@ class ThirdPartyLeadDetail(mixins.RetrieveModelMixin,
     queryset = models.ThirdPartyLead.objects.all()
     serializer_class = serializers.ThirdPartyLeadSerializer
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def get(self, request, third_party_auth, *args, **kwargs):
@@ -51,7 +51,7 @@ class ThirdPartyLeadDetail(mixins.RetrieveModelMixin,
         else:
             return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def put(self, request, third_party_auth, *args, **kwargs):
@@ -60,7 +60,7 @@ class ThirdPartyLeadDetail(mixins.RetrieveModelMixin,
         else:
             return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def delete(self, request, third_party_auth, *args, **kwargs):
@@ -74,7 +74,7 @@ class ThirdPartyLeadDocumentsCreate(APIView):
 
     parser_classes = (FormParser, MultiPartParser)
 
-    # @catch_exception(LOGGER)
+    @catch_exception(LOGGER)
     @meta_data_response()
     @thirdparty_authorize()
     def post(self, request, third_party_auth, *args, **kwargs):

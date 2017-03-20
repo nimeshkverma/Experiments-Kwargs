@@ -4,9 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core import signing
 
-from . import models, serializers
-
 from common.decorators import session_authorize, meta_data_response, catch_exception
+from social.models import Login
+
+from . import models, serializers
 from . tasks import send_verification_mail, update_email_models
 from . services import otp_service
 
@@ -86,6 +87,10 @@ class PreSignupDataDetails(mixins.ListModelMixin,
     @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request, *args, **kwargs):
+        if request.data.get('customer_id') and request.data.get('app_registration_id'):
+            Login.objects.filter(customer_id=request.data.get('customer_id')).update(
+                app_registration_id=request.data.get('app_registration_id'))
+            return Response({}, status.HTTP_200_OK)
         return self.create(request, *args, **kwargs)
 
 
