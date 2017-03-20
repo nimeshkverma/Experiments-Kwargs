@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'loan.apps.LoanConfig',
     'transaction.apps.TransactionConfig',
     'analytics.apps.AnalyticsConfig',
+    'thirdpartyleads.apps.ThirdpartyleadsConfig',
 ]
 
 MIDDLEWARE = [
@@ -311,3 +312,7 @@ ALGO360 = {
 FCM_API_KEY = 'FCM_API_KEY'
 
 CUSTOMER_DEFAULT_PROFILE_PIC = 'CUSTOMER_DEFAULT_PROFILE_PIC'
+
+THIRTY_PARTY_SECRETS = {
+    'THIRTY_PARTY_SECRETS_KEY': 'THIRTY_PARTY_SECRETS_VALUE'
+}

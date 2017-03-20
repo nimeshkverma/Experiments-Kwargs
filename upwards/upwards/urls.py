@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^loan/', include('loan.urls')),
     url(r'^transaction/', include('transaction.urls')),
     url(r'^analytics/', include('analytics.urls')),
+    url(r'^third_party_leads/', include('thirdpartyleads.urls')),
 
 ]
 

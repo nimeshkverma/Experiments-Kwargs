@@ -6,7 +6,7 @@ from django.db import models
 mobile_number_regex = RegexValidator(
     regex=r'^$|\d{10}$', message="Mobile number must be entered in the format: '9999999999'. 10 digits allowed.")
 pan_regex = RegexValidator(
-    regex=r'[A-Z]{5}\d{4}[A-Z]{1}', message="PAN must be entered in the format: 'ABCDE1234F'. 10 Characters allowed.")
+    regex=r'[a-zA-Z]{5}\d{4}[a-zA-Z]{1}', message="PAN must be entered in the format: 'ABCDE1234F'. 10 Characters allowed.")
 aadhaar_regex = RegexValidator(
     regex=r'^\d{12}$', message="AADHAAR must be entered in the format: '123456789123'. 12 digits allowed.")
 alphabet_regex = RegexValidator(
@@ -33,7 +33,7 @@ OTHER = 'Other'
 GENDER_CHOICES = (
     (MALE, 'Male'),
     (FEMALE, 'Female'),
-    (OTHER, 'Other'),
+    (OTHER, 'Other')
 )
 
 
