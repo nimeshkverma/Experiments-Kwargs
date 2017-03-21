@@ -69,14 +69,21 @@ class LoanAgreement(object):
     def __get_other_data(self):
         data = {}
         pan_object = Pan.objects.get(customer_id=self.customer_id)
-        bank_object = BankDetails.objects.get(customer_id=self.customer_id)
         data['present_date'] = datetime.datetime.now().strftime("%d-%m-%Y")
         data['pan'] = pan_object.pan if pan_object.pan else ''
         data['email_id'] = pan_object.customer.alternate_email_id if pan_object.customer.alternate_email_id else ''
-        data['bank'] = bank_object.bank_name.title(
-        ) if bank_object.bank_name else ''
-        data['ifsc'] = bank_object.ifsc if bank_object.ifsc else ''
         data['alternate_mob_no'] = pan_object.customer.alternate_mob_no if pan_object.customer.alternate_mob_no else ''
+        return data
+
+    def __get_bank_data(self):
+        data = {
+            'bank': " ____________________<to be filled later based on user provided information>",
+            'ifsc': " ______________________<to be filled later based on user provided information>"
+        }
+        # bank_object = BankDetails.objects.get(customer_id=self.customer_id)
+        # data['bank'] = bank_object.bank_name.title(
+        # ) if bank_object.bank_name else ''
+        # data['ifsc'] = bank_object.ifsc if bank_object.ifsc else ''
         return data
 
     def __age(self, when, on=None):
@@ -88,5 +95,6 @@ class LoanAgreement(object):
     def __data(self):
         data = self.__get_aadhaar_data()
         data.update(self.__eligibility_data())
+        data.update(self.__get_bank_data())
         data.update(self.__get_other_data())
         return data

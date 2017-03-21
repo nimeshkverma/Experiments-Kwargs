@@ -34,8 +34,8 @@ class Algo360DataSerializer(serializers.ModelSerializer):
                 'imei': imei,
                 'customer_id': self.validated_data.get('customer_id')
             }
-            algo360 = algo360_service.Algo360(
-                self.validated_data.get('customer_id'))
+            algo360 = algo360_service.Algo360(imei)
+            # algo360 = algo360_service.Algo360(self.validated_data.get('customer_id'))
             algo360_data.update(algo360.get_model_data())
             algo360_objects = models.Algo360.objects.filter(
                 customer_id=self.validated_data.get('customer_id', -1))
