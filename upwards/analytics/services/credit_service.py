@@ -1,40 +1,72 @@
 from analytics.models import Algo360
 from eligibility.models import Profession
-from analytics_service_constants import CREDIT_LIMIT_VARIABLES, CREDIT_REPORT_MAPPING
+from analytics_service_constants import MAB_VARIABLES, SALARY_VARIABLE, CREDIT_REPORT_MAPPING
+from django.conf import settings
 
 
 class CustomerCreditLimit(object):
 
     def __init__(self, customer_id):
         self.customer_id = customer_id
+        self.limit = self.__get_limit()
+        self.is_eligible = self.__is_eligible()
 
     def __get_minimum_average_balance(self, algo360_object):
         minimum_average_balance_list = []
-        for minimum_average_balance_key in CREDIT_LIMIT_VARIABLES:
+        for minimum_average_balance_key in MAB_VARIABLES:
             if algo360_object.__dict__.get(minimum_average_balance_key, 0) != 'N.A':
                 minimum_average_balance_list.append(
                     int(float(algo360_object.__dict__.get(minimum_average_balance_key, 0))))
-        return min(minimum_average_balance_list) if minimum_average_balance_list and min(minimum_average_balance_list) else None
+        return min(minimum_average_balance_list) if minimum_average_balance_list else None
 
-    def get_limit(self):
+    def __get_algo360_salary(self, algo360_object):
+        return algo360_object.__dict__.get(SALARY_VARIABLE) if algo360_object.__dict__.get(SALARY_VARIABLE) != 'N.A' else None
+
+    def __get_limit_from_variables(self, salary, algo360_salary, minimum_average_balance):
+        limit = 0
+        if algo360_salary == None and minimum_average_balance == None:
+            limit = salary / settings.CREDIT_ELIGIBILITY_FACTOR if salary else 0
+        elif algo360_salary == None:
+            if minimum_average_balance:
+                limit = min(salary, minimum_average_balance) / \
+                    settings.CREDIT_ELIGIBILITY_FACTOR if salary else minimum_average_balance / \
+                    settings.CREDIT_ELIGIBILITY_FACTOR
+            else:
+                limit = salary / settings.CREDIT_ELIGIBILITY_FACTOR if salary else 0
+        elif minimum_average_balance == None:
+            if algo360_salary:
+                limit = min(algo360_salary, salary) / \
+                    settings.CREDIT_ELIGIBILITY_FACTOR if salary else algo360_salary / \
+                    settings.CREDIT_ELIGIBILITY_FACTOR
+            else:
+                limit = salary / settings.CREDIT_ELIGIBILITY_FACTOR if salary else 0
+        else:
+            limit = min(min(algo360_salary, minimum_average_balance), salary) / \
+                settings.CREDIT_ELIGIBILITY_FACTOR if salary else min(
+                algo360_salary, minimum_average_balance) / settings.CREDIT_ELIGIBILITY_FACTOR
+        return int(limit)
+
+    def __get_limit(self):
         minimum_average_balance = None
+        algo360_salary = None
         salary = None
         algo360_objects = Algo360.objects.filter(customer_id=self.customer_id)
         if algo360_objects:
             minimum_average_balance = self.__get_minimum_average_balance(algo360_objects[
                                                                          0])
+            algo360_salary = self.__get_algo360_salary(algo360_objects[0])
         profession_objects = Profession.objects.filter(
             customer_id=self.customer_id)
+
         if profession_objects:
             salary = profession_objects[0].salary
-        if minimum_average_balance == None and salary == None:
-            return 0
-        elif minimum_average_balance == None:
-            return salary / 3
-        elif salary == None:
-            return minimum_average_balance / 3
-        else:
-            return min(salary, minimum_average_balance) / 3
+        return self.__get_limit_from_variables(salary, algo360_salary, minimum_average_balance)
+
+    def __is_eligible(self):
+        is_eligible = False
+        if self.limit >= settings.ELIGIBILITY_LIMIT['lower']:
+            is_eligible = True
+        return is_eligible
 
 
 class CreditReport(object):
@@ -42,7 +74,7 @@ class CreditReport(object):
     def __init__(self, customer_id):
         self.customer_id = customer_id
         self.customer_credit_limit = CustomerCreditLimit(
-            self.customer_id).get_limit()
+            self.customer_id).limit
         self.data = self.__get_report_data()
 
     def __get_algo360_data(self):

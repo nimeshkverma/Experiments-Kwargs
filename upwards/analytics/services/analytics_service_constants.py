@@ -1,7 +1,8 @@
 CREDENTIALS_FILE = 'analytics/services/algo360_credentials.json'
 
-CREDIT_LIMIT_VARIABLES = ['monthly_average_balance_lifetime', 'monthly_average_balance_12',
-                          'monthly_average_balance_6', 'monthly_average_balance_3', 'monthly_average_balance_1', 'salary']
+MAB_VARIABLES = ['monthly_average_balance_lifetime', 'monthly_average_balance_12',
+                 'monthly_average_balance_6', 'monthly_average_balance_3', 'monthly_average_balance_1']
+SALARY_VARIABLE = 'salary'
 
 ALGO360_UPWARDS_MAPPING = {
     'var201093': 'monthly_average_balance_lifetime',
