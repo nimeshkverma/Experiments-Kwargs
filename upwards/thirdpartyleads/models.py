@@ -108,7 +108,7 @@ class ThirdPartyLead(ActiveModel):
     total_experience = models.IntegerField(blank=True, null=True, default=0)
     highest_qualification = models.CharField(
         max_length=25, blank=True, null=True)
-    completion_year = models.IntegerField(
+    highest_qualification_completion_year = models.IntegerField(
         choices=YEAR_CHOICES, blank=True, null=True)
     highest_qualification_college = models.CharField(
         max_length=256, blank=True, default="")
