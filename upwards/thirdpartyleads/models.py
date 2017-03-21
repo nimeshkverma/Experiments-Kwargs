@@ -125,7 +125,7 @@ class ThirdPartyLead(ActiveModel):
         db_table = "third_party_lead"
 
     def __unicode__(self):
-        return "%s" % (str(self.customer_id))
+        return '%s__%s__%s' % (str(self.third_party_lead_id), str(self.lead_source), str(self.leads_first_name))
 
 
 UPLOADED = 'uploaded'
