@@ -87,7 +87,7 @@ class ThirdPartyLead(ActiveModel):
         max_length=12, validators=[numeric_regex], blank=True, default="")
     landline_no_residence = models.CharField(
         max_length=12, validators=[numeric_regex], blank=True, default="")
-    personal_email_id = models.EmailField(blank=True, null=True)
+    personal_email = models.EmailField(blank=True, null=True)
     pan = models.CharField(max_length=10, validators=[
                            pan_regex], blank=True, null=True)
     employement_type = models.CharField(
