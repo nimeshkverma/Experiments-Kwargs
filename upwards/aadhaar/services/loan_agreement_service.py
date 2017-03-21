@@ -77,8 +77,8 @@ class LoanAgreement(object):
 
     def __get_bank_data(self):
         data = {
-            'bank': " ____________________<to be filled later based on user provided>",
-            'ifsc': " ______________________<to be filled later based on user provided>"
+            'bank': " ____________________<to be filled later based on user provided information>",
+            'ifsc': " ______________________<to be filled later based on user provided information>"
         }
         # bank_object = BankDetails.objects.get(customer_id=self.customer_id)
         # data['bank'] = bank_object.bank_name.title(
