@@ -71,8 +71,11 @@ class PreSignupDataSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
 
     def send_notification(self):
-        notification = notification_service.Notification(self.validated_data.get(
-            'message_title'), self.validated_data.get('message_body'), self.validated_data('notification_type'))
+        message_title = self.validated_data.get('message_title')
+        message_body = self.validated_data.get('message_body')
+        notification_type = self.validated_data.get('notification_type')
+        notification = notification_service.Notification(
+            message_title, message_body, notification_type)
         notification.send_notifications()
 
     class Meta:
