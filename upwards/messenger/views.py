@@ -70,8 +70,6 @@ class OtpCreate(APIView):
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
-        from django.shortcuts import get_object_or_404
-
 
 class PreSignupDataDetails(mixins.ListModelMixin,
                            mixins.CreateModelMixin,
@@ -108,4 +106,9 @@ class NotificationDetails(mixins.ListModelMixin,
     @catch_exception(LOGGER)
     @meta_data_response()
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        serializer = serializer.NotificationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.validate_foreign_keys()
+            serializer.send_notification()
+            return Response({}, status.HTTP_200_OK)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

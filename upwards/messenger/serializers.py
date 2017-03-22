@@ -5,6 +5,7 @@ from . import models
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from customer.models import Customer
+from services import notification_service
 
 
 class EmailVerificationSerializer(serializers.ModelSerializer):
@@ -68,6 +69,11 @@ class PreSignupDataSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+
+    def send_notification(self):
+        notification = notification_service.Notification(self.validated_data.get(
+            'message_title'), self.validated_data.get('message_body'), self.validated_data('notification_type'))
+        notification.send_notifications()
 
     class Meta:
         model = models.Notification

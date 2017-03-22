@@ -9,7 +9,7 @@ from pyfcm import FCMNotification
 
 class Notification(object):
 
-    def __init__(self, message_title, message_body, data_message, notification_type):
+    def __init__(self, message_title, message_body, notification_type, data_message={}):
         self.message_title = message_title if message_title else ''
         self.message_body = message_body if message_body else ''
         self.data_message = self.__jsonify(data_message)
@@ -22,7 +22,7 @@ class Notification(object):
             return {}
 
     def __chunks(self, input_list, chunk_length):
-        for i in range(0, len(input_list), chunsk_length):
+        for i in range(0, len(input_list), chunk_length):
             yield input_list[i:i + chunk_length]
 
     def __get_unknown_state_registration_ids(self):
@@ -30,8 +30,8 @@ class Notification(object):
 
     def __get_other_state_registration_ids(self):
         customer_ids = CustomerState.objects.filter(
-            present_state=self.notification_type).values_list('app_registration_id', flat=True)
-        return Login.objects.filter(customer_ids__in=customer_ids).values_list('app_registration_id', flat=True)
+            present_state=self.notification_type).values_list('customer_id', flat=True)
+        return Login.objects.filter(customer_id__in=customer_ids).values_list('app_registration_id', flat=True)
 
     def __registration_ids(self):
         registration_ids = []
@@ -43,7 +43,7 @@ class Notification(object):
             pass
         return list(set(registration_ids))
 
-    def send_notifications():
+    def send_notifications(self):
         registration_ids = self.__registration_ids()
         push_service = FCMNotification(api_key=settings.FCM_API_KEY)
         if not self.data_message:
