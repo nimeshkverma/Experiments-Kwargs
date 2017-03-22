@@ -84,12 +84,16 @@ class ESign(object):
             'unsigned_loan_agreement_uploaded'] = self.__upload_loan_agreement(customer_id)
         response['loan_agreement_url'] = self.__s3_loan_agreement_url(
             customer_id)
-        if self.__sign_document(otp, customer_id):
-            response['esigned_process_completed'] = True
+        sign_document_completed = self.__sign_document(otp, customer_id)
+        try:
             response['signed_loan_agreement_uploaded'] = self.__upload_loan_agreement(
                 customer_id, True)
             response['loan_agreement_url'] = self.__s3_loan_agreement_url(
                 customer_id, True)
+        except Exception as e:
+            pass
+        if sign_document_completed:
+            response['esigned_process_completed'] = True
         subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
             customer_id=customer_id), shell=True)
         return response
@@ -99,7 +103,6 @@ class ESign(object):
         pdf_path = PDF_PAYLOAD_DIRECTORY.format(customer_id=customer_id)
         pdf_name = UNSIGNED_PDF_NAME.format(customer_id=customer_id)
         sign_pdf = SIGNED_PDF_PAYLOAD_PATH.format(customer_id=customer_id)
-        print pdf_path, pdf_name, sign_pdf
         self.__sign_payload = self.__get_sign_payload(
             otp, pdf_path, pdf_name, sign_pdf)
         if self.__aadhaar:
