@@ -11,6 +11,8 @@ urlpatterns = [
         name='send_otp'),
     url(r'^pre_signup_data/$', views.PreSignupDataDetails.as_view(),
         name='PreSignupDataDetails'),
+    url(r'^notification/$', views.NotificationDetails.as_view(),
+        name='NotificationDetails'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
