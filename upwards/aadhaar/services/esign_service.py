@@ -84,16 +84,12 @@ class ESign(object):
             'unsigned_loan_agreement_uploaded'] = self.__upload_loan_agreement(customer_id)
         response['loan_agreement_url'] = self.__s3_loan_agreement_url(
             customer_id)
-        sign_document_completed = self.__sign_document(otp, customer_id)
-        try:
+        if self.__sign_document(otp, customer_id):
+            response['esigned_process_completed'] = True
             response['signed_loan_agreement_uploaded'] = self.__upload_loan_agreement(
                 customer_id, True)
             response['loan_agreement_url'] = self.__s3_loan_agreement_url(
                 customer_id, True)
-        except Exception as e:
-            pass
-        if sign_document_completed:
-            response['esigned_process_completed'] = True
         subprocess.call(SIGN_DOCUMENT_COMMANDS['delete_directory'].format(
             customer_id=customer_id), shell=True)
         return response
@@ -109,7 +105,6 @@ class ESign(object):
             response = requests.post(self.__sign_url, data=self.__sign_payload,
                                      headers={'Content-Type': 'application/xml'})
             sign_tree = ET.ElementTree(ET.fromstring(response.content))
-            print response.content
         if sign_tree.getroot().attrib.get('status') in ['1', 1]:
             sign_generation_successful = True
         return sign_generation_successful
