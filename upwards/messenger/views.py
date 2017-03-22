@@ -108,7 +108,6 @@ class NotificationDetails(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         serializer = serializers.NotificationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.validate_foreign_keys()
             serializer.send_notification()
             return Response({}, status.HTTP_200_OK)
         return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
