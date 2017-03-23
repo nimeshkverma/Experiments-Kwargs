@@ -84,6 +84,26 @@ ACCOMMODATION_TYPE_CHOICES = (
     (RESICUM_OFFICE, 'Resicum Office'),
 )
 
+INDIAN = 'Indian'
+NRI = 'NRI'
+OTHER_NATIONALITY = 'Others'
+NATIONALITY_CHOICES = (
+    (INDIAN, 'Indian'),
+    (NRI, 'NRI'),
+    (OTHER_NATIONALITY, 'Others'),
+)
+
+MARRIED = 'married'
+SINGLE = 'single'
+DIVORCED = 'divorced'
+SEPARATED = 'separated'
+MARITAL_STATUS_CHOICES = (
+    (MARRIED, 'married'),
+    (SINGLE, 'single'),
+    (DIVORCED, 'divorced'),
+    (SEPARATED, 'separated'),
+)
+
 
 class ThirdPartyLead(ActiveModel):
     third_party_lead_id = models.AutoField(primary_key=True)
@@ -177,6 +197,14 @@ class ThirdPartyLead(ActiveModel):
         max_length=50, blank=False, null=False, default=BANK_TRANSFER, choices=SALARY_MODE_CHOICES)
     current_residence_years = models.IntegerField(
         blank=False, null=False, default=0)
+    marital_status = models.CharField(
+        max_length=50, blank=False, null=False, default=SINGLE, choices=MARITAL_STATUS_CHOICES)
+    loan_tenure = models.IntegerField(
+        blank=False, null=False, default=0)
+    loan_amount_required = models.IntegerField(
+        blank=False, null=False, default=0)
+    nationality = models.CharField(
+        max_length=50, blank=False, null=False, default=INDIAN, choices=NATIONALITY_CHOICES)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
