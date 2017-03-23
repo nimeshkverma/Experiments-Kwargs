@@ -93,4 +93,5 @@ class Algo360(object):
                 if data_key in user_data:
                     model_data[ALGO360_UPWARDS_MAPPING[
                         data_key]] = user_data.get(data_key)
+        model_data['algo360_data'] = json.dumps(user_data_dict)
         return model_data

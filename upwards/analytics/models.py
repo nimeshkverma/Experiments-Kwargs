@@ -34,6 +34,7 @@ class Algo360(ActiveModel):
     credit_card_last_payment_due = models.CharField(
         max_length=100, blank=True, null=False)
     salary = models.CharField(max_length=100, blank=True, null=False)
+    algo360_data = models.TextField(editable=False, blank=True, null=False)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
