@@ -141,7 +141,7 @@ class ThirdPartyLead(ActiveModel):
     employer_type = models.CharField(
         max_length=50, blank=False, null=False, choices=EMPLOYER_TYPE_CHOICES)
     profession_type = models.CharField(
-        max_length=50, blank=False, null=False, choices=PROFESSION_TYPE_CHOICES)
+        max_length=50, blank=False, null=False, default=OTHER_PROFESSION_TYPE, choices=PROFESSION_TYPE_CHOICES)
     designation = models.CharField(
         max_length=50, blank=False, null=False)
     company_email = models.EmailField(blank=True, null=True)
@@ -164,15 +164,17 @@ class ThirdPartyLead(ActiveModel):
     primary_bank_account_holder_name = models.CharField(
         max_length=50, blank=True, null=True, default="")
     primary_bank_name = models.CharField(
-        max_length=256, blank=False, null=False)
+        max_length=256, blank=False, null=False, default="")
     primary_bank_ifsc = models.CharField(
         max_length=20, blank=True, null=True, default="")
-    cheque_bounced_3 = models.BooleanField(blank=False, null=False)
-    exsisting_loans = models.BooleanField(blank=False, null=False)
+    cheque_bounced_3 = models.BooleanField(
+        blank=False, null=False, default=False)
+    existing_loans = models.BooleanField(
+        blank=False, null=False, default=False)
     accommodation_type = models.CharField(
-        max_length=50, blank=False, null=False, choices=ACCOMMODATION_TYPE_CHOICES)
+        max_length=50, blank=False, null=False, default=RENTED, choices=ACCOMMODATION_TYPE_CHOICES)
     mode_of_salary = models.CharField(
-        max_length=50, blank=False, null=False, choices=SALARY_MODE_CHOICES)
+        max_length=50, blank=False, null=False, default=BANK_TRANSFER, choices=SALARY_MODE_CHOICES)
     current_residence_years = models.IntegerField(
         blank=True, null=True, default=0)
     objects = models.Manager()
