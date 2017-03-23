@@ -176,7 +176,7 @@ class ThirdPartyLead(ActiveModel):
     mode_of_salary = models.CharField(
         max_length=50, blank=False, null=False, default=BANK_TRANSFER, choices=SALARY_MODE_CHOICES)
     current_residence_years = models.IntegerField(
-        blank=True, null=True, default=0)
+        blank=False, null=False, default=0)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
