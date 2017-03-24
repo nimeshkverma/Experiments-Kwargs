@@ -82,7 +82,7 @@ class Algo360(object):
                 user_data_response = self.__fetch_user_data()
         if user_data_response.status_code == 200:
             user_data = user_data_response.json().get(
-                'result', {}).get('data')
+                'result', {}).get('data', {})
         return user_data
 
     def get_model_data(self):

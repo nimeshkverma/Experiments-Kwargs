@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
 from django.db.models.signals import post_save
 from activity.models import register_activity, register_customer_state
 from activity.model_constants import (PROFESSIONAL_SUBMIT_STATE, CUSTOMER, PROFESSIONAL_SUBMIT, EDUCATION_SUBMIT_STATE,
@@ -21,12 +20,23 @@ from common.models import (ActiveModel,
 #     (OTHERS, 'others'),
 # )
 
+CAR = 'car'
+BIKE = 'bike'
+OTHER_VEHICLE_TYPE = 'other'
+VEHICLE_TYPE_CHOICES = (
+    (CAR, 'car'),
+    (BIKE, 'bike'),
+    (OTHER_VEHICLE_TYPE, 'other'),
+)
+
 
 class Finance(ActiveModel):
     customer = models.OneToOneField(
         'customer.Customer', on_delete=models.CASCADE)
     any_active_loans = models.BooleanField(default=False)
     any_owned_vehicles = models.BooleanField(default=False)
+    vehicle_type = models.CharField(
+        choices=VEHICLE_TYPE_CHOICES, blank=False, null=False, max_length=50, default=OTHER_VEHICLE_TYPE)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
@@ -133,3 +143,38 @@ class Education(ActiveModel):
 
 post_save.connect(
     Education.register_education_submit_customer_state, sender=Education)
+
+
+class Vahan(ActiveModel):
+    customer = models.OneToOneField(
+        'customer.Customer', on_delete=models.CASCADE)
+    registration_no = models.CharField(max_length=50, blank=False, null=False)
+    make = models.CharField(max_length=50, blank=True, null=True, default="")
+    model = models.CharField(max_length=50, blank=True, null=True, default="")
+    make_model = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    fuel = models.CharField(max_length=50, blank=True, null=True, default="")
+    display_variant = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    short_variant = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    vehicle_id = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    vertical = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    rto_code = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    rto_lnt_location = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    rto_plate_lnt_location = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    registration_date = models.CharField(
+        max_length=50, blank=True, null=True, default="")
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "customer_vahan"
+
+    def __unicode__(self):
+        return "%s__%s__%s" % (str(self.customer), str(self.registration_no), str(self.model))
