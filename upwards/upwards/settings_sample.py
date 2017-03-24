@@ -330,3 +330,5 @@ ELIGIBILITY_LIMIT = {
 }
 
 CREDIT_ELIGIBILITY_FACTOR = 2.5
+
+VAHAN_API = "VAHAN_API_BASE_URL?reg1={reg1}&reg2={reg2}&reg3={reg3}&reg4={reg4}&vertical={vertical}"

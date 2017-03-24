@@ -12,6 +12,11 @@ urlpatterns = [
     url(r'^education/$', views.EducationCreate.as_view(), name='EducationCreate'),
     url(r'^(?P<pk>[0-9]+)/education/$',
         views.EducationDetail.as_view(), name='EducationDetail'),
+    url(r'^vahan_data/$',
+        views.VahanDataDetail.as_view(), name='VahanDataDetail'),
+    url(r'^vahan/$', views.VahanCreate.as_view(), name='VahanCreate'),
+    url(r'^(?P<pk>[0-9]+)/vahan/$',
+        views.VahanDetail.as_view(), name='VahanDetail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

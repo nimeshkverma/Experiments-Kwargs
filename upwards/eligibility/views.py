@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,12 +18,14 @@ class FinanceCreate(APIView):
     @session_authorize('customer_id')
     def post(self, request, auth_data):
         if auth_data.get('authorized'):
-            serializer = serializers.FinanceSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.validate_foreign_keys()
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            finance_serializer = serializers.FinanceSerializer(
+                data=request.data)
+            vahan_serializer = serializers.VahanSerializer(data=request.data)
+            if finance_serializer.is_valid():
+                finance_serializer.validate_foreign_keys()
+                finance_serializer.save()
+                return Response(finance_serializer.data, status=status.HTTP_200_OK)
+            return Response({'error': finance_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -170,3 +173,69 @@ class EducationDetail(APIView):
             education_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class VahanDataDetail(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        serializer = serializers.VahanSerializer(data=request.query_params)
+        if serializer.is_valid():
+            return Response(serializer.get_vahan_data(), status=status.HTTP_200_OK)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VahanCreate(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize('customer_id')
+    def post(self, request, auth_data):
+        if auth_data.get('authorized'):
+            serializer = serializers.VahanSerializer(data=request.data)
+            if serializer.is_valid():
+                return Response(serializer.save(auth_data['customer_id']), status=status.HTTP_200_OK)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+
+class VahanDetail(APIView):
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def get(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            vahan_object = get_object_or_404(
+                models.Vahan, customer_id=auth_data['customer_id'])
+            return Response(model_to_dict(vahan_object, exclude=['is_active', 'updated_at', 'created_at']), status.HTTP_200_OK)
+        return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def put(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            serializer = serializers.VahanSerializer(data=request.data)
+            if serializer.is_valid():
+                updated = serializer.update(auth_data['customer_id'])
+                if updated:
+                    return Response({}, status=status.HTTP_200_OK)
+                else:
+                    return Response({}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    @session_authorize()
+    def delete(self, request, auth_data, *args, **kwargs):
+        if auth_data.get('authorized'):
+            deleted = serializers.VahanSerializer().delete(
+                auth_data['customer_id'])
+            if deleted:
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({}, status=status.HTTP_404_NOT_FOUND)
+        return Response({}, status=status.HTTP_401_UNAUTHORIZED)

@@ -82,7 +82,7 @@ class Algo360(object):
                 user_data_response = self.__fetch_user_data()
         if user_data_response.status_code == 200:
             user_data = user_data_response.json().get(
-                'result', {}).get('data')
+                'result', {}).get('data', {})
         return user_data
 
     def get_model_data(self):
@@ -93,4 +93,5 @@ class Algo360(object):
                 if data_key in user_data:
                     model_data[ALGO360_UPWARDS_MAPPING[
                         data_key]] = user_data.get(data_key)
+        model_data['algo360_data'] = json.dumps(user_data_dict)
         return model_data
