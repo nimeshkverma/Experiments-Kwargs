@@ -79,13 +79,13 @@ post_save.connect(
     Finance.register_finance_submit_customer_state, sender=Finance)
 
 
-SELF_EMPLOYED = 'self employed'
+SELF_EMPLOYED = 'self_employed'
 SALARIED = 'salaried'
 UNEMPLOYED = 'unemployed'
 OTHER_NATURE_OF_WORK = 'other'
 
 NATURE_OF_WORK_CHOICES = (
-    (SELF_EMPLOYED, 'self employed'),
+    (SELF_EMPLOYED, 'self_employed'),
     (SALARIED, 'salaried'),
     (UNEMPLOYED, 'unemployed'),
     (OTHER_NATURE_OF_WORK, 'other'),
