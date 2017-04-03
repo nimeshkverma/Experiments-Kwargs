@@ -4,7 +4,7 @@ from rest_framework import serializers
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 
-from . import models
+from customer import models
 
 
 class CustomerSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 
-from . import models
+from eligibility import models
 
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError

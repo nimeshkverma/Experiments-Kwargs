@@ -4,7 +4,8 @@ from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . import models, serializers
+from . import serializers
+from customer import models
 
 from common.decorators import session_authorize, meta_data_response, catch_exception
 from common.response import MetaDataResponse
