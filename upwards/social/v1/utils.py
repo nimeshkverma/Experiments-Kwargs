@@ -1,6 +1,6 @@
 from copy import deepcopy
 from . import serializers
-from . import models
+from social import models
 
 
 def get_linkedin_profile(customer_id):

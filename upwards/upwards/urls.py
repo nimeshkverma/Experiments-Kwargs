@@ -5,7 +5,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^customer/', include('social.urls')),
+    url(r'^', include('social.urls')),
     url(r'^customer/', include('eligibility.urls')),
     url(r'^customer/', include('customer.urls')),
     url(r'^customer/', include('pan.urls')),

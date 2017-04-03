@@ -3,7 +3,7 @@ from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
 from customer.models import Customer
 
-from . import models
+from social import models
 
 from services.session_service import get_or_create_sessions
 from services.social_service import LinkedinProfile

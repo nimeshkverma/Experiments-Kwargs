@@ -7,7 +7,7 @@ from common.decorators import session_authorize, meta_data_response, catch_excep
 from customer.models import Customer
 
 from . import serializers
-from . import models
+from social import models
 from . import utils
 
 import logging
