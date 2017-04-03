@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . import models
+from pan import models
 
 from common.utils.model_utils import check_pk_existence
 from common.exceptions import NotAcceptableError
