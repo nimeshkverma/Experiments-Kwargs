@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from . import models, serializers
+from . import serializers
+from activity import models
 
 from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 from common.v1.exceptions import NotAcceptableError

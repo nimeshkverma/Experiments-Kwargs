@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . import models
+from documents import models
 
 from common.v1.utils.model_utils import check_pk_existence
 from common.v1.exceptions import NotAcceptableError, ConflictError

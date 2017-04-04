@@ -10,7 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.conf import settings
 from django.template.loader import get_template
 from documents.models import UPLOADED
-from documents.serializers import DocumentsSerializer
+from documents.v1.serializers import DocumentsSerializer
 from esign_constants import SIGN_DOCUMENT_COMMANDS, UNSIGNED_PDF_PATH, UNSIGNED_PDF_NAME, PDF_DIRECTORY, SIGNED_PDF_PATH, SIGNED_PDF_PAYLOAD_PATH, PDF_PAYLOAD_DIRECTORY
 
 

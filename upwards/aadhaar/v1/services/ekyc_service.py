@@ -10,7 +10,7 @@ from django.conf import settings
 from common.models import MALE, FEMALE, OTHER
 from aadhaar.models import Aadhaar, EKYC as EKYC_source
 from documents.models import UPLOADED
-from documents.serializers import DocumentsSerializer
+from documents.v1.serializers import DocumentsSerializer
 
 
 GENDER_MAP = {

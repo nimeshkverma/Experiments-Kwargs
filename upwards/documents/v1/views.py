@@ -6,7 +6,9 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 
-from . import models, serializers
+from . import serializers
+from documents import models
+
 
 import logging
 LOGGER = logging.getLogger(__name__)

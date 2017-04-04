@@ -5,7 +5,7 @@ from common.v1.utils.model_utils import check_pk_existence
 from common.v1.exceptions import NotAcceptableError
 from services.loan_service import BulletLoan
 
-from . import models
+from loan import models
 
 
 class LoanTypeSerializer(serializers.ModelSerializer):

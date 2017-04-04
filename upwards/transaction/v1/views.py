@@ -3,7 +3,9 @@ from rest_framework import status, mixins, generics
 from rest_framework.response import Response
 
 
-from . import models, serializers
+from . import serializers
+from transaction import models
+
 from common.v1.decorators import meta_data_response, catch_exception, session_authorize
 
 import logging

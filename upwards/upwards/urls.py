@@ -12,13 +12,13 @@ urlpatterns = [
     url(r'^', include('aadhaar.urls')),
     url(r'^', include('common.urls')),
     url(r'^', include('messenger.urls')),
-    url(r'^customer/', include('activity.urls')),
-    url(r'^customer/', include('documents.urls')),
-    url(r'^participant/', include('participant.urls')),
-    url(r'^loan/', include('loan.urls')),
-    url(r'^transaction/', include('transaction.urls')),
-    url(r'^analytics/', include('analytics.urls')),
-    url(r'^third_party_leads/', include('thirdpartyleads.urls')),
+    url(r'^', include('activity.urls')),
+    url(r'^', include('documents.urls')),
+    url(r'^', include('participant.urls')),
+    url(r'^', include('loan.urls')),
+    url(r'^', include('transaction.urls')),
+    url(r'^', include('analytics.urls')),
+    url(r'^', include('thirdpartyleads.urls')),
 
 ]
 

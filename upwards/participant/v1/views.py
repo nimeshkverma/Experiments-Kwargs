@@ -3,9 +3,11 @@ from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from . import models, serializers
+from . import serializers
+from participant import models
+
 from common.v1.decorators import session_authorize, meta_data_response, catch_exception
-from analytics.services.credit_service import CustomerCreditLimit
+from analytics.v1.services.credit_service import CustomerCreditLimit
 from activity.models import register_customer_state
 from activity.model_constants import ELIGIBILITY_RESULT_REJECTED
 

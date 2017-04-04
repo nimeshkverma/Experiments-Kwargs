@@ -1,10 +1,5 @@
-from django.conf.urls import url
-from . import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^loan_request/$', views.LoanRequestTransactionDetails.as_view()),
-    url(r'^timeline/$', views.TransactionHistoryDetails.as_view()),
-
+    url(r'^v1/', include('transaction.v1.urls', namespace='v1')),
 ]
-urlpatterns = format_suffix_patterns(urlpatterns)
