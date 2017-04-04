@@ -26,6 +26,9 @@ class Config(object):
     def __get_versions(self):
         return settings.VERSIONS
 
+    def __get_versioned_base_url(self):
+        return settings.VERSIONED_BASE_URL
+
     def __get_post_otp_message(self):
         return settings.POST_OTP_MESSAGE
 
@@ -45,6 +48,7 @@ class Config(object):
             'user_state': self.user_state,
             'base_url': self.__get_base_url(),
             'versions': self.__get_versions(),
+            'versioned_base_url': self.__get_versioned_base_url(),
             'post_otp_message': self.__get_post_otp_message(),
             'email_type': self.email_type,
             'salary_payment_mode': self.__get_salary_payment_mode(),

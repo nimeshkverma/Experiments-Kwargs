@@ -1,7 +1,7 @@
 from django.conf import settings
 
 PDF_URL = "http://localhost:" + settings.BASE_PORT + \
-    "/customer/{customer_id}/loan_agreement/"
+    "/v1/customer/{customer_id}/loan_agreement/"
 
 UNSIGNED_PDF_PATH = "/home/esign/customer/customer_{customer_id}/customer_{customer_id}_loan_agreement.pdf"
 SIGNED_PDF_PATH = "/home/esign/customer/customer_{customer_id}/sign.pdfcustomer_{customer_id}_loan_agreement_Sign.pdf"

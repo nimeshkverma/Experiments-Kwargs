@@ -99,7 +99,7 @@ class LinkedinProfile(object):
 
     def __get_token(self):
         auth_url = settings.LINKEDIN['auth_url']
-        auth_header = deepcopy(settings.LINKEDIN['auth_header'])
+        auth_header = deepcopy(settings.LINKEDIN['auth_header']['v1'])
         auth_header['code']
         auth_header['code'] = auth_header[
             'code'].format(code=self.__code)
