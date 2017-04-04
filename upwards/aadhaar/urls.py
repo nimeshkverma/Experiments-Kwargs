@@ -1,20 +1,5 @@
-from django.conf.urls import url
-from . import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^aadhaar/$', views.AadhaarCreate.as_view(), name='AadhaarCreate'),
-    url(r'^(?P<pk>[0-9]+)/aadhaar/$',
-        views.AadhaarDetail.as_view(), name='AadhaarDetail'),
-    url(r'^(?P<pk>[0-9]+)/aadhaar_otp/$',
-        views.AadhaarOTP.as_view(), name='AadhaarOTP'),
-    url(r'^(?P<pk>[0-9]+)/aadhaar_ekyc/$',
-        views.AadhaarEKYC.as_view(), name='AadhaarEKYC'),
-    url(r'^(?P<pk>[0-9]+)/aadhaar_esign/$',
-        views.AadhaarESign.as_view(), name='AadhaarESign'),
-    url(r'^(?P<pk>[0-9]+)/loan_agreement/$',
-        views.LoanAgreement.as_view(), name='LoanAgreement'),
-
+    url(r'^v1/', include('aadhaar.v1.urls', namespace='v1')),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

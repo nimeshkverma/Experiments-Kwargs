@@ -1,10 +1,5 @@
-from django.conf.urls import url
-from . import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^(?P<pk>[0-9]+)/state_change/$',
-        views.CustomerStateChange.as_view(), name='CustomerStateChange'),
+    url(r'^v1/', include('activity.v1.urls', namespace='v1')),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

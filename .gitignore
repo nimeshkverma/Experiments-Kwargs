@@ -10,3 +10,4 @@ settings.py
 *.swo
 *.DS_Store
 migrations
+db.sqlite3
