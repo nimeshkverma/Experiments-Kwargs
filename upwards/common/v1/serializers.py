@@ -44,3 +44,10 @@ class OrganisationTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.OrganisationType
         fields = ('id', 'name', 'is_active')
+
+
+class ProfessionTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.ProfessionType
+        fields = ('id', 'type_name', 'is_active', 'updated_at')
