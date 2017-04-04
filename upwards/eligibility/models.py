@@ -19,6 +19,15 @@ from common.models import (ActiveModel,
 #     (POST_GRADUATE, 'post_graduate'),
 #     (OTHERS, 'others'),
 # )
+MARRIED = 'married'
+UNMARRIED = 'unmarried'
+OTHER_MARITAL_STATUS = 'other'
+
+MARITAL_STATUS_CHOICES = (
+    (MARRIED, 'married'),
+    (UNMARRIED, 'unmarried'),
+    (OTHER_MARITAL_STATUS, 'other'),
+)
 
 CAR = 'car'
 BIKE = 'bike'
@@ -37,6 +46,11 @@ class Finance(ActiveModel):
     any_owned_vehicles = models.BooleanField(default=False)
     vehicle_type = models.CharField(
         choices=VEHICLE_TYPE_CHOICES, blank=False, null=False, max_length=50, default=OTHER_VEHICLE_TYPE)
+    marital_status = models.CharField(
+        max_length=50, blank=False, null=False, default=OTHER_MARITAL_STATUS, choices=MARITAL_STATUS_CHOICES)
+    dependents = models.IntegerField(null=False, blank=False, default=0)
+    phone_no = models.CharField(
+        max_length=25, blank=True, null=True, default="")
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 
@@ -66,6 +80,19 @@ post_save.connect(
     Finance.register_finance_submit_customer_state, sender=Finance)
 
 
+SELF_EMPLOYED = 'self_employed'
+SALARIED = 'salaried'
+UNEMPLOYED = 'unemployed'
+OTHER_NATURE_OF_WORK = 'other'
+
+NATURE_OF_WORK_CHOICES = (
+    (SELF_EMPLOYED, 'self_employed'),
+    (SALARIED, 'salaried'),
+    (UNEMPLOYED, 'unemployed'),
+    (OTHER_NATURE_OF_WORK, 'other'),
+)
+
+
 class Profession(ActiveModel):
     customer = models.OneToOneField(
         'customer.Customer', on_delete=models.CASCADE)
@@ -75,6 +102,8 @@ class Profession(ActiveModel):
         'common.OrganisationType', on_delete=models.CASCADE)
     salary_payment_mode = models.ForeignKey(
         'common.SalaryPaymentMode', on_delete=models.CASCADE)
+    profession_type = models.ForeignKey(
+        'common.ProfessionType', on_delete=models.CASCADE)
     email = models.EmailField(blank=False, null=False)
     is_email_verified = models.BooleanField(default=False)
     department = models.CharField(
@@ -89,6 +118,8 @@ class Profession(ActiveModel):
     salary = models.IntegerField(blank=False, null=False)
     join_date = models.DateField(blank=False, null=False)
     total_experience = models.IntegerField(blank=False, null=False, default=0)
+    nature_of_work = models.CharField(
+        max_length=50, blank=False, null=False, default=OTHER_NATURE_OF_WORK, choices=NATURE_OF_WORK_CHOICES)
     objects = models.Manager()
     active_objects = ActiveObjectManager()
 

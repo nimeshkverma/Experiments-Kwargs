@@ -151,3 +151,37 @@ class OrganisationTypeDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class ProfessionTypeList(mixins.ListModelMixin,
+                         mixins.CreateModelMixin,
+                         generics.GenericAPIView):
+    queryset = models.ProfessionType.active_objects.all()
+    serializer_class = serializers.ProfessionTypeSerializer
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @catch_exception(LOGGER)
+    @meta_data_response()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class ProfessionTypeDetail(mixins.RetrieveModelMixin,
+                           mixins.UpdateModelMixin,
+                           mixins.DestroyModelMixin,
+                           generics.GenericAPIView):
+    queryset = models.ProfessionType.objects.all()
+    serializer_class = serializers.ProfessionTypeSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
