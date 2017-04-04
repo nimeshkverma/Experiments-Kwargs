@@ -13,7 +13,7 @@ from activity.model_constants import FINANCE_SUBMIT_EMAIL_VERIFIED_STATE, DOCUME
 def send_verification_mail(email_verify_data):
     encoded_data = signing.dumps(email_verify_data)
     verification_link = settings.BASE_URL + 'customer/verify_email/' + encoded_data
-    template = get_template('messenger/email_verify.html')
+    template = get_template('messenger/v1/email_verify.html')
     html_part = template.render({'verification_link': verification_link})
     msg = EmailMultiAlternatives('Email verification Link, Upwards',
                                  None, 'upwardstech@gmail.com', [email_verify_data['email_id']])

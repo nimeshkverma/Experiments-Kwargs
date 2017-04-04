@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^', include('pan.urls')),
     url(r'^', include('aadhaar.urls')),
     url(r'^', include('common.urls')),
-    url(r'^customer/', include('messenger.urls')),
+    url(r'^', include('messenger.urls')),
     url(r'^customer/', include('activity.urls')),
     url(r'^customer/', include('documents.urls')),
     url(r'^participant/', include('participant.urls')),

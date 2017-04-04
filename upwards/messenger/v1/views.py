@@ -7,7 +7,9 @@ from django.core import signing
 from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 from social.models import Login
 
-from . import models, serializers
+from . import serializers
+from messenger import models
+
 from . tasks import send_verification_mail, update_email_models
 from . services import otp_service
 
@@ -47,9 +49,9 @@ class EmailVerificationDetail(APIView):
             email_object_updated = serializers.EmailVerificationSerializer().update(
                 email_verification_object, {'is_verified': True})
             update_email_models(email_object_updated)
-            return render(request, 'messenger/email_verification_success.html')
+            return render(request, 'messenger/v1/email_verification_success.html')
         except Exception as e:
-            return render(request, 'messenger/email_verification_failure.html')
+            return render(request, 'messenger/v1/email_verification_failure.html')
 
 
 class OtpCreate(APIView):
