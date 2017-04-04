@@ -180,6 +180,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
 MEDIA_URL = '/media/'
 BASE_URL = 'BASE_URL'
+VERSIONS = ['v1']
 BASE_PORT = 'BASE_PORT'
 
 NCODE_USER = {
