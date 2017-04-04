@@ -3,8 +3,8 @@ from rest_framework import serializers
 
 from eligibility import models
 
-from common.utils.model_utils import check_pk_existence
-from common.exceptions import NotAcceptableError
+from common.v1.utils.model_utils import check_pk_existence
+from common.v1.exceptions import NotAcceptableError
 from customer.models import Customer
 from services.vahan_service import Vahan
 

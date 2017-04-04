@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from . import models
-from common.utils.model_utils import check_pk_existence
-from common.exceptions import NotAcceptableError
+from common.v1.utils.model_utils import check_pk_existence
+from common.v1.exceptions import NotAcceptableError
 from customer.models import Customer
 from loan.services.loan_service import BulletLoan
 from loan.models import LoanType

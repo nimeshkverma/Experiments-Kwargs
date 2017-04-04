@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework import status, mixins, generics
 
-from . import response, models, serializers
+from . import response, serializers
+from common import models
+
 from decorators import meta_data_response, catch_exception
 import config
 

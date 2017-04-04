@@ -1,5 +1,5 @@
 from django.conf import settings
-from . models import OrganisationType, SalaryPaymentMode
+from common.models import OrganisationType, SalaryPaymentMode
 from . serializers import SalaryPaymentModeSerializer, OrganisationTypeSerializer
 
 

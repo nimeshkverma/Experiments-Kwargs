@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from social.models import Login
-from . import models
+from common import models
 
 
 class AuthenticationSerializer(serializers.Serializer):

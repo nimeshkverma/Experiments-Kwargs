@@ -4,7 +4,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from common.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 
 from . import models, serializers
 

@@ -4,7 +4,7 @@ import json
 from copy import deepcopy
 from django.conf import settings
 
-from common.exceptions import ErrorMessage
+from common.v1.exceptions import ErrorMessage
 
 
 class SocialProfile(object):

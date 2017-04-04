@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 
 from . import models, serializers
-from common.decorators import meta_data_response, catch_exception
+from common.v1.decorators import meta_data_response, catch_exception
 
 import logging
 LOGGER = logging.getLogger(__name__)

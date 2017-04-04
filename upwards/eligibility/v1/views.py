@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from . import serializers
 from eligibility import models
-from common.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 
 import logging
 LOGGER = logging.getLogger(__name__)

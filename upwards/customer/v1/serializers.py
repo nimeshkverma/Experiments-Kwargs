@@ -1,8 +1,8 @@
 from copy import deepcopy
 from rest_framework import serializers
 
-from common.utils.model_utils import check_pk_existence
-from common.exceptions import NotAcceptableError
+from common.v1.utils.model_utils import check_pk_existence
+from common.v1.exceptions import NotAcceptableError
 
 from customer import models
 

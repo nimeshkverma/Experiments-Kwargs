@@ -12,7 +12,6 @@ from common.models import (	ActiveModel,
                             pincode_regex,
                             GENDER_CHOICES,
                             MALE,)
-from common.exceptions import NotAcceptableError, ConflictError
 
 EKYC = 'ekyc'
 UPWARDS = 'upwards'

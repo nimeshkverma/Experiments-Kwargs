@@ -4,7 +4,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from . import models, serializers
-from common.decorators import meta_data_response, catch_exception, thirdparty_authorize
+from common.v1.decorators import meta_data_response, catch_exception, thirdparty_authorize
 
 import logging
 LOGGER = logging.getLogger(__name__)

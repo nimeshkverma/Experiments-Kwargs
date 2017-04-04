@@ -6,8 +6,8 @@ from rest_framework.response import Response
 
 from . import models, serializers
 
-from common.decorators import session_authorize, meta_data_response, catch_exception
-from common.exceptions import NotAcceptableError
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.exceptions import NotAcceptableError
 
 
 from activity.models import register_customer_state

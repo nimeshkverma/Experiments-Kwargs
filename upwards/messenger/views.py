@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core import signing
 
-from common.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 from social.models import Login
 
 from . import models, serializers

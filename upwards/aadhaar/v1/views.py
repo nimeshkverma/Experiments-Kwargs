@@ -8,10 +8,10 @@ from rest_framework.response import Response
 from . import serializers
 from aadhaar import models
 
-from common.decorators import session_authorize, meta_data_response, catch_exception
-from common.response import MetaDataResponse
-from common.utils.model_utils import check_pk_existence
-from common.exceptions import NotAcceptableError
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.response import MetaDataResponse
+from common.v1.utils.model_utils import check_pk_existence
+from common.v1.exceptions import NotAcceptableError
 from customer.models import Customer
 
 from activity.models import register_customer_state

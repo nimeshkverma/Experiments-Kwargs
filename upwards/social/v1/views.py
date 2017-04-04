@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from common.decorators import session_authorize, meta_data_response, catch_exception
+from common.v1.decorators import session_authorize, meta_data_response, catch_exception
 from customer.models import Customer
 
 from . import serializers

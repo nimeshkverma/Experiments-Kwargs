@@ -1,6 +1,6 @@
 import datetime
 from loan import models
-from common.utils import math_utils
+from common.v1.utils import math_utils
 from customer.models import Customer
 from participant.models import Lender
 
