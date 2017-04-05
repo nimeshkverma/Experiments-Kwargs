@@ -31,15 +31,17 @@ class BorrowerCreate(APIView):
             data['eligible_for_loan'] = customer_credit_limit.is_eligible
             serializer = serializers.BorrowerSerializer(
                 data=data)
-            if serializer.is_valid() and data['eligible_for_loan']:
-                serializer.validate_foreign_keys()
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
+            if not serializer.is_valid():
+                return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+            if not data['eligible_for_loan']:
                 register_customer_state(
                     ELIGIBILITY_RESULT_REJECTED, auth_data['customer_id'])
                 return Response(data, status=status.HTTP_200_OK)
-            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.validate_foreign_keys()
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({}, status.HTTP_401_UNAUTHORIZED)
 
 

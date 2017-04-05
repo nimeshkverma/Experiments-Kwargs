@@ -116,9 +116,9 @@ class ThirdPartyLead(ActiveModel):
     gender = models.CharField(
         max_length=50, default=MALE, choices=GENDER_CHOICES, blank=False, null=False)
     fathers_first_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], blank=False, null=False)
+        alphabet_regex_allow_empty], blank=True, null=True)
     fathers_last_name = models.CharField(max_length=25, validators=[
-        alphabet_regex_allow_empty], blank=True, default='')
+        alphabet_regex_allow_empty], blank=True, null=True, default='')
     mothers_first_name = models.CharField(max_length=25, validators=[
         alphabet_regex_allow_empty], blank=True, default='')
     mothers_last_name = models.CharField(max_length=25, validators=[
@@ -129,7 +129,7 @@ class ThirdPartyLead(ActiveModel):
     current_address_line2 = models.CharField(
         max_length=256, blank=False, null=False)
     current_city = models.CharField(max_length=25, blank=False, null=False)
-    current_state = models.CharField(max_length=25, blank=False, null=False)
+    current_state = models.CharField(max_length=25, blank=True, null=True,)
     current_pincode = models.CharField(max_length=6, validators=[
         pincode_regex], blank=False, null=False)
     permanent_address_line1 = models.CharField(
@@ -143,7 +143,7 @@ class ThirdPartyLead(ActiveModel):
     permanent_pincode = models.CharField(max_length=6, validators=[
         pincode_regex], blank=True, null=True, default="")
     aadhaar = models.CharField(max_length=12, validators=[
-        aadhaar_regex], blank=False, null=False)
+        aadhaar_regex], blank=True, null=True)
     aadhaar_mob_no = models.CharField(max_length=12, validators=[
         mobile_number_regex], blank=True, default="")
     alternate_mob_no = models.CharField(max_length=12, validators=[
