@@ -89,7 +89,7 @@ class TransactionHistorySerializers(serializers.Serializer):
 
     def transaction_history_data(self):
         transaction_fields = ['loan_id', 'installment_id', 'lender_id',
-                              'utr', 'transaction_status', 'transaction_type', 'status_actor', 'created_at', 'updated_at']
+                              'utr', 'transaction_status', 'transaction_type', 'status_actor']
         transaction_objects = models.Transaction.objects.filter(customer_id=self.validated_data.get(
             'customer_id'), transaction_status=models.COMPLETED).order_by('created_at')
         data_list = []
@@ -98,6 +98,10 @@ class TransactionHistorySerializers(serializers.Serializer):
             for transaction_field in transaction_fields:
                 data[transaction_field] = transaction_object.__dict__.get(
                     transaction_field)
+            data['updated_at'] = transaction_object.updated_at.strftime(
+                "%Y-%m-%d %H:%M:%S")
+            data['created_at'] = transaction_object.created_at.strftime(
+                "%Y-%m-%d %H:%M:%S")
             data['loan_amount_applied'] = transaction_object.loan.loan_amount_applied
             data_list.append(data)
         return {'customer_id': self.validated_data['customer_id'], 'timeline': data_list}

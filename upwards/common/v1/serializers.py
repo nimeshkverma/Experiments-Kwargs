@@ -50,4 +50,4 @@ class ProfessionTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ProfessionType
-        fields = ('id', 'type_name', 'is_active', 'updated_at')
+        fields = ('id', 'type_name', 'is_active')
