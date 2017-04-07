@@ -179,7 +179,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = './media/'
 MEDIA_URL = '/media/'
+VERSIONS = ['v1']
 BASE_URL = 'BASE_URL'
+VERSIONED_BASE_URL = {
+    'v1': 'BASE_URL/v1/'
+}
+VERSIONS = ['v1']
 BASE_PORT = 'BASE_PORT'
 
 NCODE_USER = {
@@ -239,12 +244,14 @@ GOOGLE = {
 LINKEDIN = {
     'auth_url': 'https://www.linkedin.com/oauth/v2/accessToken',
     'auth_header': {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'grant_type': 'authorization_code',
-        'code': '{code}',
-        'redirect_uri': BASE_URL + 'customer/linkedin_auth',
-        'client_id': 'client_id',
-        'client_secret': 'client_secret'
+        'v1': {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'grant_type': 'authorization_code',
+            'code': '{code}',
+            'redirect_uri': BASE_URL['v1'] + 'customer/linkedin_auth',
+            'client_id': 'client_id',
+            'client_secret': 'client_secret'
+        }
     },
     'data_url': 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,formatted-name,phonetic-first-name,phonetic-last-name,formatted-phonetic-name,headline,industry,current-share,num-connections,num-connections-capped,specialties,positions,picture-url,picture-urls::(original),site-standard-profile-request,api-standard-profile-request,public-profile-url,location:(name),summary)?format=json',
     'data_auth': {

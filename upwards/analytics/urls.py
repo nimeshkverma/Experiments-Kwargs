@@ -1,12 +1,5 @@
-from django.conf.urls import url
-from . import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^algo360/$', views.Algo360DataDetails.as_view(),
-        name='Algo360DataDetails'),
-    url(r'^customer/(?P<pk>[0-9]+)/credit_report/$',
-        views.CreditReportDetails.as_view(), name='CreditReportDetails'),
+    url(r'^v1/', include('analytics.v1.urls', namespace='v1')),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

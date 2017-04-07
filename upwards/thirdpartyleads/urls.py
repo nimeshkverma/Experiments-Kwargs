@@ -1,16 +1,5 @@
-from django.conf.urls import url
-from . import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^(?P<third_party>[\w\-]+)/borrower/$',
-        views.ThirdPartyLeadList.as_view()),
-    url(r'^(?P<third_party>[\w\-]+)/borrower/(?P<pk>[0-9]+)/$',
-        views.ThirdPartyLeadDetail.as_view()),
-    url(r'^(?P<third_party>[\w\-]+)/borrower/document/$',
-        views.ThirdPartyLeadDocumentsCreate.as_view(), name='ThirdPartyLeadDocumentsCreate'),
-    url(r'^(?P<third_party>[\w\-]+)/borrower/(?P<pk>[0-9]+)/document/$',
-        views.ThirdPartyLeadDocumentsDetail.as_view(), name='ThirdPartyLeadDocumentsDetail'),
+    url(r'^v1/', include('thirdpartyleads.v1.urls', namespace='v1')),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

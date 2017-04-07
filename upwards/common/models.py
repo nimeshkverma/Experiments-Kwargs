@@ -133,3 +133,16 @@ class OrganisationType(ActiveModel):
 
     def __unicode__(self):
         return "%s__%s" % (str(self.id), str(self.name))
+
+
+class ProfessionType(ActiveModel):
+    type_name = models.CharField(blank=False, null=False,
+                                 max_length=256, unique=True)
+    objects = models.Manager()
+    active_objects = ActiveObjectManager()
+
+    class Meta(object):
+        db_table = "customer_profession_type"
+
+    def __unicode__(self):
+        return "%s__%s" % (str(self.type_name), str(self.is_active))
