@@ -34,10 +34,11 @@ class ProfessionSerializer(serializers.ModelSerializer):
     company_id = serializers.IntegerField()
     organisation_type_id = serializers.IntegerField()
     salary_payment_mode_id = serializers.IntegerField()
+    profession_type_id = serializers.IntegerField()
 
     def validate_foreign_keys(self, data=None):
         data = data if data else self.validated_data
-        from common.models import Company, OrganisationType, SalaryPaymentMode
+        from common.models import Company, OrganisationType, SalaryPaymentMode, ProfessionType
         model_pk_list = [
             {"model": Customer, "pk": data.get(
                 'customer_id', -1), "pk_name": "customer_id"},
@@ -47,6 +48,8 @@ class ProfessionSerializer(serializers.ModelSerializer):
                 'organisation_type_id', -1), "pk_name": "organisation_type_id"},
             {"model": SalaryPaymentMode, "pk": data.get(
                 'salary_payment_mode_id', -1), "pk_name": "salary_payment_mode_id"},
+            {"model": ProfessionType, "pk": data.get(
+                'profession_type_id', -1), "pk_name": "profession_type_id"},
         ]
         for model_pk in model_pk_list:
             if model_pk["pk_name"] in data.keys():
@@ -56,7 +59,7 @@ class ProfessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Profession
-        exclude = ('customer', 'company', 'organisation_type',
+        exclude = ('customer', 'company', 'organisation_type', 'profession_type',
                    'salary_payment_mode', 'created_at', 'updated_at', 'is_active', 'id')
 
 
