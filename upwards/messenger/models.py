@@ -58,9 +58,9 @@ class Otp(ActiveModel):
 
 
 class PreSignupData(ActiveModel):
-    app_registration_id = models.TextField(blank=True, null=False, unique=True)
+    app_registration_id = models.TextField(blank=True, null=False)
     imei = models.CharField(
-        validators=[numeric_regex], blank=True, null=False, max_length=16, unique=True)
+        validators=[numeric_regex], blank=True, null=False, max_length=16)
 
     objects = models.Manager()
     active_objects = ActiveObjectManager()
