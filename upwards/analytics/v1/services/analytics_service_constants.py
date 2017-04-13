@@ -1,4 +1,4 @@
-CREDENTIALS_FILE = 'analytics/services/algo360_credentials.json'
+CREDENTIALS_FILE = 'analytics/v1/services/algo360_credentials.json'
 
 MAB_VARIABLES = ['monthly_average_balance_lifetime', 'monthly_average_balance_12',
                  'monthly_average_balance_6', 'monthly_average_balance_3', 'monthly_average_balance_1']
