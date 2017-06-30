@@ -9,6 +9,7 @@ from common.models import (LifeTimeTrackingModel, ActiveModel,
                            numeric_regex,
                            GENDER_CHOICES,
                            MALE)
+from django.contrib.postgres.fields import JSONField
 
 from activity.models import register_activity, register_customer_state
 from activity.model_constants import SIGN_UP, CUSTOMER, SIGN_UP_STATE
@@ -38,7 +39,7 @@ class Login(LifeTimeTrackingModel):
         max_length=20, default=GOOGLE, choices=PLATFORM_CHOICES)
     source = models.CharField(
         max_length=20, default=ANDROID, choices=SOURCE_CHOICES)
-    social_data = models.TextField(editable=False, blank=True, null=False)
+    social_data = JSONField()
     platform_token = models.TextField(editable=False, blank=True, null=False)
     session_token = models.CharField(
         editable=False, blank=True, null=True, max_length=64)

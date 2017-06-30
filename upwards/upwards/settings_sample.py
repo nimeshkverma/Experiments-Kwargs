@@ -93,10 +93,15 @@ WSGI_APPLICATION = 'upwards.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'test',
+        'USER': 'abc1',
+        'PASSWORD': 'abc',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
 
 
 # Password validation
@@ -290,8 +295,8 @@ BROKER_TRANSPORT = 'sqs'
 BROKER_TRANSPORT_OPTIONS = {
     'region': 'region',
 }
-BROKER_USER = AWS_ACCESS_KEY_ID
-BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+#BROKER_USER = AWS_ACCESS_KEY_ID
+#BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
 
 
 POST_OTP_MESSAGE = " is your Upwards App OTP"

@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from datetime import datetime
 from django.core.validators import RegexValidator
 from django.db import models
+from django.contrib.postgres.fields import JSONField
+
 
 mobile_number_regex = RegexValidator(
     regex=r'^$|\d{10}$', message="Mobile number must be entered in the format: '9999999999'. 10 digits allowed.")
